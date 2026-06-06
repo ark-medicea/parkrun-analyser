@@ -1,0 +1,477 @@
+/* ── ParkRun Dashboard ── */
+/* Dark theme, fitness-app aesthetic */
+
+:root {
+  --bg-primary: #0d0d1a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #222240;
+  --bg-section: #141428;
+  --accent-green: #00d4aa;
+  --accent-orange: #ff6b35;
+  --accent-red: #ff4757;
+  --accent-blue: #4a9eff;
+  --accent-gold: #ffd700;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6b6b80;
+  --border: #2a2a45;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* ── Main ── */
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+/* ── Section blocks ── */
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.section-icon {
+  font-size: 1.2rem;
+}
+
+/* ── Highlights ── */
+.highlights {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.highlight-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--accent-green);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.highlight-card.pb { border-left-color: var(--accent-gold); }
+.highlight-card.milestone { border-left-color: var(--accent-orange); }
+.highlight-card.streak { border-left-color: var(--accent-blue); }
+
+.highlight-emoji {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.highlight-text {
+  font-size: 0.9rem;
+}
+
+.highlight-text strong {
+  color: var(--accent-green);
+}
+
+.highlight-card.pb .highlight-text strong { color: var(--accent-gold); }
+.highlight-card.milestone .highlight-text strong { color: var(--accent-orange); }
+.highlight-card.streak .highlight-text strong { color: var(--accent-blue); }
+
+/* ── Results table ── */
+.results-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.result-row {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background 0.15s;
+}
+
+.result-row:hover { background: var(--bg-card-hover); }
+
+.result-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-name .first-name { color: var(--text-primary); }
+.result-name .last-name { color: var(--text-secondary); font-weight: 400; }
+
+.result-time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-green);
+  text-align: right;
+}
+
+.result-time.is-pb {
+  color: var(--accent-gold);
+}
+
+.result-pos {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: right;
+  min-width: 2.5rem;
+}
+
+.result-ag {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+  min-width: 3rem;
+}
+
+.pb-badge {
+  display: inline-block;
+  background: var(--accent-gold);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
+
+/* ── Didn't Run ── */
+.absent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.absent-chip {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.absent-chip .streak-lost {
+  color: var(--accent-red);
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+/* ── Milestones ── */
+.milestone-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.milestone-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.milestone-progress {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.milestone-progress svg {
+  transform: rotate(-90deg);
+  width: 48px;
+  height: 48px;
+}
+
+.milestone-progress circle {
+  fill: none;
+  stroke-width: 4;
+}
+
+.milestone-progress .bg { stroke: var(--border); }
+.milestone-progress .fg { stroke: var(--accent-orange); stroke-linecap: round; }
+
+.milestone-count {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+}
+
+.milestone-detail {
+  flex: 1;
+}
+
+.milestone-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.milestone-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ── Athlete cards ── */
+.athlete-cards {
+  display: grid;
+  gap: 1rem;
+}
+
+.athlete-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.athlete-header {
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.athlete-header:hover { background: var(--bg-card-hover); }
+
+.athlete-info h3 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.athlete-info h3 .last-name { color: var(--text-secondary); font-weight: 400; }
+
+.athlete-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.athlete-stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  padding: 0 1.25rem 1rem;
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-green);
+}
+
+.stat-value.orange { color: var(--accent-orange); }
+.stat-value.blue { color: var(--accent-blue); }
+.stat-value.gold { color: var(--accent-gold); }
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.15rem;
+}
+
+/* Expandable detail */
+.athlete-detail {
+  display: none;
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.athlete-card.expanded .athlete-detail { display: block; }
+
+.expand-arrow {
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.athlete-card.expanded .expand-arrow { transform: rotate(180deg); }
+
+/* Recent form */
+.recent-form {
+  margin-top: 0.75rem;
+}
+
+.recent-form h4 {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 60px;
+}
+
+.form-bar {
+  flex: 1;
+  background: var(--accent-green);
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+  position: relative;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.form-bar:hover { opacity: 1; }
+.form-bar.is-pb { background: var(--accent-gold); opacity: 1; }
+
+.form-bar-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.form-bar:hover .form-bar-tooltip { display: block; }
+
+/* Trend indicator */
+.trend { font-size: 0.75rem; margin-left: 0.3rem; }
+.trend.up { color: var(--accent-green); }
+.trend.down { color: var(--accent-red); }
+.trend.flat { color: var(--text-muted); }
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.sample-notice {
+  color: var(--accent-orange);
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (min-width: 600px) {
+  .highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .result-row {
+    grid-template-columns: 1.5fr auto auto auto;
+  }
+}
+
+@media (min-width: 768px) {
+  main { padding: 1.5rem; }
+
+  .athlete-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+.section:nth-child(2) { animation-delay: 0.05s; }
+.section:nth-child(3) { animation-delay: 0.1s; }
+.section:nth-child(4) { animation-delay: 0.15s; }
+.section:nth-child(5) { animation-delay: 0.2s; }

@@ -1,0 +1,4595 @@
+{
+  "_meta": {
+    "generated": "2026-06-06T11:27:53.149Z",
+    "sampleData": true,
+    "note": "This is realistic sample data for dashboard development. Replace with real scraped data."
+  },
+  "event": "cassiobury",
+  "lastUpdated": "2026-06-06",
+  "athletes": [
+    {
+      "id": 7107144,
+      "name": "Hasnain PANJU",
+      "gender": "M",
+      "ageGroup": "VM35-39",
+      "totalRuns": 197,
+      "pb": "21:33",
+      "pbSeconds": 1293,
+      "bestAgeGrade": 64.98,
+      "currentStreak": 6,
+      "results": [
+        {
+          "date": "2024-12-14",
+          "event": "cassiobury",
+          "time": "22:14",
+          "timeSeconds": 1334,
+          "position": 139,
+          "totalRunners": 369,
+          "ageGrade": 58.98,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-21",
+          "event": "cassiobury",
+          "time": "22:44",
+          "timeSeconds": 1364,
+          "position": 54,
+          "totalRunners": 326,
+          "ageGrade": 58.73,
+          "isPB": false
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "22:19",
+          "timeSeconds": 1339,
+          "position": 128,
+          "totalRunners": 389,
+          "ageGrade": 59.16,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-11",
+          "event": "cassiobury",
+          "time": "23:51",
+          "timeSeconds": 1431,
+          "position": 244,
+          "totalRunners": 301,
+          "ageGrade": 57.15,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-18",
+          "event": "cassiobury",
+          "time": "23:11",
+          "timeSeconds": 1391,
+          "position": 123,
+          "totalRunners": 399,
+          "ageGrade": 60.76,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "cassiobury",
+          "time": "24:06",
+          "timeSeconds": 1446,
+          "position": 101,
+          "totalRunners": 397,
+          "ageGrade": 58.33,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-08",
+          "event": "cassiobury",
+          "time": "22:11",
+          "timeSeconds": 1331,
+          "position": 194,
+          "totalRunners": 354,
+          "ageGrade": 59.92,
+          "isPB": true
+        },
+        {
+          "date": "2025-02-15",
+          "event": "cassiobury",
+          "time": "22:19",
+          "timeSeconds": 1339,
+          "position": 232,
+          "totalRunners": 358,
+          "ageGrade": 58.5,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "24:07",
+          "timeSeconds": 1447,
+          "position": 239,
+          "totalRunners": 398,
+          "ageGrade": 58.77,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-01",
+          "event": "cassiobury",
+          "time": "23:52",
+          "timeSeconds": 1432,
+          "position": 139,
+          "totalRunners": 343,
+          "ageGrade": 57.49,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "24:00",
+          "timeSeconds": 1440,
+          "position": 91,
+          "totalRunners": 373,
+          "ageGrade": 58.14,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-22",
+          "event": "cassiobury",
+          "time": "22:57",
+          "timeSeconds": 1377,
+          "position": 202,
+          "totalRunners": 303,
+          "ageGrade": 61.18,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-29",
+          "event": "cassiobury",
+          "time": "23:03",
+          "timeSeconds": 1383,
+          "position": 229,
+          "totalRunners": 340,
+          "ageGrade": 60.22,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-05",
+          "event": "cassiobury",
+          "time": "22:47",
+          "timeSeconds": 1367,
+          "position": 71,
+          "totalRunners": 343,
+          "ageGrade": 60.55,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-12",
+          "event": "cassiobury",
+          "time": "23:57",
+          "timeSeconds": 1437,
+          "position": 142,
+          "totalRunners": 321,
+          "ageGrade": 60.39,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "23:22",
+          "timeSeconds": 1402,
+          "position": 42,
+          "totalRunners": 317,
+          "ageGrade": 60.46,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "rickmansworth",
+          "time": "23:54",
+          "timeSeconds": 1434,
+          "position": 246,
+          "totalRunners": 370,
+          "ageGrade": 59.28,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-03",
+          "event": "cassiobury",
+          "time": "23:24",
+          "timeSeconds": 1404,
+          "position": 184,
+          "totalRunners": 303,
+          "ageGrade": 57.73,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "gladstone",
+          "time": "22:56",
+          "timeSeconds": 1376,
+          "position": 113,
+          "totalRunners": 383,
+          "ageGrade": 61.41,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-17",
+          "event": "cassiobury",
+          "time": "23:00",
+          "timeSeconds": 1380,
+          "position": 147,
+          "totalRunners": 340,
+          "ageGrade": 58.05,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "23:09",
+          "timeSeconds": 1389,
+          "position": 101,
+          "totalRunners": 367,
+          "ageGrade": 61.01,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-07",
+          "event": "cassiobury",
+          "time": "23:24",
+          "timeSeconds": 1404,
+          "position": 149,
+          "totalRunners": 367,
+          "ageGrade": 59.51,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-21",
+          "event": "cassiobury",
+          "time": "23:41",
+          "timeSeconds": 1421,
+          "position": 255,
+          "totalRunners": 319,
+          "ageGrade": 60.02,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-05",
+          "event": "cassiobury",
+          "time": "23:57",
+          "timeSeconds": 1437,
+          "position": 110,
+          "totalRunners": 370,
+          "ageGrade": 62.13,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-19",
+          "event": "cassiobury",
+          "time": "23:27",
+          "timeSeconds": 1407,
+          "position": 43,
+          "totalRunners": 388,
+          "ageGrade": 59.36,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-26",
+          "event": "cassiobury",
+          "time": "22:01",
+          "timeSeconds": 1321,
+          "position": 119,
+          "totalRunners": 307,
+          "ageGrade": 59.11,
+          "isPB": true
+        },
+        {
+          "date": "2025-08-02",
+          "event": "cassiobury",
+          "time": "23:27",
+          "timeSeconds": 1407,
+          "position": 156,
+          "totalRunners": 330,
+          "ageGrade": 61.72,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "cassiobury",
+          "time": "23:57",
+          "timeSeconds": 1437,
+          "position": 231,
+          "totalRunners": 376,
+          "ageGrade": 59.35,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-16",
+          "event": "cassiobury",
+          "time": "22:56",
+          "timeSeconds": 1376,
+          "position": 194,
+          "totalRunners": 336,
+          "ageGrade": 61.79,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-30",
+          "event": "cassiobury",
+          "time": "23:23",
+          "timeSeconds": 1403,
+          "position": 253,
+          "totalRunners": 340,
+          "ageGrade": 59.47,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-06",
+          "event": "cassiobury",
+          "time": "23:55",
+          "timeSeconds": 1435,
+          "position": 32,
+          "totalRunners": 310,
+          "ageGrade": 59.25,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "22:00",
+          "timeSeconds": 1320,
+          "position": 122,
+          "totalRunners": 307,
+          "ageGrade": 60.05,
+          "isPB": true
+        },
+        {
+          "date": "2025-09-27",
+          "event": "cassiobury",
+          "time": "22:59",
+          "timeSeconds": 1379,
+          "position": 80,
+          "totalRunners": 397,
+          "ageGrade": 60.21,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-04",
+          "event": "cassiobury",
+          "time": "21:47",
+          "timeSeconds": 1307,
+          "position": 212,
+          "totalRunners": 313,
+          "ageGrade": 62.63,
+          "isPB": true
+        },
+        {
+          "date": "2025-10-11",
+          "event": "cassiobury",
+          "time": "22:51",
+          "timeSeconds": 1371,
+          "position": 203,
+          "totalRunners": 310,
+          "ageGrade": 63,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-18",
+          "event": "cassiobury",
+          "time": "23:49",
+          "timeSeconds": 1429,
+          "position": 89,
+          "totalRunners": 365,
+          "ageGrade": 60.39,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "cassiobury",
+          "time": "23:20",
+          "timeSeconds": 1400,
+          "position": 11,
+          "totalRunners": 343,
+          "ageGrade": 61.02,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-01",
+          "event": "rickmansworth",
+          "time": "22:59",
+          "timeSeconds": 1379,
+          "position": 209,
+          "totalRunners": 342,
+          "ageGrade": 62.45,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-08",
+          "event": "cassiobury",
+          "time": "22:42",
+          "timeSeconds": 1362,
+          "position": 25,
+          "totalRunners": 369,
+          "ageGrade": 59.59,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-15",
+          "event": "cassiobury",
+          "time": "23:05",
+          "timeSeconds": 1385,
+          "position": 156,
+          "totalRunners": 313,
+          "ageGrade": 60.78,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-06",
+          "event": "cassiobury",
+          "time": "22:15",
+          "timeSeconds": 1335,
+          "position": 25,
+          "totalRunners": 361,
+          "ageGrade": 62.33,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-13",
+          "event": "cassiobury",
+          "time": "23:22",
+          "timeSeconds": 1402,
+          "position": 257,
+          "totalRunners": 398,
+          "ageGrade": 60.5,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "cassiobury",
+          "time": "23:25",
+          "timeSeconds": 1405,
+          "position": 249,
+          "totalRunners": 399,
+          "ageGrade": 62.75,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "22:17",
+          "timeSeconds": 1337,
+          "position": 21,
+          "totalRunners": 329,
+          "ageGrade": 62.63,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "cassiobury",
+          "time": "22:46",
+          "timeSeconds": 1366,
+          "position": 46,
+          "totalRunners": 398,
+          "ageGrade": 62.49,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-24",
+          "event": "cassiobury",
+          "time": "22:07",
+          "timeSeconds": 1327,
+          "position": 205,
+          "totalRunners": 307,
+          "ageGrade": 61.35,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-31",
+          "event": "cassiobury",
+          "time": "23:35",
+          "timeSeconds": 1415,
+          "position": 28,
+          "totalRunners": 322,
+          "ageGrade": 62.6,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-07",
+          "event": "cassiobury",
+          "time": "23:32",
+          "timeSeconds": 1412,
+          "position": 134,
+          "totalRunners": 325,
+          "ageGrade": 62.27,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-14",
+          "event": "cassiobury",
+          "time": "23:18",
+          "timeSeconds": 1398,
+          "position": 95,
+          "totalRunners": 361,
+          "ageGrade": 63.21,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-21",
+          "event": "cassiobury",
+          "time": "23:00",
+          "timeSeconds": 1380,
+          "position": 96,
+          "totalRunners": 363,
+          "ageGrade": 64.25,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-28",
+          "event": "cassiobury",
+          "time": "23:45",
+          "timeSeconds": 1425,
+          "position": 116,
+          "totalRunners": 327,
+          "ageGrade": 60.94,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "bushey",
+          "time": "21:33",
+          "timeSeconds": 1293,
+          "position": 229,
+          "totalRunners": 366,
+          "ageGrade": 61.54,
+          "isPB": true
+        },
+        {
+          "date": "2026-03-14",
+          "event": "cassiobury",
+          "time": "22:05",
+          "timeSeconds": 1325,
+          "position": 82,
+          "totalRunners": 389,
+          "ageGrade": 64.88,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "23:04",
+          "timeSeconds": 1384,
+          "position": 259,
+          "totalRunners": 314,
+          "ageGrade": 62.18,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-28",
+          "event": "cassiobury",
+          "time": "21:44",
+          "timeSeconds": 1304,
+          "position": 110,
+          "totalRunners": 331,
+          "ageGrade": 64.98,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-04",
+          "event": "cassiobury",
+          "time": "22:44",
+          "timeSeconds": 1364,
+          "position": 113,
+          "totalRunners": 305,
+          "ageGrade": 62.17,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-11",
+          "event": "cassiobury",
+          "time": "22:12",
+          "timeSeconds": 1332,
+          "position": 149,
+          "totalRunners": 376,
+          "ageGrade": 64.22,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-18",
+          "event": "cassiobury",
+          "time": "22:42",
+          "timeSeconds": 1362,
+          "position": 259,
+          "totalRunners": 342,
+          "ageGrade": 64.58,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-02",
+          "event": "cassiobury",
+          "time": "23:39",
+          "timeSeconds": 1419,
+          "position": 229,
+          "totalRunners": 373,
+          "ageGrade": 63.68,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "22:20",
+          "timeSeconds": 1340,
+          "position": 52,
+          "totalRunners": 379,
+          "ageGrade": 64.03,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "23:20",
+          "timeSeconds": 1400,
+          "position": 73,
+          "totalRunners": 328,
+          "ageGrade": 63.76,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-23",
+          "event": "cassiobury",
+          "time": "22:54",
+          "timeSeconds": 1374,
+          "position": 133,
+          "totalRunners": 353,
+          "ageGrade": 63.56,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-30",
+          "event": "cassiobury",
+          "time": "22:30",
+          "timeSeconds": 1350,
+          "position": 40,
+          "totalRunners": 321,
+          "ageGrade": 61.64,
+          "isPB": false
+        },
+        {
+          "date": "2026-06-06",
+          "event": "cassiobury",
+          "time": "21:51",
+          "timeSeconds": 1311,
+          "position": 157,
+          "totalRunners": 352,
+          "ageGrade": 63.04,
+          "isPB": false
+        }
+      ]
+    },
+    {
+      "id": 7205311,
+      "name": "Fatima PANJU",
+      "gender": "F",
+      "ageGroup": "VW35-39",
+      "totalRuns": 145,
+      "pb": "26:44",
+      "pbSeconds": 1604,
+      "bestAgeGrade": 57.59,
+      "currentStreak": 1,
+      "results": [
+        {
+          "date": "2024-12-14",
+          "event": "cassiobury",
+          "time": "28:15",
+          "timeSeconds": 1695,
+          "position": 16,
+          "totalRunners": 335,
+          "ageGrade": 53.08,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-21",
+          "event": "cassiobury",
+          "time": "27:49",
+          "timeSeconds": 1669,
+          "position": 23,
+          "totalRunners": 376,
+          "ageGrade": 50.68,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "28:42",
+          "timeSeconds": 1722,
+          "position": 55,
+          "totalRunners": 308,
+          "ageGrade": 50.91,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-04",
+          "event": "cassiobury",
+          "time": "27:12",
+          "timeSeconds": 1632,
+          "position": 223,
+          "totalRunners": 379,
+          "ageGrade": 51.94,
+          "isPB": true
+        },
+        {
+          "date": "2025-01-11",
+          "event": "cassiobury",
+          "time": "28:41",
+          "timeSeconds": 1721,
+          "position": 150,
+          "totalRunners": 399,
+          "ageGrade": 53.29,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-18",
+          "event": "rickmansworth",
+          "time": "27:50",
+          "timeSeconds": 1670,
+          "position": 241,
+          "totalRunners": 323,
+          "ageGrade": 52.8,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "rickmansworth",
+          "time": "27:18",
+          "timeSeconds": 1638,
+          "position": 74,
+          "totalRunners": 397,
+          "ageGrade": 50.7,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-01",
+          "event": "cassiobury",
+          "time": "27:46",
+          "timeSeconds": 1666,
+          "position": 82,
+          "totalRunners": 325,
+          "ageGrade": 52.96,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-15",
+          "event": "cassiobury",
+          "time": "27:13",
+          "timeSeconds": 1633,
+          "position": 225,
+          "totalRunners": 371,
+          "ageGrade": 54.29,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "27:31",
+          "timeSeconds": 1651,
+          "position": 186,
+          "totalRunners": 382,
+          "ageGrade": 53.81,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "27:01",
+          "timeSeconds": 1621,
+          "position": 189,
+          "totalRunners": 317,
+          "ageGrade": 53.51,
+          "isPB": true
+        },
+        {
+          "date": "2025-03-29",
+          "event": "cassiobury",
+          "time": "27:17",
+          "timeSeconds": 1637,
+          "position": 152,
+          "totalRunners": 314,
+          "ageGrade": 51.44,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-05",
+          "event": "cassiobury",
+          "time": "27:09",
+          "timeSeconds": 1629,
+          "position": 259,
+          "totalRunners": 364,
+          "ageGrade": 51.85,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "29:19",
+          "timeSeconds": 1759,
+          "position": 237,
+          "totalRunners": 386,
+          "ageGrade": 51.54,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "cassiobury",
+          "time": "27:06",
+          "timeSeconds": 1626,
+          "position": 139,
+          "totalRunners": 348,
+          "ageGrade": 54.75,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "28:22",
+          "timeSeconds": 1702,
+          "position": 67,
+          "totalRunners": 346,
+          "ageGrade": 54.89,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-31",
+          "event": "cassiobury",
+          "time": "27:00",
+          "timeSeconds": 1620,
+          "position": 122,
+          "totalRunners": 378,
+          "ageGrade": 51.98,
+          "isPB": true
+        },
+        {
+          "date": "2025-06-14",
+          "event": "cassiobury",
+          "time": "27:02",
+          "timeSeconds": 1622,
+          "position": 160,
+          "totalRunners": 323,
+          "ageGrade": 52.83,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-21",
+          "event": "cassiobury",
+          "time": "28:40",
+          "timeSeconds": 1720,
+          "position": 119,
+          "totalRunners": 343,
+          "ageGrade": 54.83,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "cassiobury",
+          "time": "28:38",
+          "timeSeconds": 1718,
+          "position": 119,
+          "totalRunners": 391,
+          "ageGrade": 53.73,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-05",
+          "event": "cassiobury",
+          "time": "27:28",
+          "timeSeconds": 1648,
+          "position": 246,
+          "totalRunners": 382,
+          "ageGrade": 54.57,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-19",
+          "event": "cassiobury",
+          "time": "28:54",
+          "timeSeconds": 1734,
+          "position": 108,
+          "totalRunners": 319,
+          "ageGrade": 54.18,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "cassiobury",
+          "time": "28:00",
+          "timeSeconds": 1680,
+          "position": 28,
+          "totalRunners": 398,
+          "ageGrade": 55.21,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-23",
+          "event": "cassiobury",
+          "time": "26:50",
+          "timeSeconds": 1610,
+          "position": 31,
+          "totalRunners": 311,
+          "ageGrade": 56.07,
+          "isPB": true
+        },
+        {
+          "date": "2025-09-06",
+          "event": "cassiobury",
+          "time": "28:56",
+          "timeSeconds": 1736,
+          "position": 125,
+          "totalRunners": 346,
+          "ageGrade": 54.04,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "28:05",
+          "timeSeconds": 1685,
+          "position": 85,
+          "totalRunners": 352,
+          "ageGrade": 52.73,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-20",
+          "event": "cassiobury",
+          "time": "27:30",
+          "timeSeconds": 1650,
+          "position": 31,
+          "totalRunners": 374,
+          "ageGrade": 55.25,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-04",
+          "event": "cassiobury",
+          "time": "28:53",
+          "timeSeconds": 1733,
+          "position": 62,
+          "totalRunners": 306,
+          "ageGrade": 55.31,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-18",
+          "event": "cassiobury",
+          "time": "28:43",
+          "timeSeconds": 1723,
+          "position": 106,
+          "totalRunners": 343,
+          "ageGrade": 53.98,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "cassiobury",
+          "time": "27:53",
+          "timeSeconds": 1673,
+          "position": 182,
+          "totalRunners": 332,
+          "ageGrade": 54.33,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-15",
+          "event": "cassiobury",
+          "time": "28:50",
+          "timeSeconds": 1730,
+          "position": 225,
+          "totalRunners": 304,
+          "ageGrade": 53.8,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "27:53",
+          "timeSeconds": 1673,
+          "position": 186,
+          "totalRunners": 308,
+          "ageGrade": 55.12,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-13",
+          "event": "cassiobury",
+          "time": "28:15",
+          "timeSeconds": 1695,
+          "position": 47,
+          "totalRunners": 334,
+          "ageGrade": 54.78,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "gladstone",
+          "time": "28:28",
+          "timeSeconds": 1708,
+          "position": 164,
+          "totalRunners": 350,
+          "ageGrade": 54.9,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "28:15",
+          "timeSeconds": 1695,
+          "position": 189,
+          "totalRunners": 347,
+          "ageGrade": 53.34,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "28:15",
+          "timeSeconds": 1695,
+          "position": 169,
+          "totalRunners": 301,
+          "ageGrade": 55.46,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "rickmansworth",
+          "time": "26:44",
+          "timeSeconds": 1604,
+          "position": 101,
+          "totalRunners": 373,
+          "ageGrade": 55.76,
+          "isPB": true
+        },
+        {
+          "date": "2026-01-31",
+          "event": "cassiobury",
+          "time": "28:26",
+          "timeSeconds": 1706,
+          "position": 125,
+          "totalRunners": 388,
+          "ageGrade": 55.59,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-14",
+          "event": "cassiobury",
+          "time": "28:52",
+          "timeSeconds": 1732,
+          "position": 254,
+          "totalRunners": 377,
+          "ageGrade": 55.4,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-21",
+          "event": "cassiobury",
+          "time": "27:11",
+          "timeSeconds": 1631,
+          "position": 181,
+          "totalRunners": 384,
+          "ageGrade": 56.66,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-28",
+          "event": "cassiobury",
+          "time": "27:46",
+          "timeSeconds": 1666,
+          "position": 178,
+          "totalRunners": 327,
+          "ageGrade": 56.94,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "cassiobury",
+          "time": "27:04",
+          "timeSeconds": 1624,
+          "position": 69,
+          "totalRunners": 367,
+          "ageGrade": 55.35,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-14",
+          "event": "cassiobury",
+          "time": "26:47",
+          "timeSeconds": 1607,
+          "position": 125,
+          "totalRunners": 313,
+          "ageGrade": 54.6,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "27:43",
+          "timeSeconds": 1663,
+          "position": 196,
+          "totalRunners": 334,
+          "ageGrade": 55.17,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-28",
+          "event": "cassiobury",
+          "time": "26:56",
+          "timeSeconds": 1616,
+          "position": 213,
+          "totalRunners": 307,
+          "ageGrade": 56.65,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-11",
+          "event": "cassiobury",
+          "time": "28:32",
+          "timeSeconds": 1712,
+          "position": 155,
+          "totalRunners": 341,
+          "ageGrade": 54.91,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-18",
+          "event": "cassiobury",
+          "time": "27:59",
+          "timeSeconds": 1679,
+          "position": 77,
+          "totalRunners": 369,
+          "ageGrade": 57.57,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-02",
+          "event": "cassiobury",
+          "time": "27:03",
+          "timeSeconds": 1623,
+          "position": 172,
+          "totalRunners": 367,
+          "ageGrade": 53.93,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "27:15",
+          "timeSeconds": 1635,
+          "position": 177,
+          "totalRunners": 312,
+          "ageGrade": 57.47,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "27:36",
+          "timeSeconds": 1656,
+          "position": 102,
+          "totalRunners": 384,
+          "ageGrade": 54.74,
+          "isPB": false
+        },
+        {
+          "date": "2026-06-06",
+          "event": "cassiobury",
+          "time": "28:50",
+          "timeSeconds": 1730,
+          "position": 126,
+          "totalRunners": 312,
+          "ageGrade": 57.59,
+          "isPB": false
+        }
+      ]
+    },
+    {
+      "id": 6892003,
+      "name": "Rahim MEGHJEE",
+      "gender": "M",
+      "ageGroup": "VM40-44",
+      "totalRuns": 253,
+      "pb": "19:52",
+      "pbSeconds": 1192,
+      "bestAgeGrade": 68.57,
+      "currentStreak": 5,
+      "results": [
+        {
+          "date": "2024-12-14",
+          "event": "cassiobury",
+          "time": "20:36",
+          "timeSeconds": 1236,
+          "position": 230,
+          "totalRunners": 320,
+          "ageGrade": 62.69,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "22:04",
+          "timeSeconds": 1324,
+          "position": 218,
+          "totalRunners": 330,
+          "ageGrade": 64.27,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-04",
+          "event": "cassiobury",
+          "time": "20:02",
+          "timeSeconds": 1202,
+          "position": 191,
+          "totalRunners": 321,
+          "ageGrade": 63.22,
+          "isPB": true
+        },
+        {
+          "date": "2025-01-11",
+          "event": "cassiobury",
+          "time": "21:43",
+          "timeSeconds": 1303,
+          "position": 202,
+          "totalRunners": 319,
+          "ageGrade": 62.42,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-18",
+          "event": "cassiobury",
+          "time": "21:39",
+          "timeSeconds": 1299,
+          "position": 155,
+          "totalRunners": 372,
+          "ageGrade": 62.47,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-01",
+          "event": "cassiobury",
+          "time": "20:28",
+          "timeSeconds": 1228,
+          "position": 162,
+          "totalRunners": 383,
+          "ageGrade": 65.19,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-08",
+          "event": "cassiobury",
+          "time": "20:57",
+          "timeSeconds": 1257,
+          "position": 207,
+          "totalRunners": 348,
+          "ageGrade": 64.68,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-15",
+          "event": "cassiobury",
+          "time": "20:27",
+          "timeSeconds": 1227,
+          "position": 101,
+          "totalRunners": 364,
+          "ageGrade": 65.79,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "21:57",
+          "timeSeconds": 1317,
+          "position": 247,
+          "totalRunners": 313,
+          "ageGrade": 64.63,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-01",
+          "event": "cassiobury",
+          "time": "20:45",
+          "timeSeconds": 1245,
+          "position": 89,
+          "totalRunners": 382,
+          "ageGrade": 63.17,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "21:12",
+          "timeSeconds": 1272,
+          "position": 10,
+          "totalRunners": 348,
+          "ageGrade": 62.91,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-15",
+          "event": "cassiobury",
+          "time": "21:09",
+          "timeSeconds": 1269,
+          "position": 86,
+          "totalRunners": 380,
+          "ageGrade": 66.43,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-22",
+          "event": "cassiobury",
+          "time": "21:51",
+          "timeSeconds": 1311,
+          "position": 173,
+          "totalRunners": 307,
+          "ageGrade": 65.12,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-29",
+          "event": "cassiobury",
+          "time": "20:58",
+          "timeSeconds": 1258,
+          "position": 68,
+          "totalRunners": 383,
+          "ageGrade": 65.93,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-05",
+          "event": "cassiobury",
+          "time": "22:13",
+          "timeSeconds": 1333,
+          "position": 120,
+          "totalRunners": 397,
+          "ageGrade": 63.57,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-12",
+          "event": "cassiobury",
+          "time": "21:53",
+          "timeSeconds": 1313,
+          "position": 244,
+          "totalRunners": 341,
+          "ageGrade": 65.23,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "21:07",
+          "timeSeconds": 1267,
+          "position": 229,
+          "totalRunners": 353,
+          "ageGrade": 65.58,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "cassiobury",
+          "time": "22:20",
+          "timeSeconds": 1340,
+          "position": 237,
+          "totalRunners": 334,
+          "ageGrade": 63.59,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-03",
+          "event": "cassiobury",
+          "time": "20:13",
+          "timeSeconds": 1213,
+          "position": 46,
+          "totalRunners": 344,
+          "ageGrade": 64.54,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "cassiobury",
+          "time": "20:16",
+          "timeSeconds": 1216,
+          "position": 140,
+          "totalRunners": 335,
+          "ageGrade": 63.07,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-17",
+          "event": "cassiobury",
+          "time": "20:10",
+          "timeSeconds": 1210,
+          "position": 95,
+          "totalRunners": 372,
+          "ageGrade": 64.42,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "22:11",
+          "timeSeconds": 1331,
+          "position": 110,
+          "totalRunners": 329,
+          "ageGrade": 65.8,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-31",
+          "event": "cassiobury",
+          "time": "20:52",
+          "timeSeconds": 1252,
+          "position": 180,
+          "totalRunners": 315,
+          "ageGrade": 65.95,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-07",
+          "event": "cassiobury",
+          "time": "21:19",
+          "timeSeconds": 1279,
+          "position": 189,
+          "totalRunners": 311,
+          "ageGrade": 65.85,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-14",
+          "event": "cassiobury",
+          "time": "20:30",
+          "timeSeconds": 1230,
+          "position": 234,
+          "totalRunners": 332,
+          "ageGrade": 66.63,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-21",
+          "event": "cassiobury",
+          "time": "21:10",
+          "timeSeconds": 1270,
+          "position": 114,
+          "totalRunners": 351,
+          "ageGrade": 65.95,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "gladstone",
+          "time": "20:10",
+          "timeSeconds": 1210,
+          "position": 75,
+          "totalRunners": 392,
+          "ageGrade": 65.44,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-05",
+          "event": "gladstone",
+          "time": "20:02",
+          "timeSeconds": 1202,
+          "position": 146,
+          "totalRunners": 330,
+          "ageGrade": 65.65,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-19",
+          "event": "cassiobury",
+          "time": "20:34",
+          "timeSeconds": 1234,
+          "position": 34,
+          "totalRunners": 399,
+          "ageGrade": 65.75,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-26",
+          "event": "cassiobury",
+          "time": "20:14",
+          "timeSeconds": 1214,
+          "position": 236,
+          "totalRunners": 360,
+          "ageGrade": 63.7,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-02",
+          "event": "cassiobury",
+          "time": "20:48",
+          "timeSeconds": 1248,
+          "position": 157,
+          "totalRunners": 328,
+          "ageGrade": 66.58,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "gladstone",
+          "time": "21:28",
+          "timeSeconds": 1288,
+          "position": 122,
+          "totalRunners": 311,
+          "ageGrade": 67.04,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-16",
+          "event": "cassiobury",
+          "time": "20:17",
+          "timeSeconds": 1217,
+          "position": 230,
+          "totalRunners": 374,
+          "ageGrade": 65.44,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-23",
+          "event": "cassiobury",
+          "time": "21:29",
+          "timeSeconds": 1289,
+          "position": 166,
+          "totalRunners": 372,
+          "ageGrade": 65.4,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-30",
+          "event": "cassiobury",
+          "time": "20:19",
+          "timeSeconds": 1219,
+          "position": 21,
+          "totalRunners": 306,
+          "ageGrade": 66.26,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-06",
+          "event": "cassiobury",
+          "time": "20:08",
+          "timeSeconds": 1208,
+          "position": 103,
+          "totalRunners": 322,
+          "ageGrade": 67.05,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "22:11",
+          "timeSeconds": 1331,
+          "position": 107,
+          "totalRunners": 361,
+          "ageGrade": 66.92,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-20",
+          "event": "cassiobury",
+          "time": "21:55",
+          "timeSeconds": 1315,
+          "position": 204,
+          "totalRunners": 397,
+          "ageGrade": 64.18,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-27",
+          "event": "cassiobury",
+          "time": "22:04",
+          "timeSeconds": 1324,
+          "position": 28,
+          "totalRunners": 311,
+          "ageGrade": 63.72,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-04",
+          "event": "cassiobury",
+          "time": "21:43",
+          "timeSeconds": 1303,
+          "position": 12,
+          "totalRunners": 303,
+          "ageGrade": 67.04,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-18",
+          "event": "rickmansworth",
+          "time": "20:18",
+          "timeSeconds": 1218,
+          "position": 248,
+          "totalRunners": 348,
+          "ageGrade": 65.94,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "cassiobury",
+          "time": "22:10",
+          "timeSeconds": 1330,
+          "position": 118,
+          "totalRunners": 335,
+          "ageGrade": 65.31,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-01",
+          "event": "cassiobury",
+          "time": "19:52",
+          "timeSeconds": 1192,
+          "position": 211,
+          "totalRunners": 306,
+          "ageGrade": 66.64,
+          "isPB": true
+        },
+        {
+          "date": "2025-11-15",
+          "event": "cassiobury",
+          "time": "20:08",
+          "timeSeconds": 1208,
+          "position": 20,
+          "totalRunners": 355,
+          "ageGrade": 64.12,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "20:51",
+          "timeSeconds": 1251,
+          "position": 201,
+          "totalRunners": 385,
+          "ageGrade": 64.83,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-29",
+          "event": "cassiobury",
+          "time": "20:02",
+          "timeSeconds": 1202,
+          "position": 29,
+          "totalRunners": 339,
+          "ageGrade": 64.69,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-06",
+          "event": "cassiobury",
+          "time": "21:46",
+          "timeSeconds": 1306,
+          "position": 108,
+          "totalRunners": 393,
+          "ageGrade": 64.67,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-13",
+          "event": "cassiobury",
+          "time": "20:33",
+          "timeSeconds": 1233,
+          "position": 109,
+          "totalRunners": 308,
+          "ageGrade": 67.51,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "cassiobury",
+          "time": "21:54",
+          "timeSeconds": 1314,
+          "position": 71,
+          "totalRunners": 366,
+          "ageGrade": 64.47,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "20:34",
+          "timeSeconds": 1234,
+          "position": 45,
+          "totalRunners": 347,
+          "ageGrade": 67.43,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "20:17",
+          "timeSeconds": 1217,
+          "position": 74,
+          "totalRunners": 381,
+          "ageGrade": 65.67,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "cassiobury",
+          "time": "20:01",
+          "timeSeconds": 1201,
+          "position": 104,
+          "totalRunners": 359,
+          "ageGrade": 66.39,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-24",
+          "event": "gladstone",
+          "time": "20:07",
+          "timeSeconds": 1207,
+          "position": 169,
+          "totalRunners": 391,
+          "ageGrade": 65.18,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-31",
+          "event": "cassiobury",
+          "time": "19:58",
+          "timeSeconds": 1198,
+          "position": 247,
+          "totalRunners": 335,
+          "ageGrade": 66.99,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-07",
+          "event": "cassiobury",
+          "time": "20:33",
+          "timeSeconds": 1233,
+          "position": 197,
+          "totalRunners": 329,
+          "ageGrade": 64.58,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-14",
+          "event": "cassiobury",
+          "time": "20:12",
+          "timeSeconds": 1212,
+          "position": 177,
+          "totalRunners": 366,
+          "ageGrade": 68.12,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-21",
+          "event": "cassiobury",
+          "time": "21:18",
+          "timeSeconds": 1278,
+          "position": 55,
+          "totalRunners": 304,
+          "ageGrade": 66.98,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-28",
+          "event": "bushey",
+          "time": "20:21",
+          "timeSeconds": 1221,
+          "position": 140,
+          "totalRunners": 350,
+          "ageGrade": 67.28,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "cassiobury",
+          "time": "20:06",
+          "timeSeconds": 1206,
+          "position": 167,
+          "totalRunners": 307,
+          "ageGrade": 66.73,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-14",
+          "event": "cassiobury",
+          "time": "20:42",
+          "timeSeconds": 1242,
+          "position": 16,
+          "totalRunners": 334,
+          "ageGrade": 64.71,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "21:41",
+          "timeSeconds": 1301,
+          "position": 171,
+          "totalRunners": 313,
+          "ageGrade": 67.34,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-28",
+          "event": "cassiobury",
+          "time": "21:12",
+          "timeSeconds": 1272,
+          "position": 70,
+          "totalRunners": 399,
+          "ageGrade": 64.64,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-04",
+          "event": "cassiobury",
+          "time": "20:01",
+          "timeSeconds": 1201,
+          "position": 78,
+          "totalRunners": 322,
+          "ageGrade": 65.43,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-11",
+          "event": "cassiobury",
+          "time": "20:02",
+          "timeSeconds": 1202,
+          "position": 26,
+          "totalRunners": 304,
+          "ageGrade": 65.61,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-18",
+          "event": "cassiobury",
+          "time": "21:49",
+          "timeSeconds": 1309,
+          "position": 107,
+          "totalRunners": 359,
+          "ageGrade": 66.41,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-25",
+          "event": "cassiobury",
+          "time": "20:11",
+          "timeSeconds": 1211,
+          "position": 139,
+          "totalRunners": 304,
+          "ageGrade": 68.57,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "21:57",
+          "timeSeconds": 1317,
+          "position": 186,
+          "totalRunners": 362,
+          "ageGrade": 67.63,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "20:30",
+          "timeSeconds": 1230,
+          "position": 224,
+          "totalRunners": 319,
+          "ageGrade": 68.5,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-23",
+          "event": "cassiobury",
+          "time": "21:49",
+          "timeSeconds": 1309,
+          "position": 143,
+          "totalRunners": 347,
+          "ageGrade": 67.99,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-30",
+          "event": "cassiobury",
+          "time": "20:42",
+          "timeSeconds": 1242,
+          "position": 164,
+          "totalRunners": 378,
+          "ageGrade": 65.92,
+          "isPB": false
+        },
+        {
+          "date": "2026-06-06",
+          "event": "cassiobury",
+          "time": "20:17",
+          "timeSeconds": 1217,
+          "position": 41,
+          "totalRunners": 360,
+          "ageGrade": 66.76,
+          "isPB": false
+        }
+      ]
+    },
+    {
+      "id": 7450122,
+      "name": "Zara MEGHJEE",
+      "gender": "F",
+      "ageGroup": "VW40-44",
+      "totalRuns": 97,
+      "pb": "28:57",
+      "pbSeconds": 1737,
+      "bestAgeGrade": 51.04,
+      "currentStreak": 0,
+      "results": [
+        {
+          "date": "2024-12-21",
+          "event": "cassiobury",
+          "time": "30:16",
+          "timeSeconds": 1816,
+          "position": 252,
+          "totalRunners": 352,
+          "ageGrade": 46.75,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "29:45",
+          "timeSeconds": 1785,
+          "position": 156,
+          "totalRunners": 375,
+          "ageGrade": 46.87,
+          "isPB": true
+        },
+        {
+          "date": "2025-01-11",
+          "event": "cassiobury",
+          "time": "31:24",
+          "timeSeconds": 1884,
+          "position": 91,
+          "totalRunners": 330,
+          "ageGrade": 48.05,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "cassiobury",
+          "time": "30:41",
+          "timeSeconds": 1841,
+          "position": 75,
+          "totalRunners": 385,
+          "ageGrade": 49.48,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-15",
+          "event": "cassiobury",
+          "time": "29:28",
+          "timeSeconds": 1768,
+          "position": 203,
+          "totalRunners": 316,
+          "ageGrade": 47.42,
+          "isPB": true
+        },
+        {
+          "date": "2025-03-01",
+          "event": "cassiobury",
+          "time": "31:04",
+          "timeSeconds": 1864,
+          "position": 169,
+          "totalRunners": 368,
+          "ageGrade": 47.84,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "31:24",
+          "timeSeconds": 1884,
+          "position": 137,
+          "totalRunners": 327,
+          "ageGrade": 46.29,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-15",
+          "event": "cassiobury",
+          "time": "30:40",
+          "timeSeconds": 1840,
+          "position": 44,
+          "totalRunners": 366,
+          "ageGrade": 46.61,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-29",
+          "event": "cassiobury",
+          "time": "30:04",
+          "timeSeconds": 1804,
+          "position": 171,
+          "totalRunners": 349,
+          "ageGrade": 46.92,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-05",
+          "event": "cassiobury",
+          "time": "30:19",
+          "timeSeconds": 1819,
+          "position": 252,
+          "totalRunners": 321,
+          "ageGrade": 47.74,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-12",
+          "event": "cassiobury",
+          "time": "29:00",
+          "timeSeconds": 1740,
+          "position": 150,
+          "totalRunners": 351,
+          "ageGrade": 48.95,
+          "isPB": true
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "29:42",
+          "timeSeconds": 1782,
+          "position": 154,
+          "totalRunners": 326,
+          "ageGrade": 49.24,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "cassiobury",
+          "time": "31:13",
+          "timeSeconds": 1873,
+          "position": 196,
+          "totalRunners": 305,
+          "ageGrade": 47.96,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "29:58",
+          "timeSeconds": 1798,
+          "position": 128,
+          "totalRunners": 301,
+          "ageGrade": 47.11,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-31",
+          "event": "cassiobury",
+          "time": "29:00",
+          "timeSeconds": 1740,
+          "position": 149,
+          "totalRunners": 319,
+          "ageGrade": 47.1,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-07",
+          "event": "cassiobury",
+          "time": "29:31",
+          "timeSeconds": 1771,
+          "position": 230,
+          "totalRunners": 363,
+          "ageGrade": 48.68,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-21",
+          "event": "cassiobury",
+          "time": "29:17",
+          "timeSeconds": 1757,
+          "position": 159,
+          "totalRunners": 375,
+          "ageGrade": 50.51,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "cassiobury",
+          "time": "29:07",
+          "timeSeconds": 1747,
+          "position": 213,
+          "totalRunners": 310,
+          "ageGrade": 46.75,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-12",
+          "event": "cassiobury",
+          "time": "30:21",
+          "timeSeconds": 1821,
+          "position": 168,
+          "totalRunners": 335,
+          "ageGrade": 46.91,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-26",
+          "event": "cassiobury",
+          "time": "30:11",
+          "timeSeconds": 1811,
+          "position": 231,
+          "totalRunners": 381,
+          "ageGrade": 48.38,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-02",
+          "event": "cassiobury",
+          "time": "31:14",
+          "timeSeconds": 1874,
+          "position": 182,
+          "totalRunners": 347,
+          "ageGrade": 47.92,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-30",
+          "event": "cassiobury",
+          "time": "29:07",
+          "timeSeconds": 1747,
+          "position": 40,
+          "totalRunners": 346,
+          "ageGrade": 47.64,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "29:34",
+          "timeSeconds": 1774,
+          "position": 63,
+          "totalRunners": 353,
+          "ageGrade": 49.1,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-20",
+          "event": "rickmansworth",
+          "time": "29:26",
+          "timeSeconds": 1766,
+          "position": 113,
+          "totalRunners": 391,
+          "ageGrade": 49.05,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "cassiobury",
+          "time": "31:24",
+          "timeSeconds": 1884,
+          "position": 183,
+          "totalRunners": 344,
+          "ageGrade": 48.01,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-08",
+          "event": "cassiobury",
+          "time": "29:26",
+          "timeSeconds": 1766,
+          "position": 94,
+          "totalRunners": 324,
+          "ageGrade": 48.69,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "29:42",
+          "timeSeconds": 1782,
+          "position": 97,
+          "totalRunners": 357,
+          "ageGrade": 49.87,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-29",
+          "event": "cassiobury",
+          "time": "30:52",
+          "timeSeconds": 1852,
+          "position": 126,
+          "totalRunners": 390,
+          "ageGrade": 50.68,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "cassiobury",
+          "time": "29:17",
+          "timeSeconds": 1757,
+          "position": 104,
+          "totalRunners": 369,
+          "ageGrade": 48.69,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "30:53",
+          "timeSeconds": 1853,
+          "position": 169,
+          "totalRunners": 312,
+          "ageGrade": 47.2,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "28:57",
+          "timeSeconds": 1737,
+          "position": 72,
+          "totalRunners": 397,
+          "ageGrade": 50.26,
+          "isPB": true
+        },
+        {
+          "date": "2026-01-10",
+          "event": "cassiobury",
+          "time": "30:33",
+          "timeSeconds": 1833,
+          "position": 184,
+          "totalRunners": 339,
+          "ageGrade": 50.19,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "cassiobury",
+          "time": "30:12",
+          "timeSeconds": 1812,
+          "position": 186,
+          "totalRunners": 301,
+          "ageGrade": 48.66,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-31",
+          "event": "cassiobury",
+          "time": "30:34",
+          "timeSeconds": 1834,
+          "position": 249,
+          "totalRunners": 336,
+          "ageGrade": 49.48,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-07",
+          "event": "cassiobury",
+          "time": "30:16",
+          "timeSeconds": 1816,
+          "position": 44,
+          "totalRunners": 370,
+          "ageGrade": 47.8,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-21",
+          "event": "cassiobury",
+          "time": "29:24",
+          "timeSeconds": 1764,
+          "position": 107,
+          "totalRunners": 334,
+          "ageGrade": 51.04,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "cassiobury",
+          "time": "29:25",
+          "timeSeconds": 1765,
+          "position": 120,
+          "totalRunners": 360,
+          "ageGrade": 47.53,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "29:37",
+          "timeSeconds": 1777,
+          "position": 192,
+          "totalRunners": 328,
+          "ageGrade": 50.85,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-28",
+          "event": "cassiobury",
+          "time": "31:15",
+          "timeSeconds": 1875,
+          "position": 63,
+          "totalRunners": 306,
+          "ageGrade": 50.75,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-04",
+          "event": "cassiobury",
+          "time": "30:16",
+          "timeSeconds": 1816,
+          "position": 251,
+          "totalRunners": 385,
+          "ageGrade": 49.94,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-11",
+          "event": "cassiobury",
+          "time": "29:34",
+          "timeSeconds": 1774,
+          "position": 255,
+          "totalRunners": 354,
+          "ageGrade": 48.18,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-18",
+          "event": "cassiobury",
+          "time": "30:44",
+          "timeSeconds": 1844,
+          "position": 213,
+          "totalRunners": 351,
+          "ageGrade": 47.31,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-25",
+          "event": "cassiobury",
+          "time": "29:38",
+          "timeSeconds": 1778,
+          "position": 180,
+          "totalRunners": 357,
+          "ageGrade": 48.84,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-02",
+          "event": "cassiobury",
+          "time": "30:11",
+          "timeSeconds": 1811,
+          "position": 86,
+          "totalRunners": 300,
+          "ageGrade": 49.89,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "30:42",
+          "timeSeconds": 1842,
+          "position": 100,
+          "totalRunners": 354,
+          "ageGrade": 50.91,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "31:14",
+          "timeSeconds": 1874,
+          "position": 144,
+          "totalRunners": 344,
+          "ageGrade": 48.25,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-23",
+          "event": "cassiobury",
+          "time": "29:17",
+          "timeSeconds": 1757,
+          "position": 177,
+          "totalRunners": 356,
+          "ageGrade": 47.73,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-30",
+          "event": "cassiobury",
+          "time": "30:06",
+          "timeSeconds": 1806,
+          "position": 93,
+          "totalRunners": 331,
+          "ageGrade": 49.77,
+          "isPB": false
+        }
+      ]
+    },
+    {
+      "id": 6334567,
+      "name": "Amir TEJANI",
+      "gender": "M",
+      "ageGroup": "VM45-49",
+      "totalRuns": 214,
+      "pb": "23:01",
+      "pbSeconds": 1381,
+      "bestAgeGrade": 57.76,
+      "currentStreak": 6,
+      "results": [
+        {
+          "date": "2024-12-14",
+          "event": "cassiobury",
+          "time": "23:59",
+          "timeSeconds": 1439,
+          "position": 46,
+          "totalRunners": 300,
+          "ageGrade": 57.42,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-21",
+          "event": "cassiobury",
+          "time": "24:17",
+          "timeSeconds": 1457,
+          "position": 29,
+          "totalRunners": 337,
+          "ageGrade": 57.45,
+          "isPB": false
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "24:43",
+          "timeSeconds": 1483,
+          "position": 164,
+          "totalRunners": 311,
+          "ageGrade": 55.15,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-04",
+          "event": "cassiobury",
+          "time": "24:22",
+          "timeSeconds": 1462,
+          "position": 74,
+          "totalRunners": 305,
+          "ageGrade": 55.49,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-11",
+          "event": "cassiobury",
+          "time": "24:56",
+          "timeSeconds": 1496,
+          "position": 176,
+          "totalRunners": 382,
+          "ageGrade": 56.99,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-18",
+          "event": "cassiobury",
+          "time": "24:20",
+          "timeSeconds": 1460,
+          "position": 19,
+          "totalRunners": 340,
+          "ageGrade": 57.47,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "cassiobury",
+          "time": "24:00",
+          "timeSeconds": 1440,
+          "position": 58,
+          "totalRunners": 314,
+          "ageGrade": 54.08,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-01",
+          "event": "cassiobury",
+          "time": "25:08",
+          "timeSeconds": 1508,
+          "position": 42,
+          "totalRunners": 387,
+          "ageGrade": 54.18,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-08",
+          "event": "cassiobury",
+          "time": "24:09",
+          "timeSeconds": 1449,
+          "position": 226,
+          "totalRunners": 382,
+          "ageGrade": 57.03,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-15",
+          "event": "cassiobury",
+          "time": "24:46",
+          "timeSeconds": 1486,
+          "position": 15,
+          "totalRunners": 348,
+          "ageGrade": 56.4,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "24:52",
+          "timeSeconds": 1492,
+          "position": 53,
+          "totalRunners": 311,
+          "ageGrade": 56.45,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-15",
+          "event": "rickmansworth",
+          "time": "24:14",
+          "timeSeconds": 1454,
+          "position": 144,
+          "totalRunners": 372,
+          "ageGrade": 55.67,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-22",
+          "event": "cassiobury",
+          "time": "23:05",
+          "timeSeconds": 1385,
+          "position": 217,
+          "totalRunners": 383,
+          "ageGrade": 56.93,
+          "isPB": true
+        },
+        {
+          "date": "2025-03-29",
+          "event": "cassiobury",
+          "time": "23:43",
+          "timeSeconds": 1423,
+          "position": 43,
+          "totalRunners": 327,
+          "ageGrade": 57.35,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-05",
+          "event": "cassiobury",
+          "time": "24:16",
+          "timeSeconds": 1456,
+          "position": 170,
+          "totalRunners": 349,
+          "ageGrade": 57.7,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-12",
+          "event": "cassiobury",
+          "time": "23:25",
+          "timeSeconds": 1405,
+          "position": 99,
+          "totalRunners": 374,
+          "ageGrade": 56.54,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "23:50",
+          "timeSeconds": 1430,
+          "position": 199,
+          "totalRunners": 335,
+          "ageGrade": 56.15,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "cassiobury",
+          "time": "24:10",
+          "timeSeconds": 1450,
+          "position": 167,
+          "totalRunners": 312,
+          "ageGrade": 56.72,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "bushey",
+          "time": "24:37",
+          "timeSeconds": 1477,
+          "position": 173,
+          "totalRunners": 380,
+          "ageGrade": 57.65,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-17",
+          "event": "cassiobury",
+          "time": "25:02",
+          "timeSeconds": 1502,
+          "position": 104,
+          "totalRunners": 380,
+          "ageGrade": 57.76,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "24:38",
+          "timeSeconds": 1478,
+          "position": 54,
+          "totalRunners": 347,
+          "ageGrade": 57.25,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-31",
+          "event": "cassiobury",
+          "time": "23:34",
+          "timeSeconds": 1414,
+          "position": 197,
+          "totalRunners": 373,
+          "ageGrade": 56.84,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-14",
+          "event": "cassiobury",
+          "time": "24:02",
+          "timeSeconds": 1442,
+          "position": 57,
+          "totalRunners": 310,
+          "ageGrade": 57.19,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-21",
+          "event": "cassiobury",
+          "time": "24:05",
+          "timeSeconds": 1445,
+          "position": 220,
+          "totalRunners": 311,
+          "ageGrade": 57.23,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "cassiobury",
+          "time": "23:49",
+          "timeSeconds": 1429,
+          "position": 103,
+          "totalRunners": 350,
+          "ageGrade": 55.93,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-05",
+          "event": "cassiobury",
+          "time": "24:57",
+          "timeSeconds": 1497,
+          "position": 49,
+          "totalRunners": 304,
+          "ageGrade": 56.08,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-12",
+          "event": "bushey",
+          "time": "25:17",
+          "timeSeconds": 1517,
+          "position": 241,
+          "totalRunners": 307,
+          "ageGrade": 57.47,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-19",
+          "event": "cassiobury",
+          "time": "23:39",
+          "timeSeconds": 1419,
+          "position": 181,
+          "totalRunners": 327,
+          "ageGrade": 56.29,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "cassiobury",
+          "time": "23:17",
+          "timeSeconds": 1397,
+          "position": 167,
+          "totalRunners": 396,
+          "ageGrade": 54.4,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-16",
+          "event": "cassiobury",
+          "time": "23:50",
+          "timeSeconds": 1430,
+          "position": 118,
+          "totalRunners": 304,
+          "ageGrade": 55.95,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-23",
+          "event": "cassiobury",
+          "time": "23:31",
+          "timeSeconds": 1411,
+          "position": 214,
+          "totalRunners": 380,
+          "ageGrade": 55.82,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-06",
+          "event": "cassiobury",
+          "time": "24:58",
+          "timeSeconds": 1498,
+          "position": 100,
+          "totalRunners": 333,
+          "ageGrade": 54.51,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "23:41",
+          "timeSeconds": 1421,
+          "position": 109,
+          "totalRunners": 316,
+          "ageGrade": 55.17,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-20",
+          "event": "cassiobury",
+          "time": "24:55",
+          "timeSeconds": 1495,
+          "position": 201,
+          "totalRunners": 321,
+          "ageGrade": 55.27,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-27",
+          "event": "cassiobury",
+          "time": "23:43",
+          "timeSeconds": 1423,
+          "position": 79,
+          "totalRunners": 385,
+          "ageGrade": 53.91,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-11",
+          "event": "cassiobury",
+          "time": "24:53",
+          "timeSeconds": 1493,
+          "position": 26,
+          "totalRunners": 379,
+          "ageGrade": 56.26,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "rickmansworth",
+          "time": "24:18",
+          "timeSeconds": 1458,
+          "position": 142,
+          "totalRunners": 314,
+          "ageGrade": 55.99,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-08",
+          "event": "cassiobury",
+          "time": "24:07",
+          "timeSeconds": 1447,
+          "position": 251,
+          "totalRunners": 313,
+          "ageGrade": 55.67,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-15",
+          "event": "cassiobury",
+          "time": "24:20",
+          "timeSeconds": 1460,
+          "position": 31,
+          "totalRunners": 378,
+          "ageGrade": 54.53,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "23:32",
+          "timeSeconds": 1412,
+          "position": 84,
+          "totalRunners": 320,
+          "ageGrade": 57.34,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-29",
+          "event": "cassiobury",
+          "time": "23:36",
+          "timeSeconds": 1416,
+          "position": 73,
+          "totalRunners": 371,
+          "ageGrade": 56.59,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "cassiobury",
+          "time": "24:55",
+          "timeSeconds": 1495,
+          "position": 171,
+          "totalRunners": 330,
+          "ageGrade": 55.86,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "23:20",
+          "timeSeconds": 1400,
+          "position": 197,
+          "totalRunners": 379,
+          "ageGrade": 56.14,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "24:26",
+          "timeSeconds": 1466,
+          "position": 233,
+          "totalRunners": 327,
+          "ageGrade": 56.65,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-10",
+          "event": "cassiobury",
+          "time": "24:19",
+          "timeSeconds": 1459,
+          "position": 61,
+          "totalRunners": 357,
+          "ageGrade": 54.89,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "cassiobury",
+          "time": "25:20",
+          "timeSeconds": 1520,
+          "position": 222,
+          "totalRunners": 330,
+          "ageGrade": 57.25,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-31",
+          "event": "cassiobury",
+          "time": "24:06",
+          "timeSeconds": 1446,
+          "position": 28,
+          "totalRunners": 306,
+          "ageGrade": 57.26,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-07",
+          "event": "cassiobury",
+          "time": "23:01",
+          "timeSeconds": 1381,
+          "position": 51,
+          "totalRunners": 356,
+          "ageGrade": 56.74,
+          "isPB": true
+        },
+        {
+          "date": "2026-02-28",
+          "event": "cassiobury",
+          "time": "24:42",
+          "timeSeconds": 1482,
+          "position": 216,
+          "totalRunners": 345,
+          "ageGrade": 55.5,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "cassiobury",
+          "time": "24:22",
+          "timeSeconds": 1462,
+          "position": 35,
+          "totalRunners": 382,
+          "ageGrade": 55.14,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "24:39",
+          "timeSeconds": 1479,
+          "position": 197,
+          "totalRunners": 309,
+          "ageGrade": 54.84,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-04",
+          "event": "cassiobury",
+          "time": "24:02",
+          "timeSeconds": 1442,
+          "position": 165,
+          "totalRunners": 332,
+          "ageGrade": 54.79,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-02",
+          "event": "cassiobury",
+          "time": "23:07",
+          "timeSeconds": 1387,
+          "position": 74,
+          "totalRunners": 353,
+          "ageGrade": 54.53,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "25:29",
+          "timeSeconds": 1529,
+          "position": 215,
+          "totalRunners": 392,
+          "ageGrade": 55.66,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "rickmansworth",
+          "time": "24:41",
+          "timeSeconds": 1481,
+          "position": 166,
+          "totalRunners": 355,
+          "ageGrade": 57.02,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-23",
+          "event": "cassiobury",
+          "time": "24:49",
+          "timeSeconds": 1489,
+          "position": 204,
+          "totalRunners": 346,
+          "ageGrade": 54.79,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-30",
+          "event": "cassiobury",
+          "time": "24:12",
+          "timeSeconds": 1452,
+          "position": 196,
+          "totalRunners": 356,
+          "ageGrade": 54.04,
+          "isPB": false
+        },
+        {
+          "date": "2026-06-06",
+          "event": "cassiobury",
+          "time": "24:04",
+          "timeSeconds": 1444,
+          "position": 15,
+          "totalRunners": 369,
+          "ageGrade": 57.61,
+          "isPB": false
+        }
+      ]
+    },
+    {
+      "id": 7801234,
+      "name": "Imran TEJANI",
+      "gender": "M",
+      "ageGroup": "SM25-29",
+      "totalRuns": 88,
+      "pb": "18:18",
+      "pbSeconds": 1098,
+      "bestAgeGrade": 71.81,
+      "currentStreak": 1,
+      "results": [
+        {
+          "date": "2024-12-21",
+          "event": "cassiobury",
+          "time": "21:11",
+          "timeSeconds": 1271,
+          "position": 252,
+          "totalRunners": 300,
+          "ageGrade": 61.26,
+          "isPB": false
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "21:10",
+          "timeSeconds": 1270,
+          "position": 64,
+          "totalRunners": 319,
+          "ageGrade": 61.21,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-04",
+          "event": "cassiobury",
+          "time": "20:30",
+          "timeSeconds": 1230,
+          "position": 19,
+          "totalRunners": 311,
+          "ageGrade": 61.22,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-11",
+          "event": "rickmansworth",
+          "time": "19:39",
+          "timeSeconds": 1179,
+          "position": 27,
+          "totalRunners": 358,
+          "ageGrade": 60.73,
+          "isPB": true
+        },
+        {
+          "date": "2025-01-18",
+          "event": "cassiobury",
+          "time": "21:06",
+          "timeSeconds": 1266,
+          "position": 214,
+          "totalRunners": 347,
+          "ageGrade": 65.06,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "cassiobury",
+          "time": "19:07",
+          "timeSeconds": 1147,
+          "position": 130,
+          "totalRunners": 353,
+          "ageGrade": 63.84,
+          "isPB": true
+        },
+        {
+          "date": "2025-02-15",
+          "event": "cassiobury",
+          "time": "20:03",
+          "timeSeconds": 1203,
+          "position": 213,
+          "totalRunners": 369,
+          "ageGrade": 63.92,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "19:20",
+          "timeSeconds": 1160,
+          "position": 238,
+          "totalRunners": 378,
+          "ageGrade": 63.65,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-01",
+          "event": "cassiobury",
+          "time": "19:13",
+          "timeSeconds": 1153,
+          "position": 166,
+          "totalRunners": 376,
+          "ageGrade": 61.73,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "20:35",
+          "timeSeconds": 1235,
+          "position": 236,
+          "totalRunners": 370,
+          "ageGrade": 62.52,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-15",
+          "event": "cassiobury",
+          "time": "19:02",
+          "timeSeconds": 1142,
+          "position": 65,
+          "totalRunners": 390,
+          "ageGrade": 66,
+          "isPB": true
+        },
+        {
+          "date": "2025-04-12",
+          "event": "cassiobury",
+          "time": "19:49",
+          "timeSeconds": 1189,
+          "position": 156,
+          "totalRunners": 384,
+          "ageGrade": 65.44,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "cassiobury",
+          "time": "19:04",
+          "timeSeconds": 1144,
+          "position": 162,
+          "totalRunners": 376,
+          "ageGrade": 64.42,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "cassiobury",
+          "time": "19:16",
+          "timeSeconds": 1156,
+          "position": 93,
+          "totalRunners": 359,
+          "ageGrade": 65.35,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-17",
+          "event": "cassiobury",
+          "time": "20:12",
+          "timeSeconds": 1212,
+          "position": 154,
+          "totalRunners": 313,
+          "ageGrade": 65.28,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "19:30",
+          "timeSeconds": 1170,
+          "position": 170,
+          "totalRunners": 302,
+          "ageGrade": 66.03,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-07",
+          "event": "cassiobury",
+          "time": "20:49",
+          "timeSeconds": 1249,
+          "position": 199,
+          "totalRunners": 327,
+          "ageGrade": 63.69,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-14",
+          "event": "cassiobury",
+          "time": "20:01",
+          "timeSeconds": 1201,
+          "position": 220,
+          "totalRunners": 327,
+          "ageGrade": 64.15,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "cassiobury",
+          "time": "21:00",
+          "timeSeconds": 1260,
+          "position": 119,
+          "totalRunners": 359,
+          "ageGrade": 63.58,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-05",
+          "event": "cassiobury",
+          "time": "19:46",
+          "timeSeconds": 1186,
+          "position": 134,
+          "totalRunners": 347,
+          "ageGrade": 66.54,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-12",
+          "event": "cassiobury",
+          "time": "19:50",
+          "timeSeconds": 1190,
+          "position": 22,
+          "totalRunners": 394,
+          "ageGrade": 65.92,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-19",
+          "event": "cassiobury",
+          "time": "18:56",
+          "timeSeconds": 1136,
+          "position": 47,
+          "totalRunners": 390,
+          "ageGrade": 65.92,
+          "isPB": true
+        },
+        {
+          "date": "2025-07-26",
+          "event": "cassiobury",
+          "time": "20:35",
+          "timeSeconds": 1235,
+          "position": 162,
+          "totalRunners": 357,
+          "ageGrade": 65.4,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-02",
+          "event": "cassiobury",
+          "time": "19:01",
+          "timeSeconds": 1141,
+          "position": 247,
+          "totalRunners": 306,
+          "ageGrade": 67.77,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "cassiobury",
+          "time": "20:42",
+          "timeSeconds": 1242,
+          "position": 218,
+          "totalRunners": 303,
+          "ageGrade": 64.57,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-16",
+          "event": "cassiobury",
+          "time": "20:01",
+          "timeSeconds": 1201,
+          "position": 202,
+          "totalRunners": 321,
+          "ageGrade": 66.59,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-23",
+          "event": "cassiobury",
+          "time": "20:34",
+          "timeSeconds": 1234,
+          "position": 240,
+          "totalRunners": 370,
+          "ageGrade": 68.28,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-30",
+          "event": "gladstone",
+          "time": "18:54",
+          "timeSeconds": 1134,
+          "position": 129,
+          "totalRunners": 395,
+          "ageGrade": 66.94,
+          "isPB": true
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "20:23",
+          "timeSeconds": 1223,
+          "position": 106,
+          "totalRunners": 381,
+          "ageGrade": 67.81,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-27",
+          "event": "cassiobury",
+          "time": "20:12",
+          "timeSeconds": 1212,
+          "position": 235,
+          "totalRunners": 334,
+          "ageGrade": 68.24,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-04",
+          "event": "rickmansworth",
+          "time": "19:32",
+          "timeSeconds": 1172,
+          "position": 130,
+          "totalRunners": 388,
+          "ageGrade": 67.06,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-11",
+          "event": "cassiobury",
+          "time": "19:55",
+          "timeSeconds": 1195,
+          "position": 111,
+          "totalRunners": 316,
+          "ageGrade": 65.33,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-18",
+          "event": "cassiobury",
+          "time": "20:51",
+          "timeSeconds": 1251,
+          "position": 67,
+          "totalRunners": 395,
+          "ageGrade": 66.08,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-08",
+          "event": "cassiobury",
+          "time": "19:38",
+          "timeSeconds": 1178,
+          "position": 10,
+          "totalRunners": 325,
+          "ageGrade": 67.93,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "20:01",
+          "timeSeconds": 1201,
+          "position": 93,
+          "totalRunners": 331,
+          "ageGrade": 68.32,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-06",
+          "event": "cassiobury",
+          "time": "18:42",
+          "timeSeconds": 1122,
+          "position": 238,
+          "totalRunners": 315,
+          "ageGrade": 69.14,
+          "isPB": true
+        },
+        {
+          "date": "2025-12-13",
+          "event": "cassiobury",
+          "time": "20:02",
+          "timeSeconds": 1202,
+          "position": 153,
+          "totalRunners": 344,
+          "ageGrade": 67.44,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "cassiobury",
+          "time": "18:44",
+          "timeSeconds": 1124,
+          "position": 126,
+          "totalRunners": 363,
+          "ageGrade": 66.98,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "19:14",
+          "timeSeconds": 1154,
+          "position": 185,
+          "totalRunners": 369,
+          "ageGrade": 66.84,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "19:21",
+          "timeSeconds": 1161,
+          "position": 248,
+          "totalRunners": 383,
+          "ageGrade": 68.83,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-10",
+          "event": "cassiobury",
+          "time": "20:41",
+          "timeSeconds": 1241,
+          "position": 40,
+          "totalRunners": 326,
+          "ageGrade": 67.51,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "cassiobury",
+          "time": "19:54",
+          "timeSeconds": 1194,
+          "position": 181,
+          "totalRunners": 349,
+          "ageGrade": 67.15,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-24",
+          "event": "cassiobury",
+          "time": "19:56",
+          "timeSeconds": 1196,
+          "position": 160,
+          "totalRunners": 353,
+          "ageGrade": 68.99,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-07",
+          "event": "cassiobury",
+          "time": "19:25",
+          "timeSeconds": 1165,
+          "position": 204,
+          "totalRunners": 316,
+          "ageGrade": 70.04,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-14",
+          "event": "cassiobury",
+          "time": "20:09",
+          "timeSeconds": 1209,
+          "position": 181,
+          "totalRunners": 378,
+          "ageGrade": 69.77,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-21",
+          "event": "cassiobury",
+          "time": "18:23",
+          "timeSeconds": 1103,
+          "position": 15,
+          "totalRunners": 388,
+          "ageGrade": 70.3,
+          "isPB": true
+        },
+        {
+          "date": "2026-02-28",
+          "event": "bushey",
+          "time": "18:38",
+          "timeSeconds": 1118,
+          "position": 36,
+          "totalRunners": 363,
+          "ageGrade": 70.08,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-14",
+          "event": "cassiobury",
+          "time": "19:56",
+          "timeSeconds": 1196,
+          "position": 17,
+          "totalRunners": 379,
+          "ageGrade": 67.5,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "20:21",
+          "timeSeconds": 1221,
+          "position": 203,
+          "totalRunners": 386,
+          "ageGrade": 68.79,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-04",
+          "event": "cassiobury",
+          "time": "18:40",
+          "timeSeconds": 1120,
+          "position": 254,
+          "totalRunners": 342,
+          "ageGrade": 67.72,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-11",
+          "event": "rickmansworth",
+          "time": "19:42",
+          "timeSeconds": 1182,
+          "position": 102,
+          "totalRunners": 355,
+          "ageGrade": 70.59,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-02",
+          "event": "cassiobury",
+          "time": "18:50",
+          "timeSeconds": 1130,
+          "position": 202,
+          "totalRunners": 368,
+          "ageGrade": 69.06,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "19:03",
+          "timeSeconds": 1143,
+          "position": 136,
+          "totalRunners": 395,
+          "ageGrade": 71.81,
+          "isPB": false
+        },
+        {
+          "date": "2026-06-06",
+          "event": "cassiobury",
+          "time": "18:18",
+          "timeSeconds": 1098,
+          "position": 233,
+          "totalRunners": 389,
+          "ageGrade": 71.8,
+          "isPB": true
+        }
+      ]
+    },
+    {
+      "id": 7023456,
+      "name": "Salim KANANI",
+      "gender": "M",
+      "ageGroup": "VM50-54",
+      "totalRuns": 199,
+      "pb": "25:12",
+      "pbSeconds": 1512,
+      "bestAgeGrade": 58.92,
+      "currentStreak": 1,
+      "results": [
+        {
+          "date": "2024-12-21",
+          "event": "cassiobury",
+          "time": "26:28",
+          "timeSeconds": 1588,
+          "position": 80,
+          "totalRunners": 318,
+          "ageGrade": 58.92,
+          "isPB": true
+        },
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "25:49",
+          "timeSeconds": 1549,
+          "position": 246,
+          "totalRunners": 376,
+          "ageGrade": 56.76,
+          "isPB": true
+        },
+        {
+          "date": "2025-01-04",
+          "event": "cassiobury",
+          "time": "26:49",
+          "timeSeconds": 1609,
+          "position": 216,
+          "totalRunners": 347,
+          "ageGrade": 55.55,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-11",
+          "event": "cassiobury",
+          "time": "26:12",
+          "timeSeconds": 1572,
+          "position": 109,
+          "totalRunners": 394,
+          "ageGrade": 57.58,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-18",
+          "event": "cassiobury",
+          "time": "26:56",
+          "timeSeconds": 1616,
+          "position": 91,
+          "totalRunners": 356,
+          "ageGrade": 58.65,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "cassiobury",
+          "time": "25:12",
+          "timeSeconds": 1512,
+          "position": 183,
+          "totalRunners": 311,
+          "ageGrade": 56.02,
+          "isPB": true
+        },
+        {
+          "date": "2025-02-08",
+          "event": "cassiobury",
+          "time": "25:31",
+          "timeSeconds": 1531,
+          "position": 91,
+          "totalRunners": 303,
+          "ageGrade": 55.2,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "25:50",
+          "timeSeconds": 1550,
+          "position": 133,
+          "totalRunners": 344,
+          "ageGrade": 55.49,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-01",
+          "event": "cassiobury",
+          "time": "26:22",
+          "timeSeconds": 1582,
+          "position": 95,
+          "totalRunners": 344,
+          "ageGrade": 58.5,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "26:58",
+          "timeSeconds": 1618,
+          "position": 201,
+          "totalRunners": 359,
+          "ageGrade": 57.72,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-15",
+          "event": "cassiobury",
+          "time": "25:56",
+          "timeSeconds": 1556,
+          "position": 76,
+          "totalRunners": 378,
+          "ageGrade": 57.9,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-22",
+          "event": "cassiobury",
+          "time": "26:52",
+          "timeSeconds": 1612,
+          "position": 16,
+          "totalRunners": 347,
+          "ageGrade": 58.73,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-12",
+          "event": "cassiobury",
+          "time": "26:59",
+          "timeSeconds": 1619,
+          "position": 85,
+          "totalRunners": 341,
+          "ageGrade": 55.57,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "26:30",
+          "timeSeconds": 1590,
+          "position": 144,
+          "totalRunners": 316,
+          "ageGrade": 56.13,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "cassiobury",
+          "time": "27:22",
+          "timeSeconds": 1642,
+          "position": 58,
+          "totalRunners": 311,
+          "ageGrade": 57.87,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-03",
+          "event": "cassiobury",
+          "time": "26:29",
+          "timeSeconds": 1589,
+          "position": 10,
+          "totalRunners": 335,
+          "ageGrade": 56.21,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "cassiobury",
+          "time": "25:55",
+          "timeSeconds": 1555,
+          "position": 99,
+          "totalRunners": 320,
+          "ageGrade": 57.03,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-17",
+          "event": "bushey",
+          "time": "27:16",
+          "timeSeconds": 1636,
+          "position": 49,
+          "totalRunners": 328,
+          "ageGrade": 58,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "27:18",
+          "timeSeconds": 1638,
+          "position": 65,
+          "totalRunners": 330,
+          "ageGrade": 57.82,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-31",
+          "event": "cassiobury",
+          "time": "25:20",
+          "timeSeconds": 1520,
+          "position": 248,
+          "totalRunners": 303,
+          "ageGrade": 56.46,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-07",
+          "event": "cassiobury",
+          "time": "27:22",
+          "timeSeconds": 1642,
+          "position": 242,
+          "totalRunners": 353,
+          "ageGrade": 56.2,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-14",
+          "event": "cassiobury",
+          "time": "27:30",
+          "timeSeconds": 1650,
+          "position": 208,
+          "totalRunners": 399,
+          "ageGrade": 54.58,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "cassiobury",
+          "time": "27:29",
+          "timeSeconds": 1649,
+          "position": 99,
+          "totalRunners": 319,
+          "ageGrade": 55.7,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-05",
+          "event": "cassiobury",
+          "time": "27:06",
+          "timeSeconds": 1626,
+          "position": 88,
+          "totalRunners": 386,
+          "ageGrade": 57.57,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-12",
+          "event": "cassiobury",
+          "time": "27:02",
+          "timeSeconds": 1622,
+          "position": 190,
+          "totalRunners": 342,
+          "ageGrade": 57.14,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-26",
+          "event": "cassiobury",
+          "time": "25:59",
+          "timeSeconds": 1559,
+          "position": 176,
+          "totalRunners": 342,
+          "ageGrade": 57.48,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-02",
+          "event": "cassiobury",
+          "time": "26:27",
+          "timeSeconds": 1587,
+          "position": 129,
+          "totalRunners": 364,
+          "ageGrade": 54.92,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "cassiobury",
+          "time": "26:26",
+          "timeSeconds": 1586,
+          "position": 13,
+          "totalRunners": 349,
+          "ageGrade": 55.96,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-16",
+          "event": "cassiobury",
+          "time": "27:15",
+          "timeSeconds": 1635,
+          "position": 164,
+          "totalRunners": 392,
+          "ageGrade": 57.68,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-23",
+          "event": "bushey",
+          "time": "26:34",
+          "timeSeconds": 1594,
+          "position": 11,
+          "totalRunners": 310,
+          "ageGrade": 54.25,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-30",
+          "event": "gladstone",
+          "time": "25:25",
+          "timeSeconds": 1525,
+          "position": 139,
+          "totalRunners": 307,
+          "ageGrade": 57.98,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-06",
+          "event": "cassiobury",
+          "time": "25:30",
+          "timeSeconds": 1530,
+          "position": 173,
+          "totalRunners": 393,
+          "ageGrade": 54.27,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-13",
+          "event": "cassiobury",
+          "time": "26:29",
+          "timeSeconds": 1589,
+          "position": 174,
+          "totalRunners": 321,
+          "ageGrade": 57.06,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-20",
+          "event": "cassiobury",
+          "time": "26:43",
+          "timeSeconds": 1603,
+          "position": 87,
+          "totalRunners": 373,
+          "ageGrade": 57.29,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-27",
+          "event": "cassiobury",
+          "time": "26:08",
+          "timeSeconds": 1568,
+          "position": 97,
+          "totalRunners": 339,
+          "ageGrade": 55.43,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-04",
+          "event": "cassiobury",
+          "time": "27:01",
+          "timeSeconds": 1621,
+          "position": 70,
+          "totalRunners": 354,
+          "ageGrade": 56.39,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-11",
+          "event": "cassiobury",
+          "time": "27:05",
+          "timeSeconds": 1625,
+          "position": 28,
+          "totalRunners": 354,
+          "ageGrade": 55.75,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-18",
+          "event": "cassiobury",
+          "time": "26:44",
+          "timeSeconds": 1604,
+          "position": 135,
+          "totalRunners": 314,
+          "ageGrade": 54.33,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "cassiobury",
+          "time": "25:25",
+          "timeSeconds": 1525,
+          "position": 179,
+          "totalRunners": 316,
+          "ageGrade": 55.54,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-01",
+          "event": "cassiobury",
+          "time": "26:09",
+          "timeSeconds": 1569,
+          "position": 220,
+          "totalRunners": 383,
+          "ageGrade": 54.33,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-08",
+          "event": "cassiobury",
+          "time": "26:40",
+          "timeSeconds": 1600,
+          "position": 22,
+          "totalRunners": 329,
+          "ageGrade": 54.58,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-15",
+          "event": "cassiobury",
+          "time": "26:22",
+          "timeSeconds": 1582,
+          "position": 103,
+          "totalRunners": 364,
+          "ageGrade": 56.3,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "27:21",
+          "timeSeconds": 1641,
+          "position": 110,
+          "totalRunners": 341,
+          "ageGrade": 54.76,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-29",
+          "event": "cassiobury",
+          "time": "25:26",
+          "timeSeconds": 1526,
+          "position": 92,
+          "totalRunners": 376,
+          "ageGrade": 55.62,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-06",
+          "event": "cassiobury",
+          "time": "25:40",
+          "timeSeconds": 1540,
+          "position": 82,
+          "totalRunners": 385,
+          "ageGrade": 53.66,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-13",
+          "event": "cassiobury",
+          "time": "25:48",
+          "timeSeconds": 1548,
+          "position": 72,
+          "totalRunners": 361,
+          "ageGrade": 56.42,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "27:31",
+          "timeSeconds": 1651,
+          "position": 153,
+          "totalRunners": 361,
+          "ageGrade": 57.39,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-03",
+          "event": "cassiobury",
+          "time": "26:29",
+          "timeSeconds": 1589,
+          "position": 202,
+          "totalRunners": 317,
+          "ageGrade": 54.08,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-17",
+          "event": "cassiobury",
+          "time": "27:21",
+          "timeSeconds": 1641,
+          "position": 198,
+          "totalRunners": 329,
+          "ageGrade": 56.67,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-31",
+          "event": "cassiobury",
+          "time": "26:44",
+          "timeSeconds": 1604,
+          "position": 230,
+          "totalRunners": 395,
+          "ageGrade": 56.59,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "cassiobury",
+          "time": "26:05",
+          "timeSeconds": 1565,
+          "position": 255,
+          "totalRunners": 352,
+          "ageGrade": 53.84,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "26:57",
+          "timeSeconds": 1617,
+          "position": 215,
+          "totalRunners": 334,
+          "ageGrade": 55.3,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-28",
+          "event": "gladstone",
+          "time": "26:54",
+          "timeSeconds": 1614,
+          "position": 50,
+          "totalRunners": 303,
+          "ageGrade": 53.74,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-04",
+          "event": "cassiobury",
+          "time": "27:08",
+          "timeSeconds": 1628,
+          "position": 108,
+          "totalRunners": 378,
+          "ageGrade": 56.23,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-18",
+          "event": "cassiobury",
+          "time": "25:26",
+          "timeSeconds": 1526,
+          "position": 78,
+          "totalRunners": 342,
+          "ageGrade": 56.01,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-25",
+          "event": "cassiobury",
+          "time": "26:42",
+          "timeSeconds": 1602,
+          "position": 159,
+          "totalRunners": 335,
+          "ageGrade": 56.53,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-02",
+          "event": "bushey",
+          "time": "26:25",
+          "timeSeconds": 1585,
+          "position": 28,
+          "totalRunners": 366,
+          "ageGrade": 55.26,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "26:11",
+          "timeSeconds": 1571,
+          "position": 164,
+          "totalRunners": 331,
+          "ageGrade": 52.91,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "26:16",
+          "timeSeconds": 1576,
+          "position": 250,
+          "totalRunners": 355,
+          "ageGrade": 54.06,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-23",
+          "event": "cassiobury",
+          "time": "26:56",
+          "timeSeconds": 1616,
+          "position": 207,
+          "totalRunners": 373,
+          "ageGrade": 53.24,
+          "isPB": false
+        },
+        {
+          "date": "2026-06-06",
+          "event": "cassiobury",
+          "time": "25:55",
+          "timeSeconds": 1555,
+          "position": 71,
+          "totalRunners": 315,
+          "ageGrade": 54.31,
+          "isPB": false
+        }
+      ]
+    },
+    {
+      "id": 7654321,
+      "name": "Nadia KANANI",
+      "gender": "F",
+      "ageGroup": "VW50-54",
+      "totalRuns": 114,
+      "pb": "30:50",
+      "pbSeconds": 1850,
+      "bestAgeGrade": 54.94,
+      "currentStreak": 0,
+      "results": [
+        {
+          "date": "2024-12-28",
+          "event": "cassiobury",
+          "time": "31:41",
+          "timeSeconds": 1901,
+          "position": 162,
+          "totalRunners": 355,
+          "ageGrade": 50.25,
+          "isPB": true
+        },
+        {
+          "date": "2025-01-11",
+          "event": "rickmansworth",
+          "time": "32:28",
+          "timeSeconds": 1948,
+          "position": 94,
+          "totalRunners": 300,
+          "ageGrade": 50.5,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-18",
+          "event": "cassiobury",
+          "time": "32:09",
+          "timeSeconds": 1929,
+          "position": 215,
+          "totalRunners": 367,
+          "ageGrade": 49.63,
+          "isPB": false
+        },
+        {
+          "date": "2025-01-25",
+          "event": "cassiobury",
+          "time": "31:25",
+          "timeSeconds": 1885,
+          "position": 93,
+          "totalRunners": 331,
+          "ageGrade": 50.05,
+          "isPB": true
+        },
+        {
+          "date": "2025-02-01",
+          "event": "cassiobury",
+          "time": "32:44",
+          "timeSeconds": 1964,
+          "position": 140,
+          "totalRunners": 381,
+          "ageGrade": 53,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-08",
+          "event": "bushey",
+          "time": "33:12",
+          "timeSeconds": 1992,
+          "position": 38,
+          "totalRunners": 339,
+          "ageGrade": 52.82,
+          "isPB": false
+        },
+        {
+          "date": "2025-02-22",
+          "event": "cassiobury",
+          "time": "31:20",
+          "timeSeconds": 1880,
+          "position": 201,
+          "totalRunners": 385,
+          "ageGrade": 50.65,
+          "isPB": true
+        },
+        {
+          "date": "2025-03-08",
+          "event": "cassiobury",
+          "time": "31:21",
+          "timeSeconds": 1881,
+          "position": 251,
+          "totalRunners": 366,
+          "ageGrade": 50.77,
+          "isPB": false
+        },
+        {
+          "date": "2025-03-29",
+          "event": "cassiobury",
+          "time": "31:52",
+          "timeSeconds": 1912,
+          "position": 21,
+          "totalRunners": 314,
+          "ageGrade": 53.21,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-05",
+          "event": "cassiobury",
+          "time": "31:58",
+          "timeSeconds": 1918,
+          "position": 198,
+          "totalRunners": 361,
+          "ageGrade": 52.24,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-19",
+          "event": "cassiobury",
+          "time": "32:06",
+          "timeSeconds": 1926,
+          "position": 63,
+          "totalRunners": 375,
+          "ageGrade": 50.09,
+          "isPB": false
+        },
+        {
+          "date": "2025-04-26",
+          "event": "cassiobury",
+          "time": "33:18",
+          "timeSeconds": 1998,
+          "position": 91,
+          "totalRunners": 326,
+          "ageGrade": 52.44,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-03",
+          "event": "cassiobury",
+          "time": "31:33",
+          "timeSeconds": 1893,
+          "position": 148,
+          "totalRunners": 316,
+          "ageGrade": 52.22,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-10",
+          "event": "cassiobury",
+          "time": "33:21",
+          "timeSeconds": 2001,
+          "position": 246,
+          "totalRunners": 306,
+          "ageGrade": 52.57,
+          "isPB": false
+        },
+        {
+          "date": "2025-05-24",
+          "event": "cassiobury",
+          "time": "31:32",
+          "timeSeconds": 1892,
+          "position": 95,
+          "totalRunners": 316,
+          "ageGrade": 50.45,
+          "isPB": false
+        },
+        {
+          "date": "2025-06-28",
+          "event": "cassiobury",
+          "time": "31:24",
+          "timeSeconds": 1884,
+          "position": 195,
+          "totalRunners": 323,
+          "ageGrade": 50.68,
+          "isPB": false
+        },
+        {
+          "date": "2025-07-19",
+          "event": "cassiobury",
+          "time": "33:10",
+          "timeSeconds": 1990,
+          "position": 149,
+          "totalRunners": 373,
+          "ageGrade": 52.04,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-02",
+          "event": "cassiobury",
+          "time": "32:44",
+          "timeSeconds": 1964,
+          "position": 144,
+          "totalRunners": 306,
+          "ageGrade": 53.87,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-09",
+          "event": "gladstone",
+          "time": "32:33",
+          "timeSeconds": 1953,
+          "position": 69,
+          "totalRunners": 341,
+          "ageGrade": 50.1,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-16",
+          "event": "cassiobury",
+          "time": "31:29",
+          "timeSeconds": 1889,
+          "position": 63,
+          "totalRunners": 337,
+          "ageGrade": 53.94,
+          "isPB": false
+        },
+        {
+          "date": "2025-08-23",
+          "event": "cassiobury",
+          "time": "32:09",
+          "timeSeconds": 1929,
+          "position": 211,
+          "totalRunners": 368,
+          "ageGrade": 53.23,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-06",
+          "event": "cassiobury",
+          "time": "32:37",
+          "timeSeconds": 1957,
+          "position": 174,
+          "totalRunners": 378,
+          "ageGrade": 51.59,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-20",
+          "event": "bushey",
+          "time": "33:12",
+          "timeSeconds": 1992,
+          "position": 243,
+          "totalRunners": 390,
+          "ageGrade": 50.25,
+          "isPB": false
+        },
+        {
+          "date": "2025-09-27",
+          "event": "bushey",
+          "time": "31:13",
+          "timeSeconds": 1873,
+          "position": 175,
+          "totalRunners": 323,
+          "ageGrade": 50.51,
+          "isPB": true
+        },
+        {
+          "date": "2025-10-18",
+          "event": "cassiobury",
+          "time": "31:15",
+          "timeSeconds": 1875,
+          "position": 49,
+          "totalRunners": 322,
+          "ageGrade": 53.93,
+          "isPB": false
+        },
+        {
+          "date": "2025-10-25",
+          "event": "cassiobury",
+          "time": "33:02",
+          "timeSeconds": 1982,
+          "position": 209,
+          "totalRunners": 328,
+          "ageGrade": 51.51,
+          "isPB": false
+        },
+        {
+          "date": "2025-11-22",
+          "event": "cassiobury",
+          "time": "32:05",
+          "timeSeconds": 1925,
+          "position": 157,
+          "totalRunners": 357,
+          "ageGrade": 50.84,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-20",
+          "event": "bushey",
+          "time": "33:16",
+          "timeSeconds": 1996,
+          "position": 14,
+          "totalRunners": 300,
+          "ageGrade": 53.53,
+          "isPB": false
+        },
+        {
+          "date": "2025-12-27",
+          "event": "cassiobury",
+          "time": "33:06",
+          "timeSeconds": 1986,
+          "position": 47,
+          "totalRunners": 316,
+          "ageGrade": 53.44,
+          "isPB": false
+        },
+        {
+          "date": "2026-01-24",
+          "event": "cassiobury",
+          "time": "31:51",
+          "timeSeconds": 1911,
+          "position": 174,
+          "totalRunners": 323,
+          "ageGrade": 53.38,
+          "isPB": false
+        },
+        {
+          "date": "2026-02-14",
+          "event": "cassiobury",
+          "time": "32:46",
+          "timeSeconds": 1966,
+          "position": 166,
+          "totalRunners": 384,
+          "ageGrade": 53.88,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-07",
+          "event": "cassiobury",
+          "time": "31:58",
+          "timeSeconds": 1918,
+          "position": 166,
+          "totalRunners": 383,
+          "ageGrade": 54.63,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-14",
+          "event": "cassiobury",
+          "time": "30:54",
+          "timeSeconds": 1854,
+          "position": 117,
+          "totalRunners": 385,
+          "ageGrade": 52.44,
+          "isPB": true
+        },
+        {
+          "date": "2026-03-21",
+          "event": "cassiobury",
+          "time": "31:50",
+          "timeSeconds": 1910,
+          "position": 101,
+          "totalRunners": 320,
+          "ageGrade": 54.93,
+          "isPB": false
+        },
+        {
+          "date": "2026-03-28",
+          "event": "cassiobury",
+          "time": "31:24",
+          "timeSeconds": 1884,
+          "position": 99,
+          "totalRunners": 334,
+          "ageGrade": 51.96,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-11",
+          "event": "cassiobury",
+          "time": "30:54",
+          "timeSeconds": 1854,
+          "position": 60,
+          "totalRunners": 338,
+          "ageGrade": 52.08,
+          "isPB": false
+        },
+        {
+          "date": "2026-04-25",
+          "event": "cassiobury",
+          "time": "32:02",
+          "timeSeconds": 1922,
+          "position": 186,
+          "totalRunners": 328,
+          "ageGrade": 51.35,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-09",
+          "event": "cassiobury",
+          "time": "32:45",
+          "timeSeconds": 1965,
+          "position": 163,
+          "totalRunners": 311,
+          "ageGrade": 51.76,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-16",
+          "event": "cassiobury",
+          "time": "31:49",
+          "timeSeconds": 1909,
+          "position": 86,
+          "totalRunners": 370,
+          "ageGrade": 54.94,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-23",
+          "event": "cassiobury",
+          "time": "31:25",
+          "timeSeconds": 1885,
+          "position": 174,
+          "totalRunners": 337,
+          "ageGrade": 51.66,
+          "isPB": false
+        },
+        {
+          "date": "2026-05-30",
+          "event": "bushey",
+          "time": "31:34",
+          "timeSeconds": 1894,
+          "position": 191,
+          "totalRunners": 335,
+          "ageGrade": 54.33,
+          "isPB": false
+        }
+      ]
+    }
+  ]
+}

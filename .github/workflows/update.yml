@@ -1,0 +1,44 @@
+name: Update ParkRun Data
+
+on:
+  schedule:
+    # Every Saturday at 14:00 UTC (15:00 BST) - after most UK parkruns finish
+    - cron: '0 14 * * 6'
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Discover new athletes
+        run: npm run scrape:discover
+        continue-on-error: true
+
+      - name: Update athlete data
+        run: npm run scrape:update
+
+      - name: Copy data to docs
+        run: cp data/athletes.json docs/data/athletes.json
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ docs/data/ config.json
+          git diff --staged --quiet || git commit -m "📊 Update parkrun data $(date +%Y-%m-%d)"
+          git push

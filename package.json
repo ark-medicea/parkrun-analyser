@@ -1,0 +1,14 @@
+{
+  "name": "parkrun-dashboard",
+  "version": "1.0.0",
+  "description": "ParkRun family/friends tracking dashboard",
+  "private": true,
+  "scripts": {
+    "scrape": "node scraper/index.js",
+    "scrape:discover": "node scraper/discover.js",
+    "scrape:update": "node scraper/update.js"
+  },
+  "dependencies": {
+    "playwright": "^1.58.0"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "event": "cassiobury",
+  "eventId": 1152,
+  "surnames": ["PANJU", "MEGHJEE", "TEJANI", "KANANI"],
+  "athletes": [],
+  "resultsUrl": "https://www.parkrun.org.uk/cassiobury/results/latestresults/",
+  "athleteUrlTemplate": "https://www.parkrun.org.uk/parkrunner/{athleteId}/all/"
+}
