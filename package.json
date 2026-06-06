@@ -11,6 +11,7 @@
     "db:export": "cp data/parkrun.db docs/data/parkrun.db"
   },
   "dependencies": {
+    "better-sqlite3": "^12.10.0",
     "sql.js": "^1.14.1"
   },
   "devDependencies": {
