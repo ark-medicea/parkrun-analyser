@@ -44,7 +44,7 @@ nav {
 }
 
 .nav-inner {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -88,7 +88,7 @@ header {
 }
 
 .header-inner {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
@@ -106,7 +106,7 @@ header h1 {
 
 /* ── Main ── */
 main {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -184,7 +184,7 @@ main {
   border-radius: var(--radius-sm);
   padding: 0.85rem 1rem;
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto auto auto;
   align-items: center;
   gap: 0.75rem;
   transition: background 0.15s;
@@ -230,6 +230,12 @@ main {
   min-width: 3rem;
 }
 
+.result-event {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
 .pb-badge {
   display: inline-block;
   background: var(--accent-gold);
@@ -263,6 +269,174 @@ main {
   color: var(--accent-red);
   font-size: 0.75rem;
   margin-left: 0.25rem;
+}
+
+/* ── League Table ── */
+.league-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.league-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+  font-size: 0.9rem;
+}
+
+.league-table thead th {
+  background: var(--bg-section);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.75rem 0.65rem;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--border);
+  transition: color 0.15s;
+  position: relative;
+}
+
+.league-table thead th:hover {
+  color: var(--text-primary);
+}
+
+.league-table thead th.sorted {
+  color: var(--accent-green);
+}
+
+.league-table thead th .sort-arrow {
+  margin-left: 0.25rem;
+  font-size: 0.65rem;
+  opacity: 0.4;
+}
+
+.league-table thead th.sorted .sort-arrow {
+  opacity: 1;
+  color: var(--accent-green);
+}
+
+.league-table tbody tr {
+  background: var(--bg-card);
+  transition: background 0.12s;
+  border-bottom: 1px solid rgba(42,42,69,0.4);
+}
+
+.league-table tbody tr:nth-child(even) {
+  background: rgba(26,26,46,0.7);
+}
+
+.league-table tbody tr:hover {
+  background: var(--bg-card-hover);
+}
+
+.league-table td {
+  padding: 0.7rem 0.65rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.league-table .col-rank {
+  width: 2.5rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.league-table .col-name {
+  font-weight: 600;
+  min-width: 140px;
+}
+
+.league-table .col-name a {
+  color: var(--text-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.league-table .col-name a:hover {
+  color: var(--accent-green);
+  text-decoration: none;
+}
+
+.league-table .col-name .badge-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.league-table .col-runs {
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.league-table .col-pb {
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.league-table .col-ag {
+  color: var(--accent-orange);
+}
+
+.league-table .col-vol {
+  color: var(--accent-blue);
+}
+
+.league-table .col-improvement {
+  font-weight: 600;
+}
+
+.league-table .col-improvement.faster {
+  color: var(--accent-green);
+}
+
+.league-table .col-improvement.slower {
+  color: var(--accent-orange);
+}
+
+.league-table .col-improvement.neutral {
+  color: var(--text-muted);
+}
+
+.league-table .col-streak {
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+/* Sticky name column on mobile */
+@media (max-width: 768px) {
+  .league-table thead th:nth-child(1),
+  .league-table tbody td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--bg-section);
+  }
+  .league-table thead th:nth-child(2),
+  .league-table tbody td:nth-child(2) {
+    position: sticky;
+    left: 2.5rem;
+    z-index: 2;
+    background: var(--bg-card);
+  }
+  .league-table tbody tr:nth-child(even) td:nth-child(2) {
+    background: rgba(26,26,46,0.95);
+  }
+  .league-table tbody tr:hover td:nth-child(1),
+  .league-table tbody tr:hover td:nth-child(2) {
+    background: var(--bg-card-hover);
+  }
 }
 
 /* ── Milestones ── */
@@ -317,98 +491,6 @@ main {
   color: var(--text-secondary);
 }
 
-/* ── Athlete cards ── */
-.athlete-cards {
-  display: grid;
-  gap: 1rem;
-}
-
-.athlete-card {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-
-.athlete-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-
-.athlete-card a {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  padding: 1rem 1.25rem;
-}
-
-.athlete-card a:hover { text-decoration: none; }
-
-.athlete-info h3 {
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.athlete-info h3 .last-name { color: var(--text-secondary); font-weight: 400; }
-
-.athlete-meta {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.35rem;
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-}
-
-.athlete-stat-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
-  padding: 0 1.25rem 1rem;
-}
-
-.stat-box { text-align: center; }
-
-.stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--accent-green);
-}
-
-.stat-value.orange { color: var(--accent-orange); }
-.stat-value.blue { color: var(--accent-blue); }
-.stat-value.gold { color: var(--accent-gold); }
-
-.stat-label {
-  font-size: 0.65rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 0.15rem;
-}
-
-/* ── Recent form bars ── */
-.form-bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 50px;
-  padding: 0 1.25rem 1rem;
-}
-
-.form-bar {
-  flex: 1;
-  background: var(--accent-green);
-  border-radius: 2px 2px 0 0;
-  min-height: 3px;
-  opacity: 0.6;
-  transition: opacity 0.15s;
-  position: relative;
-}
-
-.form-bar:hover { opacity: 1; }
-.form-bar.is-pb { background: var(--accent-gold); opacity: 1; }
-
 /* ── Trend indicator ── */
 .trend { font-size: 0.75rem; margin-left: 0.3rem; }
 .trend.up { color: var(--accent-green); }
@@ -427,9 +509,18 @@ main {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .athlete-hero h1 .last-name { color: var(--text-secondary); font-weight: 400; }
+
+.athlete-hero h1 .badge-icon-lg {
+  width: 32px;
+  height: 32px;
+}
 
 .athlete-hero .meta {
   color: var(--text-secondary);
@@ -584,6 +675,85 @@ main {
   margin-top: 0.25rem;
 }
 
+/* ── Per-event breakdown table ── */
+.event-breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.event-breakdown-table th {
+  text-align: left;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.event-breakdown-table td {
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid rgba(42,42,69,0.4);
+}
+
+.event-breakdown-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+/* ── Toggle switch ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--accent-green);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+  background: #fff;
+}
+
 /* ── Athletes Management Page ── */
 .athletes-manage {
   max-width: 700px;
@@ -620,6 +790,14 @@ main {
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.athlete-list-name .badge-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .athlete-list-meta {
@@ -679,30 +857,7 @@ main {
 
 .btn-secondary:hover { border-color: var(--accent-green); }
 
-/* ── Legacy Add Page ── */
-.add-section {
-  max-width: 600px;
-  margin: 2rem auto;
-}
-
-.add-card {
-  background: var(--bg-card);
-  border-radius: var(--radius);
-  padding: 2rem;
-}
-
-.add-card h2 {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-}
-
-.add-card p {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
+/* ── Form ── */
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -757,7 +912,7 @@ main {
   margin-top: 1.5rem;
 }
 
-.instructions h3 {
+.instructions h3, .instructions h4 {
   font-size: 0.95rem;
   margin-bottom: 0.75rem;
 }
@@ -781,7 +936,7 @@ main {
   margin-bottom: 1rem;
 }
 
-.back-link:hover { color: var(--text-primary); }
+.back-link:hover { color: var(--text-primary); text-decoration: none; }
 
 /* ── Footer ── */
 footer {
@@ -806,7 +961,7 @@ footer {
   }
 
   .result-row {
-    grid-template-columns: 1.5fr auto auto auto;
+    grid-template-columns: 1.5fr auto auto auto auto;
   }
 
   .hero-stats {
@@ -816,10 +971,6 @@ footer {
 
 @media (min-width: 768px) {
   main { padding: 1.5rem; }
-
-  .athlete-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 /* ── Animations ── */
@@ -836,3 +987,4 @@ footer {
 .section:nth-child(3) { animation-delay: 0.1s; }
 .section:nth-child(4) { animation-delay: 0.15s; }
 .section:nth-child(5) { animation-delay: 0.2s; }
+.section:nth-child(6) { animation-delay: 0.25s; }

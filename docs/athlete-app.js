@@ -38,6 +38,11 @@ function query(db, sql, params = []) {
   return rows;
 }
 
+function querySingle(db, sql, params = []) {
+  const rows = query(db, sql, params);
+  return rows.length > 0 ? rows[0] : null;
+}
+
 function formatTime(seconds) {
   if (!seconds && seconds !== 0) return '—';
   const m = Math.floor(seconds / 60);
@@ -62,120 +67,133 @@ function rollingAvg(results, window) {
   return avgs;
 }
 
+function badgeImg(badge, cls = 'badge-icon-lg') {
+  if (!badge) return '';
+  return `<img src="badges/badge-${badge}.svg" alt="${badge} badge" class="${cls}" title="${badge} parkruns">`;
+}
+
 function renderAthlete(db, athleteId) {
   const app = document.getElementById('app');
 
   // Get athlete
-  const athletes = query(db, 'SELECT * FROM athletes WHERE id = ?', [athleteId]);
-  if (athletes.length === 0) {
+  const athlete = querySingle(db, 'SELECT * FROM athletes WHERE id = ?', [athleteId]);
+  if (!athlete) {
     app.innerHTML = '<div class="error">Athlete not found. <a href="index.html">Back to dashboard</a></div>';
     return;
   }
-  const athlete = athletes[0];
   const { first, last } = splitName(athlete.name);
 
-  // Get results chronologically
-  const results = query(
-    db,
+  // All results
+  const allResults = query(db,
     'SELECT * FROM results WHERE athlete_id = ? ORDER BY date ASC',
     [athleteId]
   );
 
-  if (results.length === 0) {
-    app.innerHTML = `<div class="error">No results found for ${athlete.name}. <a href="index.html">Back</a></div>`;
-    return;
-  }
+  // 5k results only (default view)
+  const results5k = allResults.filter(r => !r.is_junior);
+  const juniorResults = allResults.filter(r => r.is_junior);
 
-  // Stats
-  const totalRuns = results.length;
-  const pb = Math.min(...results.map((r) => r.time_seconds));
-  const worst = Math.max(...results.map((r) => r.time_seconds));
-  const avgTime = Math.round(results.reduce((s, r) => s + r.time_seconds, 0) / totalRuns);
-  const bestAG = Math.max(...results.filter((r) => r.age_grade).map((r) => r.age_grade), 0);
-  const avgAG = results.filter((r) => r.age_grade).length > 0
-    ? results.filter((r) => r.age_grade).reduce((s, r) => s + r.age_grade, 0) / results.filter((r) => r.age_grade).length
+  // Use pb_5k from DB, not calculated
+  const pb = athlete.pb_5k || null;
+  const pbSeconds = athlete.pb_5k_seconds || null;
+
+  // Stats from 5k results
+  const totalRuns5k = athlete.total_5k || results5k.length;
+  const totalJunior = athlete.total_junior || juniorResults.length;
+  const volCount = athlete.volunteer_count || 0;
+
+  const worst5k = results5k.length > 0 ? Math.max(...results5k.map(r => r.time_seconds)) : null;
+  const avgTime5k = results5k.length > 0
+    ? Math.round(results5k.reduce((s, r) => s + r.time_seconds, 0) / results5k.length)
+    : null;
+  const bestAG = results5k.filter(r => r.age_grade).length > 0
+    ? Math.max(...results5k.filter(r => r.age_grade).map(r => r.age_grade))
+    : 0;
+  const avgAG = results5k.filter(r => r.age_grade && r.age_grade > 0).length > 0
+    ? results5k.filter(r => r.age_grade && r.age_grade > 0).reduce((s, r) => s + r.age_grade, 0) /
+      results5k.filter(r => r.age_grade && r.age_grade > 0).length
     : 0;
 
-  // Streaks
-  const dates = [...new Set(results.map((r) => r.date))].sort();
+  // Streaks (5k only)
+  const dates = [...new Set(results5k.map(r => r.date))].sort();
   let currentStreak = 0;
   let longestStreak = 0;
   let tempStreak = 1;
 
-  // Current streak: count back from latest
   const reverseDates = [...dates].reverse();
   if (reverseDates.length > 0) {
     currentStreak = 1;
     for (let i = 1; i < reverseDates.length; i++) {
       const diff = (new Date(reverseDates[i - 1]) - new Date(reverseDates[i])) / (1000 * 60 * 60 * 24);
-      if (diff <= 8) {
-        currentStreak++;
-      } else {
-        break;
-      }
+      if (diff <= 8) currentStreak++;
+      else break;
     }
   }
 
-  // Longest streak
   for (let i = 1; i < dates.length; i++) {
     const diff = (new Date(dates[i]) - new Date(dates[i - 1])) / (1000 * 60 * 60 * 24);
-    if (diff <= 8) {
-      tempStreak++;
-    } else {
-      longestStreak = Math.max(longestStreak, tempStreak);
-      tempStreak = 1;
-    }
+    if (diff <= 8) tempStreak++;
+    else { longestStreak = Math.max(longestStreak, tempStreak); tempStreak = 1; }
   }
   longestStreak = Math.max(longestStreak, tempStreak);
 
-  // Consistency: % of Saturdays they ran (from first to last result)
-  const firstDate = new Date(dates[0]);
-  const lastDate = new Date(dates[dates.length - 1]);
-  const totalWeeks = Math.round((lastDate - firstDate) / (1000 * 60 * 60 * 24 * 7)) + 1;
-  const consistency = totalWeeks > 0 ? Math.round((totalRuns / totalWeeks) * 100) : 0;
+  // Consistency
+  const firstDate = dates.length > 0 ? new Date(dates[0]) : null;
+  const lastDate = dates.length > 0 ? new Date(dates[dates.length - 1]) : null;
+  const totalWeeks = firstDate && lastDate ? Math.round((lastDate - firstDate) / (1000 * 60 * 60 * 24 * 7)) + 1 : 0;
+  const consistency = totalWeeks > 0 ? Math.round((totalRuns5k / totalWeeks) * 100) : 0;
 
-  // Milestone progress
-  const milestoneTargets = [25, 50, 100, 150, 200, 250, 300];
-  const nextMilestone = milestoneTargets.find((t) => t > totalRuns) || null;
+  // Milestone
+  const milestoneTargets = [25, 50, 100, 250, 500, 1000];
+  const nextMilestone = milestoneTargets.find(t => t > totalRuns5k) || null;
 
   // Rolling averages
-  const avg4w = rollingAvg(results, 4);
-  const avg12w = rollingAvg(results, 12);
+  const recent4 = results5k.slice(-4);
+  const recent12 = results5k.slice(-12);
+  const current4wAvg = recent4.length > 0
+    ? Math.round(recent4.reduce((s, r) => s + r.time_seconds, 0) / recent4.length) : null;
+  const current12wAvg = recent12.length > 0
+    ? Math.round(recent12.reduce((s, r) => s + r.time_seconds, 0) / recent12.length) : null;
 
-  // Recent 4-week and 12-week average values
-  const recent4results = results.slice(-4);
-  const recent12results = results.slice(-12);
-  const current4wAvg = recent4results.length > 0
-    ? Math.round(recent4results.reduce((s, r) => s + r.time_seconds, 0) / recent4results.length)
-    : null;
-  const current12wAvg = recent12results.length > 0
-    ? Math.round(recent12results.reduce((s, r) => s + r.time_seconds, 0) / recent12results.length)
-    : null;
+  const pbCount = results5k.filter(r => r.is_pb).length;
 
-  // PB count
-  const pbCount = results.filter((r) => r.is_pb).length;
+  // Per-event breakdown
+  const eventBreakdown = query(db, `
+    SELECT event,
+      COUNT(*) as cnt,
+      MIN(time_seconds) as best_time_s,
+      MIN(time) as best_time,
+      MAX(age_grade) as best_ag
+    FROM results
+    WHERE athlete_id = ? AND is_junior = 0
+    GROUP BY event
+    ORDER BY cnt DESC
+  `, [athleteId]);
 
-  // Update page title
+  // 2026 results
+  const results2026 = results5k.filter(r => r.date >= '2026-01-01');
+
   document.title = `${athlete.name} — ParkRun Dashboard`;
 
-  // Build HTML
+  // ── Build HTML ──
   let html = '';
-
-  // Back link
   html += '<a href="index.html" class="back-link">← Back to dashboard</a>';
 
-  // Hero section
+  // Hero
   html += `
     <div class="athlete-hero">
-      <h1><span class="first-name">${first}</span> <span class="last-name">${last}</span></h1>
+      <h1>
+        <span class="first-name">${first}</span> <span class="last-name">${last}</span>
+        ${badgeImg(athlete.badge)}
+      </h1>
       <div class="meta">${athlete.age_group || ''} · ${athlete.home_event || 'cassiobury'} · parkrunner #${athleteId}</div>
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="value">${totalRuns}</div>
-          <div class="label">Total Runs</div>
+          <div class="value">${totalRuns5k}</div>
+          <div class="label">5k Runs</div>
         </div>
         <div class="hero-stat">
-          <div class="value gold">${formatTime(pb)}</div>
+          <div class="value gold">${pb || '—'}</div>
           <div class="label">Personal Best</div>
         </div>
         <div class="hero-stat">
@@ -190,7 +208,7 @@ function renderAthlete(db, athleteId) {
     </div>
   `;
 
-  // Rolling averages cards
+  // Averages + volunteer
   html += `
     <div class="averages-grid">
       <div class="avg-card">
@@ -202,17 +220,17 @@ function renderAthlete(db, athleteId) {
         <div class="label">12-Week Average</div>
       </div>
       <div class="avg-card">
-        <div class="value">${formatTime(avgTime)}</div>
+        <div class="value">${avgTime5k ? formatTime(avgTime5k) : '—'}</div>
         <div class="label">All-Time Average</div>
       </div>
       <div class="avg-card">
-        <div class="value">${consistency}%</div>
-        <div class="label">Consistency</div>
+        <div class="value blue">${volCount}</div>
+        <div class="label">Volunteered</div>
       </div>
     </div>
   `;
 
-  // Performance chart
+  // Performance chart (5k only)
   html += `
     <div class="chart-container">
       <h3>📈 Performance Over Time</h3>
@@ -232,6 +250,18 @@ function renderAthlete(db, athleteId) {
     </div>
   `;
 
+  // 2026 Progress chart
+  if (results2026.length >= 3) {
+    html += `
+      <div class="chart-container">
+        <h3>📊 2026 Progress</h3>
+        <div class="chart-wrapper">
+          <canvas id="chart2026"></canvas>
+        </div>
+      </div>
+    `;
+  }
+
   // Streaks
   html += `
     <div class="streaks-grid">
@@ -248,13 +278,13 @@ function renderAthlete(db, athleteId) {
         <div class="label">PBs Set</div>
       </div>
       <div class="streak-card">
-        <div class="value">${nextMilestone ? nextMilestone - totalRuns : '✓'}</div>
-        <div class="label">${nextMilestone ? `To ${nextMilestone} Runs` : 'All Milestones'}</div>
+        <div class="value">${consistency}%</div>
+        <div class="label">Consistency</div>
       </div>
     </div>
   `;
 
-  // Stats cards
+  // Stats
   html += `
     <div class="section">
       <div class="section-header">
@@ -263,15 +293,15 @@ function renderAthlete(db, athleteId) {
       </div>
       <div class="averages-grid">
         <div class="avg-card">
-          <div class="value gold">${formatTime(pb)}</div>
+          <div class="value gold">${pb || '—'}</div>
           <div class="label">Personal Best</div>
         </div>
         <div class="avg-card">
-          <div class="value">${formatTime(worst)}</div>
+          <div class="value">${worst5k ? formatTime(worst5k) : '—'}</div>
           <div class="label">Slowest</div>
         </div>
         <div class="avg-card">
-          <div class="value">${formatTime(avgTime)}</div>
+          <div class="value">${avgTime5k ? formatTime(avgTime5k) : '—'}</div>
           <div class="label">Average</div>
         </div>
         <div class="avg-card">
@@ -282,16 +312,58 @@ function renderAthlete(db, athleteId) {
     </div>
   `;
 
-  // Recent results table
-  const recent20 = [...results].reverse().slice(0, 20);
+  // Per-event breakdown
+  if (eventBreakdown.length > 0) {
+    html += `
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">📍</span>
+          <h2>Events</h2>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="event-breakdown-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Runs</th>
+                <th>Best Time</th>
+                <th>Best AG</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${eventBreakdown.map(e => `
+                <tr>
+                  <td>${e.event}</td>
+                  <td>${e.cnt}</td>
+                  <td style="font-weight:700;color:var(--accent-gold)">${e.best_time || formatTime(e.best_time_s)}</td>
+                  <td style="color:var(--accent-orange)">${e.best_ag ? e.best_ag.toFixed(1) + '%' : '—'}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  // Recent results with toggle for junior
   html += `
     <div class="section">
       <div class="section-header">
         <span class="section-icon">🕐</span>
         <h2>Recent Results</h2>
       </div>
+      ${juniorResults.length > 0 ? `
+        <div class="toggle-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="showJunior">
+            <span class="toggle-slider"></span>
+          </label>
+          <span>Show junior (2k) results</span>
+        </div>
+      ` : ''}
       <div style="overflow-x:auto">
-        <table class="history-table">
+        <table class="history-table" id="results-table">
           <thead>
             <tr>
               <th>Date</th>
@@ -302,24 +374,7 @@ function renderAthlete(db, athleteId) {
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            ${recent20
-              .map((r) => {
-                const d = new Date(r.date);
-                const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
-                return `
-                <tr class="${r.is_pb ? 'pb-row' : ''}">
-                  <td>${dateStr}</td>
-                  <td>${r.event}</td>
-                  <td class="time-cell">${r.time}</td>
-                  <td>${r.position || '—'}</td>
-                  <td>${r.age_grade ? r.age_grade.toFixed(1) + '%' : '—'}</td>
-                  <td>${r.is_pb ? '<span class="pb-badge">PB</span>' : ''}</td>
-                </tr>
-              `;
-              })
-              .join('')}
-          </tbody>
+          <tbody id="results-body"></tbody>
         </table>
       </div>
     </div>
@@ -327,6 +382,37 @@ function renderAthlete(db, athleteId) {
 
   app.className = '';
   app.innerHTML = html;
+
+  // ── Render results table ──
+  function renderResultsTable(includeJunior) {
+    const displayResults = includeJunior
+      ? [...allResults].reverse().slice(0, 30)
+      : [...results5k].reverse().slice(0, 20);
+
+    document.getElementById('results-body').innerHTML = displayResults.map(r => {
+      const d = new Date(r.date);
+      const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' });
+      const juniorTag = r.is_junior ? ' <span style="font-size:0.7rem;color:var(--accent-blue)">(2k)</span>' : '';
+      return `
+        <tr class="${r.is_pb ? 'pb-row' : ''}">
+          <td>${dateStr}</td>
+          <td>${r.event}${juniorTag}</td>
+          <td class="time-cell">${r.time}</td>
+          <td>${r.position || '—'}</td>
+          <td>${r.age_grade ? r.age_grade.toFixed(1) + '%' : '—'}</td>
+          <td>${r.is_pb ? '<span class="pb-badge">PB</span>' : ''}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  renderResultsTable(false);
+
+  // Toggle junior results
+  const toggle = document.getElementById('showJunior');
+  if (toggle) {
+    toggle.addEventListener('change', () => renderResultsTable(toggle.checked));
+  }
 
   // ── Charts ──
   const chartDefaults = {
@@ -347,101 +433,52 @@ function renderAthlete(db, athleteId) {
     },
   };
 
-  // Filter to last 18 months for charts
+  // Last 18 months of 5k results for main charts
   const eighteenMonthsAgo = new Date();
   eighteenMonthsAgo.setMonth(eighteenMonthsAgo.getMonth() - 18);
-  const chartResults = results.filter((r) => new Date(r.date) >= eighteenMonthsAgo);
+  const chartResults = results5k.filter(r => new Date(r.date) >= eighteenMonthsAgo);
   const chartAvg4w = rollingAvg(chartResults, 4);
 
   // Performance chart
-  const perfCtx = document.getElementById('perfChart').getContext('2d');
-  new Chart(perfCtx, {
-    type: 'line',
-    data: {
-      labels: chartResults.map((r) => {
-        const d = new Date(r.date);
-        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-      }),
-      datasets: [
-        {
-          label: 'Time (seconds)',
-          data: chartResults.map((r) => r.time_seconds),
-          borderColor: '#00d4aa',
-          backgroundColor: 'rgba(0,212,170,0.1)',
-          pointBackgroundColor: chartResults.map((r) =>
-            r.is_pb ? '#ffd700' : '#00d4aa'
-          ),
-          pointRadius: chartResults.map((r) => (r.is_pb ? 6 : 2)),
-          borderWidth: 2,
-          tension: 0.3,
-          fill: true,
-        },
-        {
-          label: '4-Week Avg',
-          data: chartAvg4w.map((a) => a.avg),
-          borderColor: '#ff6b35',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          pointRadius: 0,
-          tension: 0.3,
-          fill: false,
-        },
-        {
-          label: 'PB Line',
-          data: chartResults.map(() => pb),
-          borderColor: '#ffd700',
-          borderWidth: 1,
-          borderDash: [3, 3],
-          pointRadius: 0,
-          fill: false,
-        },
-      ],
-    },
-    options: {
-      ...chartDefaults,
-      scales: {
-        ...chartDefaults.scales,
-        y: {
-          ...chartDefaults.scales.y,
-          reverse: true,
-          ticks: {
-            ...chartDefaults.scales.y.ticks,
-            callback: (v) => formatTime(v),
-          },
-        },
-      },
-      plugins: {
-        ...chartDefaults.plugins,
-        tooltip: {
-          callbacks: {
-            label: (ctx) => `${ctx.dataset.label}: ${formatTime(ctx.parsed.y)}`,
-          },
-        },
-      },
-    },
-  });
-
-  // Age grade chart
-  const agResults = chartResults.filter((r) => r.age_grade);
-  if (agResults.length > 0) {
-    const agCtx = document.getElementById('agChart').getContext('2d');
-    new Chart(agCtx, {
+  if (chartResults.length > 0) {
+    const perfCtx = document.getElementById('perfChart').getContext('2d');
+    new Chart(perfCtx, {
       type: 'line',
       data: {
-        labels: agResults.map((r) => {
+        labels: chartResults.map(r => {
           const d = new Date(r.date);
           return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         }),
         datasets: [
           {
-            label: 'Age Grade %',
-            data: agResults.map((r) => r.age_grade),
-            borderColor: '#4a9eff',
-            backgroundColor: 'rgba(74,158,255,0.1)',
-            pointRadius: 2,
+            label: 'Time (seconds)',
+            data: chartResults.map(r => r.time_seconds),
+            borderColor: '#00d4aa',
+            backgroundColor: 'rgba(0,212,170,0.1)',
+            pointBackgroundColor: chartResults.map(r => r.is_pb ? '#ffd700' : '#00d4aa'),
+            pointRadius: chartResults.map(r => r.is_pb ? 6 : 2),
             borderWidth: 2,
             tension: 0.3,
             fill: true,
+          },
+          {
+            label: '4-Week Avg',
+            data: chartAvg4w.map(a => a.avg),
+            borderColor: '#ff6b35',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            pointRadius: 0,
+            tension: 0.3,
+            fill: false,
+          },
+          {
+            label: 'PB Line',
+            data: chartResults.map(() => pbSeconds),
+            borderColor: '#ffd700',
+            borderWidth: 1,
+            borderDash: [3, 3],
+            pointRadius: 0,
+            fill: false,
           },
         ],
       },
@@ -451,9 +488,127 @@ function renderAthlete(db, athleteId) {
           ...chartDefaults.scales,
           y: {
             ...chartDefaults.scales.y,
+            reverse: true,
             ticks: {
               ...chartDefaults.scales.y.ticks,
-              callback: (v) => v + '%',
+              callback: v => formatTime(v),
+            },
+          },
+        },
+        plugins: {
+          ...chartDefaults.plugins,
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${formatTime(ctx.parsed.y)}`,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // Age grade chart
+  const agResults = chartResults.filter(r => r.age_grade);
+  if (agResults.length > 0) {
+    const agCtx = document.getElementById('agChart').getContext('2d');
+    new Chart(agCtx, {
+      type: 'line',
+      data: {
+        labels: agResults.map(r => {
+          const d = new Date(r.date);
+          return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        }),
+        datasets: [{
+          label: 'Age Grade %',
+          data: agResults.map(r => r.age_grade),
+          borderColor: '#4a9eff',
+          backgroundColor: 'rgba(74,158,255,0.1)',
+          pointRadius: 2,
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true,
+        }],
+      },
+      options: {
+        ...chartDefaults,
+        scales: {
+          ...chartDefaults.scales,
+          y: {
+            ...chartDefaults.scales.y,
+            ticks: {
+              ...chartDefaults.scales.y.ticks,
+              callback: v => v + '%',
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // 2026 Progress chart with trend line
+  if (results2026.length >= 3) {
+    const ctx2026 = document.getElementById('chart2026').getContext('2d');
+
+    // Simple linear regression for trend
+    const xs = results2026.map((_, i) => i);
+    const ys = results2026.map(r => r.time_seconds);
+    const n = xs.length;
+    const sumX = xs.reduce((a, b) => a + b, 0);
+    const sumY = ys.reduce((a, b) => a + b, 0);
+    const sumXY = xs.reduce((a, x, i) => a + x * ys[i], 0);
+    const sumX2 = xs.reduce((a, x) => a + x * x, 0);
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    const trendData = xs.map(x => Math.round(slope * x + intercept));
+
+    new Chart(ctx2026, {
+      type: 'line',
+      data: {
+        labels: results2026.map(r => {
+          const d = new Date(r.date);
+          return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        }),
+        datasets: [
+          {
+            label: 'Time',
+            data: ys,
+            borderColor: '#00d4aa',
+            backgroundColor: 'rgba(0,212,170,0.1)',
+            pointBackgroundColor: results2026.map(r => r.is_pb ? '#ffd700' : '#00d4aa'),
+            pointRadius: 3,
+            borderWidth: 2,
+            tension: 0.3,
+            fill: true,
+          },
+          {
+            label: 'Trend',
+            data: trendData,
+            borderColor: '#ff6b35',
+            borderWidth: 2,
+            borderDash: [8, 4],
+            pointRadius: 0,
+            fill: false,
+          },
+        ],
+      },
+      options: {
+        ...chartDefaults,
+        scales: {
+          ...chartDefaults.scales,
+          y: {
+            ...chartDefaults.scales.y,
+            reverse: true,
+            ticks: {
+              ...chartDefaults.scales.y.ticks,
+              callback: v => formatTime(v),
+            },
+          },
+        },
+        plugins: {
+          ...chartDefaults.plugins,
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${formatTime(ctx.parsed.y)}`,
             },
           },
         },

@@ -64,13 +64,14 @@
     return `${m}:${s.toString().padStart(2, '0')}`;
   }
 
+  function badgeImg(badge) {
+    if (!badge) return '';
+    return `<img src="badges/badge-${badge}.svg" alt="${badge}" class="badge-icon" style="width:18px;height:18px;vertical-align:middle">`;
+  }
+
   function renderAthletes(db) {
     const athletes = query(db, `
       SELECT a.*,
-        (SELECT COUNT(*) FROM results r WHERE r.athlete_id = a.id) as total_runs,
-        (SELECT MIN(time_seconds) FROM results r WHERE r.athlete_id = a.id) as pb_seconds,
-        (SELECT MIN(time) FROM results r WHERE r.athlete_id = a.id AND r.time_seconds = (SELECT MIN(time_seconds) FROM results r2 WHERE r2.athlete_id = a.id)) as pb,
-        (SELECT MAX(age_grade) FROM results r WHERE r.athlete_id = a.id) as best_ag,
         (SELECT MAX(date) FROM results r WHERE r.athlete_id = a.id) as last_run
       FROM athletes a
       ORDER BY a.name ASC
@@ -91,13 +92,18 @@
             return `
             <div class="athlete-list-item" data-id="${a.id}">
               <a href="athlete.html?id=${a.id}" class="athlete-list-info">
-                <div class="athlete-list-name">${a.name}</div>
+                <div class="athlete-list-name">
+                  ${badgeImg(a.badge)}
+                  ${a.name}
+                </div>
                 <div class="athlete-list-meta">
                   <span>${a.age_group || '—'}</span>
                   <span>·</span>
-                  <span>${a.total_runs} runs</span>
+                  <span>${a.total_5k || 0} runs</span>
                   <span>·</span>
-                  <span>PB ${a.pb || '—'}</span>
+                  <span>PB ${a.pb_5k || '—'}</span>
+                  <span>·</span>
+                  <span>Vol ${a.volunteer_count || 0}</span>
                   <span>·</span>
                   <span>Last: ${lastRunDate}</span>
                 </div>
