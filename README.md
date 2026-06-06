@@ -1,119 +1,61 @@
-# 🏃 ParkRun Family Dashboard
+# ParkRun Dashboard 🏃
 
-A static dashboard tracking parkrun results for family and friends. Designed to be deployed on GitHub Pages with automated weekly data updates.
+A family & friends parkrun tracker for Cassiobury parkrun. Built with SQLite + [sql.js](https://sql.js.org/) — the entire dashboard runs client-side with no backend.
 
-## Live Dashboard
+## Architecture
 
-Deploy to GitHub Pages from the `docs/` directory. The dashboard works immediately with the included sample data.
+- **Database:** SQLite (`data/parkrun.db`) with athletes + results tables
+- **Scraper:** Node.js + Playwright scripts that populate the SQLite DB from parkrun.org.uk
+- **Dashboard:** Static HTML/CSS/JS served via GitHub Pages, using sql.js (SQLite compiled to WASM) to query the DB directly in the browser
+- **Updates:** GitHub Actions cron job every Saturday at 12:00 UK time
 
-## Setup
-
-### 1. Install Dependencies
+## Quick Start
 
 ```bash
+# Install dependencies
 npm install
+
+# Generate sample data
+npm run db:init
+
+# Export to docs for the dashboard
+npm run db:export
+
+# Open docs/index.html in your browser
 ```
 
-### 2. Discover Athletes
+## Scripts
 
-The discover script scrapes recent Cassiobury parkrun results and finds athletes matching the configured surnames (PANJU, MEGHJEE, TEJANI, KANANI):
+| Script | Description |
+|--------|-------------|
+| `npm run db:init` | Generate sample database |
+| `npm run db:export` | Copy DB to `docs/data/` for the dashboard |
+| `npm run scrape:discover` | Find athletes by surname in recent results |
+| `npm run scrape:update` | Update all active athletes' results |
+| `npm run scrape` | Run discover + update |
 
-```bash
-npm run scrape:discover        # Check last 4 weeks
-npm run scrape:discover -- --weeks=8   # Check more weeks
-```
+## Pages
 
-This updates `config.json` with discovered athlete IDs.
-
-### 3. Update Data
-
-Scrape full history for all configured athletes:
-
-```bash
-npm run scrape:update
-```
-
-### 4. Full Scrape (Discover + Update)
-
-```bash
-npm run scrape
-```
-
-### 5. Copy Data for Dashboard
-
-After scraping, copy the data file to the docs directory:
-
-```bash
-cp data/athletes.json docs/data/athletes.json
-```
+- **Dashboard** (`docs/index.html`) — Overview with highlights, this week's results, milestones, athlete cards
+- **Athlete** (`docs/athlete.html?id=X`) — Individual performance charts, stats, streaks, history
+- **Add Athlete** (`docs/add.html`) — Request adding a new athlete via GitHub issue
 
 ## Configuration
 
-Edit `config.json`:
+Edit `config.json` to change tracked surnames or event:
 
 ```json
 {
   "event": "cassiobury",
-  "surnames": ["PANJU", "MEGHJEE", "TEJANI", "KANANI"],
-  "athletes": []
+  "eventId": 1152,
+  "surnames": ["PANJU", "MEGHJEE", "TEJANI", "KANANI"]
 }
 ```
 
-- **event**: The parkrun event to search (URL slug)
-- **surnames**: Surnames to search for in results pages
-- **athletes**: Auto-populated by the discover script
+## Tech Stack
 
-## GitHub Pages Deployment
-
-1. Push to GitHub
-2. Go to Settings → Pages → Source: **Deploy from a branch**
-3. Branch: `main`, Folder: `/docs`
-4. The dashboard will be live at `https://<user>.github.io/parkrun-dashboard/`
-
-## Automated Updates
-
-The included GitHub Actions workflow (`.github/workflows/update.yml`) runs every Saturday at 14:00 UTC to:
-
-1. Discover any new athletes matching the surnames
-2. Scrape updated results for all tracked athletes
-3. Commit and push the new data
-
-You can also trigger it manually from the Actions tab.
-
-## Requirements
-
-- Node.js 22+
-- Playwright (for scraping) — uses system Chrome
-- The scraper needs a real browser because parkrun.org.uk is a JS-rendered SPA with WAF protection
-
-## Project Structure
-
-```
-parkrun-dashboard/
-├── config.json              # Tracked athletes & event config
-├── data/
-│   └── athletes.json        # Scraped athlete data
-├── docs/                    # GitHub Pages root
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   └── data/
-│       └── athletes.json    # Copy of scraped data
-├── scraper/
-│   ├── index.js             # Main entry (discover + update)
-│   ├── discover.js          # Find athletes by surname
-│   ├── update.js            # Scrape athlete histories
-│   ├── browser.js           # Shared Playwright utilities
-│   └── generate-sample-data.js  # Sample data generator
-└── .github/workflows/
-    └── update.yml           # Weekly auto-update
-```
-
-## Dashboard Features
-
-- **Highlights** — PBs, milestones, notable achievements
-- **This Week's Results** — who ran, times, positions, age grades
-- **Who Didn't Run** — absentees with broken streak notices
-- **Upcoming Milestones** — progress toward 50/100/200/etc run targets
-- **Athlete Cards** — expandable cards with stats, form bars, trends
-- Dark theme, mobile-first responsive design
+- [sql.js](https://sql.js.org/) — SQLite compiled to WASM (browser + Node.js)
+- [Chart.js](https://www.chartjs.org/) — Performance charts
+- [Playwright](https://playwright.dev/) — Web scraping
+- GitHub Pages — Static hosting
+- GitHub Actions — Automated weekly updates

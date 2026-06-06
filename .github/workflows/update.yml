@@ -2,43 +2,41 @@ name: Update ParkRun Data
 
 on:
   schedule:
-    # Every Saturday at 14:00 UTC (15:00 BST) - after most UK parkruns finish
-    - cron: '0 14 * * 6'
-  workflow_dispatch: # Manual trigger
+    # 11:00 UTC = 12:00 BST on Saturdays
+    - cron: '0 11 * * 6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  scrape:
+  update:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install chromium
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
 
-      - name: Discover new athletes
-        run: npm run scrape:discover
-        continue-on-error: true
+      - name: Run scraper (discover + update)
+        run: npm run scrape
 
-      - name: Update athlete data
-        run: npm run scrape:update
+      - name: Export DB to docs
+        run: npm run db:export
 
-      - name: Copy data to docs
-        run: cp data/athletes.json docs/data/athletes.json
-
-      - name: Commit and push
+      - name: Commit & push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ docs/data/ config.json
-          git diff --staged --quiet || git commit -m "📊 Update parkrun data $(date +%Y-%m-%d)"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: update parkrun data $(date +%Y-%m-%d)"
           git push

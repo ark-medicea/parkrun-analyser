@@ -1,403 +1,433 @@
-/* ── ParkRun Dashboard App ── */
+/* ── ParkRun Dashboard — app.js ── */
+/* Loads SQLite DB via sql.js, queries everything client-side */
 
-(function () {
-  'use strict';
+(async function () {
+  const app = document.getElementById('app');
 
-  const DATA_URL = 'data/athletes.json';
-  const MILESTONES = [50, 100, 150, 200, 250, 300, 500];
-
-  // ── Data Loading ──
-  async function loadData() {
-    // Try relative path (GitHub Pages serves from docs/)
-    // Data is copied/symlinked into docs/data/ for deployment
-    const paths = ['data/athletes.json', '../data/athletes.json'];
-    for (const p of paths) {
-      try {
-        const res = await fetch(p);
-        if (res.ok) return await res.json();
-      } catch (_) {}
-    }
-    throw new Error('Could not load athlete data');
-  }
-
-  // ── Helpers ──
-  function formatName(fullName) {
-    const parts = fullName.split(' ');
-    const last = parts.pop();
-    return `<span class="first-name">${parts.join(' ')}</span> <span class="last-name">${last}</span>`;
-  }
-
-  function firstName(fullName) {
-    return fullName.split(' ')[0];
-  }
-
-  function getLatestDate(data) {
-    return data.lastUpdated || '';
-  }
-
-  function formatDate(dateStr) {
-    if (!dateStr) return '';
-    const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-  }
-
-  function formatDateShort(dateStr) {
-    if (!dateStr) return '';
-    const d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-  }
-
-  function thisWeekResults(athlete, latestDate) {
-    return athlete.results.filter(r => r.date === latestDate);
-  }
-
-  function getRecentResults(athlete, n) {
-    const sorted = [...athlete.results].sort((a, b) => b.date.localeCompare(a.date));
-    return sorted.slice(0, n);
-  }
-
-  function computeTrend(athlete) {
-    const recent = getRecentResults(athlete, 10);
-    if (recent.length < 3) return { direction: 'flat', symbol: '→' };
-    const recentAvg = recent.slice(0, 3).reduce((s, r) => s + r.timeSeconds, 0) / 3;
-    const olderAvg = recent.slice(-3).reduce((s, r) => s + r.timeSeconds, 0) / 3;
-    const diff = recentAvg - olderAvg;
-    if (diff < -10) return { direction: 'up', symbol: '↑' }; // faster = improving
-    if (diff > 10) return { direction: 'down', symbol: '↓' };
-    return { direction: 'flat', symbol: '→' };
-  }
-
-  function nextMilestone(totalRuns) {
-    for (const m of MILESTONES) {
-      if (totalRuns < m) return { target: m, remaining: m - totalRuns };
-    }
-    return null;
-  }
-
-  function consecutiveWeekStreak(athlete, latestDate) {
-    // Calculate from results data
-    if (!latestDate) return 0;
-    const dates = new Set(athlete.results.map(r => r.date));
-    let streak = 0;
-    let d = new Date(latestDate + 'T00:00:00');
-    while (dates.has(d.toISOString().split('T')[0])) {
-      streak++;
-      d.setDate(d.getDate() - 7);
-    }
-    return streak;
-  }
-
-  // ── Rendering ──
-  function render(data) {
-    const app = document.getElementById('app');
-    const latestDate = getLatestDate(data);
-
-    // Update header
-    document.getElementById('last-updated').textContent =
-      `Cassiobury parkrun · ${formatDate(latestDate)}`;
-
-    // Show sample data notice
-    if (data._meta?.sampleData) {
-      document.getElementById('sample-notice').style.display = 'block';
-    }
-
-    // Compute derived data
-    const athletes = data.athletes.map(a => ({
-      ...a,
-      thisWeek: thisWeekResults(a, latestDate),
-      recent: getRecentResults(a, 10),
-      trend: computeTrend(a),
-      milestone: nextMilestone(a.totalRuns),
-      streak: a.currentStreak || consecutiveWeekStreak(a, latestDate),
-    }));
-
-    const ran = athletes.filter(a => a.thisWeek.length > 0);
-    const didntRun = athletes.filter(a => a.thisWeek.length === 0);
-
-    // Sort runners by time
-    ran.sort((a, b) => (a.thisWeek[0]?.timeSeconds || 9999) - (b.thisWeek[0]?.timeSeconds || 9999));
-
-    let html = '';
-    html += renderHighlights(athletes, ran, latestDate);
-    html += renderThisWeek(ran);
-    html += renderAbsent(didntRun);
-    html += renderMilestones(athletes);
-    html += renderAthleteCards(athletes);
-
-    app.innerHTML = html;
-
-    // Attach card toggle listeners
-    document.querySelectorAll('.athlete-header').forEach(el => {
-      el.addEventListener('click', () => {
-        el.closest('.athlete-card').classList.toggle('expanded');
-      });
+  try {
+    const SQL = await initSqlJs({
+      locateFile: (file) =>
+        `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${file}`,
     });
+
+    const resp = await fetch('data/parkrun.db');
+    if (!resp.ok) throw new Error('Failed to load database');
+    const buf = await resp.arrayBuffer();
+    const db = new SQL.Database(new Uint8Array(buf));
+
+    renderDashboard(db);
+  } catch (err) {
+    app.innerHTML = `<div class="error">Failed to load: ${err.message}</div>`;
+    console.error(err);
   }
+})();
 
-  function renderHighlights(athletes, ran, latestDate) {
-    const highlights = [];
+function query(db, sql, params = []) {
+  const stmt = db.prepare(sql);
+  if (params.length) stmt.bind(params);
+  const rows = [];
+  while (stmt.step()) rows.push(stmt.getAsObject());
+  stmt.free();
+  return rows;
+}
 
-    // PBs this week
-    for (const a of ran) {
-      for (const r of a.thisWeek) {
-        if (r.isPB) {
-          highlights.push({
-            type: 'pb',
-            emoji: '🏆',
-            html: `<strong>${firstName(a.name)}</strong> set a new PB! <strong>${r.time}</strong>`,
-          });
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function splitName(name) {
+  const parts = name.split(' ');
+  const last = parts.pop();
+  return { first: parts.join(' '), last };
+}
+
+function renderDashboard(db) {
+  const app = document.getElementById('app');
+
+  // Get latest Saturday (most recent results date)
+  const latestDateRow = query(db, 'SELECT MAX(date) as d FROM results');
+  const latestDate = latestDateRow[0]?.d;
+
+  // All athletes
+  const athletes = query(db, 'SELECT * FROM athletes WHERE active = 1 ORDER BY name');
+
+  // This week's results
+  const thisWeek = latestDate
+    ? query(
+        db,
+        `SELECT r.*, a.name FROM results r 
+         JOIN athletes a ON r.athlete_id = a.id 
+         WHERE r.date = ? ORDER BY r.time_seconds ASC`,
+        [latestDate]
+      )
+    : [];
+
+  // Athletes who didn't run this week
+  const runnersThisWeek = new Set(thisWeek.map((r) => r.athlete_id));
+  const absent = athletes.filter((a) => !runnersThisWeek.has(a.id));
+
+  // PBs this week
+  const pbs = thisWeek.filter((r) => r.is_pb);
+
+  // All results for streaks/milestones
+  const allResults = query(
+    db,
+    `SELECT r.*, a.name FROM results r 
+     JOIN athletes a ON r.athlete_id = a.id 
+     ORDER BY r.date DESC`
+  );
+
+  // Build streak data & milestone data per athlete
+  const athleteData = {};
+  for (const a of athletes) {
+    const results = query(
+      db,
+      'SELECT * FROM results WHERE athlete_id = ? ORDER BY date DESC',
+      [a.id]
+    );
+    const totalRuns = results.length;
+    const pb = results.reduce(
+      (min, r) => (r.time_seconds < min ? r.time_seconds : min),
+      Infinity
+    );
+    const bestAG = results.reduce(
+      (max, r) => (r.age_grade > max ? r.age_grade : max),
+      0
+    );
+
+    // Current streak (consecutive weeks from latest date backwards)
+    let streak = 0;
+    if (latestDate) {
+      const dates = [...new Set(results.map((r) => r.date))].sort().reverse();
+      const latestD = new Date(latestDate);
+      let checkDate = new Date(latestD);
+      for (const d of dates) {
+        const diff = Math.round(
+          (checkDate - new Date(d)) / (1000 * 60 * 60 * 24)
+        );
+        if (diff <= 1) {
+          streak++;
+          checkDate = new Date(d);
+          checkDate.setDate(checkDate.getDate() - 7);
+        } else {
+          break;
         }
       }
     }
 
-    // Big streaks
-    for (const a of athletes) {
-      if (a.streak >= 10) {
-        highlights.push({
-          type: 'streak',
-          emoji: '🔥',
-          html: `<strong>${firstName(a.name)}</strong> is on a <strong>${a.streak}-week streak</strong>`,
+    // Recent 8 results for form bars
+    const recent8 = results.slice(0, 8).reverse();
+
+    // 4-week average
+    const recent4 = results.slice(0, 4);
+    const avg4w =
+      recent4.length > 0
+        ? Math.round(
+            recent4.reduce((s, r) => s + r.time_seconds, 0) / recent4.length
+          )
+        : null;
+
+    // Trend: compare last 4 avg to previous 4 avg
+    const prev4 = results.slice(4, 8);
+    const avg4prev =
+      prev4.length > 0
+        ? Math.round(
+            prev4.reduce((s, r) => s + r.time_seconds, 0) / prev4.length
+          )
+        : null;
+    let trend = 'flat';
+    if (avg4w && avg4prev) {
+      const diff = avg4prev - avg4w;
+      if (diff > 15) trend = 'up'; // faster = improving
+      else if (diff < -15) trend = 'down';
+    }
+
+    athleteData[a.id] = {
+      ...a,
+      totalRuns,
+      pb: pb === Infinity ? null : pb,
+      bestAG,
+      streak,
+      recent8,
+      avg4w,
+      trend,
+    };
+  }
+
+  // Milestones
+  const milestones = [];
+  const milestoneTargets = [25, 50, 100, 150, 200, 250, 300];
+  for (const a of athletes) {
+    const d = athleteData[a.id];
+    for (const target of milestoneTargets) {
+      if (d.totalRuns >= target - 10 && d.totalRuns < target) {
+        milestones.push({
+          name: d.name,
+          current: d.totalRuns,
+          target,
+          remaining: target - d.totalRuns,
         });
       }
     }
+  }
 
-    // Close milestones (within 5 runs)
-    for (const a of athletes) {
-      if (a.milestone && a.milestone.remaining <= 5) {
-        highlights.push({
-          type: 'milestone',
-          emoji: '⭐',
-          html: `<strong>${firstName(a.name)}</strong> is <strong>${a.milestone.remaining} run${a.milestone.remaining === 1 ? '' : 's'}</strong> from <strong>${a.milestone.target}</strong>!`,
-        });
-      }
-    }
+  // Build highlights
+  const highlights = [];
 
-    // Best age grade this week
-    const bestAG = ran.reduce((best, a) => {
-      const ag = a.thisWeek[0]?.ageGrade || 0;
-      return ag > (best?.ag || 0) ? { name: a.name, ag } : best;
-    }, null);
-    if (bestAG && bestAG.ag > 0) {
+  for (const pb of pbs) {
+    const { first, last } = splitName(pb.name);
+    highlights.push({
+      type: 'pb',
+      emoji: '🏆',
+      html: `<strong>${first}</strong> set a new PB! <strong>${pb.time}</strong>${
+        pb.age_grade ? ` (${pb.age_grade.toFixed(1)}% AG)` : ''
+      }`,
+    });
+  }
+
+  for (const a of athletes) {
+    const d = athleteData[a.id];
+    if (d.streak >= 4) {
+      const { first } = splitName(d.name);
       highlights.push({
         type: 'streak',
-        emoji: '📊',
-        html: `Best age grade this week: <strong>${firstName(bestAG.name)}</strong> with <strong>${bestAG.ag.toFixed(1)}%</strong>`,
+        emoji: '🔥',
+        html: `<strong>${first}</strong> is on a <strong>${d.streak}-week streak</strong>!`,
       });
     }
+  }
 
-    if (highlights.length === 0) return '';
+  for (const m of milestones) {
+    const { first } = splitName(m.name);
+    highlights.push({
+      type: 'milestone',
+      emoji: '🎯',
+      html: `<strong>${first}</strong> is ${m.remaining} run${
+        m.remaining === 1 ? '' : 's'
+      } away from <strong>${m.target} runs</strong>!`,
+    });
+  }
 
-    return `
+  // Render
+  let html = '';
+
+  // Highlights
+  if (highlights.length > 0) {
+    html += `
       <div class="section">
         <div class="section-header">
           <span class="section-icon">✨</span>
           <h2>Highlights</h2>
         </div>
         <div class="highlights">
-          ${highlights.map(h => `
+          ${highlights
+            .map(
+              (h) => `
             <div class="highlight-card ${h.type}">
               <span class="highlight-emoji">${h.emoji}</span>
-              <span class="highlight-text">${h.html}</span>
+              <div class="highlight-text">${h.html}</div>
             </div>
-          `).join('')}
+          `
+            )
+            .join('')}
         </div>
       </div>
     `;
   }
 
-  function renderThisWeek(ran) {
-    if (ran.length === 0) {
-      return `
-        <div class="section">
-          <div class="section-header">
-            <span class="section-icon">📋</span>
-            <h2>This Week's Results</h2>
-          </div>
-          <p style="color: var(--text-secondary); padding: 1rem;">No results yet for this week.</p>
-        </div>
-      `;
-    }
-
-    return `
+  // This week's results
+  if (thisWeek.length > 0) {
+    const dateStr = new Date(latestDate).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+    html += `
       <div class="section">
         <div class="section-header">
-          <span class="section-icon">📋</span>
-          <h2>This Week's Results</h2>
+          <span class="section-icon">📊</span>
+          <h2>This Week — ${dateStr}</h2>
         </div>
         <div class="results-grid">
-          ${ran.map(a => {
-            const r = a.thisWeek[0];
-            return `
-              <div class="result-row">
+          ${thisWeek
+            .map((r) => {
+              const { first, last } = splitName(r.name);
+              return `
+              <a href="athlete.html?id=${r.athlete_id}" class="result-row">
                 <div class="result-name">
-                  ${formatName(a.name)}
-                  ${r.isPB ? '<span class="pb-badge">PB!</span>' : ''}
+                  <span class="first-name">${first}</span>
+                  <span class="last-name">${last}</span>
                 </div>
-                <div class="result-ag">${r.ageGrade ? r.ageGrade.toFixed(1) + '%' : ''}</div>
-                <div class="result-pos">#${r.position}</div>
-                <div class="result-time ${r.isPB ? 'is-pb' : ''}">${r.time}</div>
-              </div>
+                <div class="result-time ${r.is_pb ? 'is-pb' : ''}">${
+                r.time
+              }${r.is_pb ? '<span class="pb-badge">PB</span>' : ''}</div>
+                <div class="result-pos">#${r.position || '—'}</div>
+                <div class="result-ag">${
+                  r.age_grade ? r.age_grade.toFixed(1) + '%' : '—'
+                }</div>
+              </a>
             `;
-          }).join('')}
+            })
+            .join('')}
         </div>
       </div>
     `;
   }
 
-  function renderAbsent(didntRun) {
-    if (didntRun.length === 0) return '';
-
-    return `
+  // Didn't run
+  if (absent.length > 0) {
+    html += `
       <div class="section">
         <div class="section-header">
           <span class="section-icon">😴</span>
           <h2>Didn't Run This Week</h2>
         </div>
         <div class="absent-list">
-          ${didntRun.map(a => {
-            const streakNote = a.streak > 3 ? `<span class="streak-lost">broke ${a.streak}w streak</span>` : '';
-            return `<span class="absent-chip">${firstName(a.name)} ${a.name.split(' ').pop()}${streakNote}</span>`;
-          }).join('')}
+          ${absent
+            .map((a) => {
+              const d = athleteData[a.id];
+              const streakLost =
+                d.streak > 2
+                  ? `<span class="streak-lost">🔥 ${d.streak}-week streak broken!</span>`
+                  : '';
+              return `<span class="absent-chip">${splitName(a.name).first} ${streakLost}</span>`;
+            })
+            .join('')}
         </div>
       </div>
     `;
   }
 
-  function renderMilestones(athletes) {
-    const upcoming = athletes
-      .filter(a => a.milestone && a.milestone.remaining <= 20)
-      .sort((a, b) => a.milestone.remaining - b.milestone.remaining);
-
-    if (upcoming.length === 0) return '';
-
-    return `
+  // Milestones
+  if (milestones.length > 0) {
+    const circ = 2 * Math.PI * 20;
+    html += `
       <div class="section">
         <div class="section-header">
           <span class="section-icon">🎯</span>
-          <h2>Upcoming Milestones</h2>
+          <h2>Approaching Milestones</h2>
         </div>
         <div class="milestone-list">
-          ${upcoming.map(a => {
-            const pct = (a.totalRuns / a.milestone.target) * 100;
-            const r = 20;
-            const circ = 2 * Math.PI * r;
-            const offset = circ - (pct / 100) * circ;
-            return `
+          ${milestones
+            .map((m) => {
+              const pct = m.current / m.target;
+              const offset = circ * (1 - pct);
+              const { first, last } = splitName(m.name);
+              return `
               <div class="milestone-item">
                 <div class="milestone-progress">
                   <svg viewBox="0 0 48 48">
-                    <circle class="bg" cx="24" cy="24" r="${r}" />
-                    <circle class="fg" cx="24" cy="24" r="${r}"
+                    <circle class="bg" cx="24" cy="24" r="20" />
+                    <circle class="fg" cx="24" cy="24" r="20" 
                       stroke-dasharray="${circ}" stroke-dashoffset="${offset}" />
                   </svg>
-                  <span class="milestone-count">${a.totalRuns}</span>
+                  <span class="milestone-count">${m.current}</span>
                 </div>
                 <div class="milestone-detail">
-                  <div class="milestone-name">${a.name}</div>
-                  <div class="milestone-desc">${a.milestone.remaining} run${a.milestone.remaining === 1 ? '' : 's'} to reach <strong>${a.milestone.target}</strong></div>
+                  <div class="milestone-name">${first} ${last}</div>
+                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} runs 🏅</div>
                 </div>
               </div>
             `;
-          }).join('')}
+            })
+            .join('')}
         </div>
       </div>
     `;
   }
 
-  function renderAthleteCards(athletes) {
-    // Sort by total runs descending
-    const sorted = [...athletes].sort((a, b) => b.totalRuns - a.totalRuns);
-
-    return `
-      <div class="section">
-        <div class="section-header">
-          <span class="section-icon">👥</span>
-          <h2>Athletes</h2>
-        </div>
-        <div class="athlete-cards">
-          ${sorted.map(a => renderAthleteCard(a)).join('')}
-        </div>
+  // Athlete grid
+  html += `
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">👥</span>
+        <h2>Athletes</h2>
       </div>
-    `;
-  }
+      <div class="athlete-cards">
+        ${athletes
+          .map((a) => {
+            const d = athleteData[a.id];
+            const { first, last } = splitName(a.name);
 
-  function renderAthleteCard(a) {
-    const trend = a.trend;
-    const recent5 = getRecentResults(a, 10);
+            // Form bars
+            let formHtml = '';
+            if (d.recent8.length > 0) {
+              const times = d.recent8.map((r) => r.time_seconds);
+              const maxT = Math.max(...times);
+              const minT = Math.min(...times);
+              const range = maxT - minT || 1;
+              formHtml = `
+                <div class="form-bars">
+                  ${d.recent8
+                    .map((r) => {
+                      const h = 10 + ((maxT - r.time_seconds) / range) * 40;
+                      return `<div class="form-bar ${
+                        r.is_pb ? 'is-pb' : ''
+                      }" style="height:${h}px" title="${r.date}: ${r.time}"></div>`;
+                    })
+                    .join('')}
+                </div>
+              `;
+            }
 
-    // Form bars: normalize times relative to PB and slowest
-    const times = recent5.map(r => r.timeSeconds);
-    const maxT = Math.max(...times);
-    const minT = Math.min(...times);
-    const range = maxT - minT || 60;
+            const trendIcon =
+              d.trend === 'up'
+                ? '<span class="trend up">▲</span>'
+                : d.trend === 'down'
+                ? '<span class="trend down">▼</span>'
+                : '<span class="trend flat">—</span>';
 
-    const bars = recent5.reverse().map(r => {
-      // Higher bar = faster time (inverted)
-      const pct = 20 + ((maxT - r.timeSeconds) / range) * 80;
-      return `
-        <div class="form-bar ${r.isPB ? 'is-pb' : ''}" style="height: ${pct}%">
-          <div class="form-bar-tooltip">${formatDateShort(r.date)}: ${r.time}${r.isPB ? ' PB!' : ''}</div>
-        </div>
-      `;
-    }).join('');
-
-    // Age grade trend
-    const recentAG = recent5.length > 0 ? recent5[recent5.length - 1].ageGrade : 0;
-
-    return `
-      <div class="athlete-card">
-        <div class="athlete-header">
-          <div class="athlete-info">
-            <h3>${formatName(a.name)}</h3>
-            <div class="athlete-meta">
-              <span>${a.ageGroup}</span>
-              <span>${a.gender === 'M' ? '♂' : '♀'}</span>
+            return `
+            <div class="athlete-card">
+              <a href="athlete.html?id=${a.id}">
+                <div class="athlete-info">
+                  <h3><span class="first-name">${first}</span> <span class="last-name">${last}</span></h3>
+                  <div class="athlete-meta">
+                    <span>${a.age_group || '—'}</span>
+                    <span>${d.totalRuns} runs</span>
+                  </div>
+                </div>
+              </a>
+              <div class="athlete-stat-row">
+                <div class="stat-box">
+                  <div class="stat-value gold">${
+                    d.pb ? formatTime(d.pb) : '—'
+                  }</div>
+                  <div class="stat-label">PB</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-value">${
+                    d.avg4w ? formatTime(d.avg4w) : '—'
+                  }${trendIcon}</div>
+                  <div class="stat-label">4wk avg</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-value orange">${
+                    d.bestAG ? d.bestAG.toFixed(1) + '%' : '—'
+                  }</div>
+                  <div class="stat-label">Best AG</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-value blue">${d.streak}</div>
+                  <div class="stat-label">Streak</div>
+                </div>
+              </div>
+              ${formHtml}
             </div>
-          </div>
-          <span class="expand-arrow">▼</span>
-        </div>
-
-        <div class="athlete-stat-row">
-          <div class="stat-box">
-            <div class="stat-value">${a.totalRuns}</div>
-            <div class="stat-label">Runs</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value gold">${a.pb}</div>
-            <div class="stat-label">PB</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value blue">${a.streak}w</div>
-            <div class="stat-label">Streak</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value orange">${a.bestAgeGrade.toFixed(1)}%</div>
-            <div class="stat-label">Best AG</div>
-          </div>
-        </div>
-
-        <div class="athlete-detail">
-          <div class="recent-form">
-            <h4>Recent Form <span class="trend ${trend.direction}">${trend.symbol} ${trend.direction === 'up' ? 'improving' : trend.direction === 'down' ? 'slowing' : 'steady'}</span></h4>
-            <div class="form-bars">${bars}</div>
-          </div>
-          ${a.milestone ? `
-            <p style="margin-top: 0.75rem; font-size: 0.85rem; color: var(--text-secondary);">
-              🎯 ${a.milestone.remaining} run${a.milestone.remaining === 1 ? '' : 's'} to <strong style="color: var(--accent-orange)">${a.milestone.target}</strong>
-            </p>
-          ` : ''}
-        </div>
+          `;
+          })
+          .join('')}
       </div>
-    `;
+    </div>
+  `;
+
+  app.className = '';
+  app.innerHTML = html;
+
+  // Check if sample data (IDs start with 1000)
+  if (athletes.length > 0 && athletes[0].id.startsWith('100000')) {
+    document.getElementById('sample-notice').style.display = 'block';
   }
-
-  // ── Init ──
-  loadData().then(render).catch(err => {
-    document.getElementById('app').innerHTML = `
-      <div class="loading" style="color: var(--accent-red);">
-        Failed to load data: ${err.message}<br>
-        <small style="color: var(--text-muted)">Make sure data/athletes.json exists in the docs/ directory</small>
-      </div>
-    `;
-  });
-})();
+}
