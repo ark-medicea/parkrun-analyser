@@ -177,11 +177,10 @@ function renderDashboard(db) {
   const highlights = [];
 
   for (const pb of pbs) {
-    const { first, last } = splitName(pb.name);
     highlights.push({
       type: 'pb',
       emoji: '🏆',
-      html: `<strong>${first}</strong> set a new PB! <strong>${pb.time}</strong>${
+      html: `<strong>${pb.name}</strong> set a new PB! <strong>${pb.time}</strong>${
         pb.age_grade ? ` (${pb.age_grade.toFixed(1)}% AG)` : ''
       }`,
     });
@@ -190,21 +189,19 @@ function renderDashboard(db) {
   for (const a of athletes) {
     const d = athleteData[a.id];
     if (d.streak >= 4) {
-      const { first } = splitName(d.name);
       highlights.push({
         type: 'streak',
         emoji: '🔥',
-        html: `<strong>${first}</strong> is on a <strong>${d.streak}-week streak</strong>!`,
+        html: `<strong>${d.name}</strong> is on a <strong>${d.streak}-week streak</strong>!`,
       });
     }
   }
 
   for (const m of milestones) {
-    const { first } = splitName(m.name);
     highlights.push({
       type: 'milestone',
       emoji: '🎯',
-      html: `<strong>${first}</strong> is ${m.remaining} run${
+      html: `<strong>${m.name}</strong> is ${m.remaining} run${
         m.remaining === 1 ? '' : 's'
       } away from <strong>${m.target} runs</strong>!`,
     });

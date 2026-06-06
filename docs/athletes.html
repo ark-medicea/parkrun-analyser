@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Athletes — ParkRun Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏃</text></svg>">
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">🏃 ParkRun Dashboard</a>
+      <div class="nav-links">
+        <a href="index.html">Dashboard</a>
+        <a href="athletes.html" class="active">Athletes</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <div id="app" class="loading">Loading athletes…</div>
+  </main>
+
+  <footer>
+    <div>Data from <a href="https://www.parkrun.org.uk/" target="_blank">parkrun.org.uk</a></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/sql-wasm.js"></script>
+  <script>
+  (async function () {
+    const app = document.getElementById('app');
+
+    try {
+      const SQL = await initSqlJs({
+        locateFile: (file) =>
+          `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${file}`,
+      });
+
+      const resp = await fetch('data/parkrun.db');
+      if (!resp.ok) throw new Error('Failed to load database');
+      const buf = await resp.arrayBuffer();
+      const db = new SQL.Database(new Uint8Array(buf));
+
+      renderAthletes(db);
+    } catch (err) {
+      app.innerHTML = `<div class="error">Failed to load: ${err.message}</div>`;
+    }
+  })();
+
+  function query(db, sql, params = []) {
+    const stmt = db.prepare(sql);
+    if (params.length) stmt.bind(params);
+    const rows = [];
+    while (stmt.step()) rows.push(stmt.getAsObject());
+    stmt.free();
+    return rows;
+  }
+
+  function formatTime(seconds) {
+    if (!seconds) return '—';
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  }
+
+  function renderAthletes(db) {
+    const athletes = query(db, `
+      SELECT a.*,
+        (SELECT COUNT(*) FROM results r WHERE r.athlete_id = a.id) as total_runs,
+        (SELECT MIN(time_seconds) FROM results r WHERE r.athlete_id = a.id) as pb_seconds,
+        (SELECT MIN(time) FROM results r WHERE r.athlete_id = a.id AND r.time_seconds = (SELECT MIN(time_seconds) FROM results r2 WHERE r2.athlete_id = a.id)) as pb,
+        (SELECT MAX(age_grade) FROM results r WHERE r.athlete_id = a.id) as best_ag,
+        (SELECT MAX(date) FROM results r WHERE r.athlete_id = a.id) as last_run
+      FROM athletes a
+      ORDER BY a.name ASC
+    `);
+
+    let html = `
+      <div class="athletes-manage">
+        <div class="section-header" style="margin-bottom: 1.5rem;">
+          <span class="section-icon">👥</span>
+          <h2>Tracked Athletes</h2>
+        </div>
+
+        <div class="athlete-list">
+          ${athletes.map(a => {
+            const lastRunDate = a.last_run
+              ? new Date(a.last_run).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+              : 'Never';
+            return `
+            <div class="athlete-list-item" data-id="${a.id}">
+              <a href="athlete.html?id=${a.id}" class="athlete-list-info">
+                <div class="athlete-list-name">${a.name}</div>
+                <div class="athlete-list-meta">
+                  <span>${a.age_group || '—'}</span>
+                  <span>·</span>
+                  <span>${a.total_runs} runs</span>
+                  <span>·</span>
+                  <span>PB ${a.pb || '—'}</span>
+                  <span>·</span>
+                  <span>Last: ${lastRunDate}</span>
+                </div>
+              </a>
+              <button class="remove-btn" onclick="removeAthlete('${a.id}', '${a.name.replace(/'/g, "\\'")}')">✕</button>
+            </div>
+          `;
+          }).join('')}
+        </div>
+
+        ${athletes.length === 0 ? '<p style="color: var(--text-secondary); padding: 1rem;">No athletes tracked yet.</p>' : ''}
+
+        <div class="add-section-inline">
+          <h3>➕ Add an Athlete</h3>
+
+          <div class="add-form">
+            <div class="form-group">
+              <label for="athleteId">Parkrun Athlete ID</label>
+              <input type="text" id="athleteId" placeholder="e.g. 7107144" pattern="[0-9]+" inputmode="numeric">
+            </div>
+
+            <div class="form-group">
+              <label for="athleteName">Name (optional)</label>
+              <input type="text" id="athleteName" placeholder="e.g. Hasnain Panju">
+            </div>
+
+            <button class="btn" onclick="addAthlete()">Add Athlete →</button>
+          </div>
+
+          <div class="instructions">
+            <h4>How to find an athlete ID</h4>
+            <ol>
+              <li>Go to <a href="https://www.parkrun.org.uk/cassiobury/results/latestresults/" target="_blank">Cassiobury parkrun results</a></li>
+              <li>Find the person in the results list and click their name</li>
+              <li>Their profile URL will be like: <code>parkrun.org.uk/parkrunner/<strong>7107144</strong>/</code></li>
+              <li>The number is their athlete ID</li>
+            </ol>
+          </div>
+
+          <div class="alt-edit">
+            <p>Or edit the config directly:</p>
+            <a href="https://github.com/ark-medicea/parkrun-analyser/edit/main/config.json" target="_blank" class="btn btn-secondary">
+              Edit config.json on GitHub →
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    app.className = '';
+    app.innerHTML = html;
+  }
+
+  function addAthlete() {
+    const id = document.getElementById('athleteId').value.trim();
+    const name = document.getElementById('athleteName').value.trim();
+
+    if (!id || !/^\d+$/.test(id)) {
+      alert('Please enter a valid numeric athlete ID');
+      return;
+    }
+
+    const title = encodeURIComponent(`Add athlete: ${id}${name ? ` (${name})` : ''}`);
+    const body = encodeURIComponent(
+      `Please add parkrun athlete ${id}${name ? ` — ${name}` : ''} to the dashboard.\n\nProfile: https://www.parkrun.org.uk/parkrunner/${id}/`
+    );
+
+    window.open(
+      `https://github.com/ark-medicea/parkrun-analyser/issues/new?title=${title}&body=${body}&labels=add-athlete`,
+      '_blank'
+    );
+  }
+
+  function removeAthlete(id, name) {
+    if (!confirm(`Remove ${name} from the dashboard?\n\nThis will create a GitHub issue to request removal.`)) {
+      return;
+    }
+
+    const title = encodeURIComponent(`Remove athlete: ${id} (${name})`);
+    const body = encodeURIComponent(
+      `Please remove parkrun athlete ${id} — ${name} from the dashboard.`
+    );
+
+    window.open(
+      `https://github.com/ark-medicea/parkrun-analyser/issues/new?title=${title}&body=${body}&labels=remove-athlete`,
+      '_blank'
+    );
+  }
+  </script>
+</body>
+</html>

@@ -584,7 +584,102 @@ main {
   margin-top: 0.25rem;
 }
 
-/* ── Add Athlete Page ── */
+/* ── Athletes Management Page ── */
+.athletes-manage {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+.athlete-list {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.athlete-list-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s;
+}
+
+.athlete-list-item:hover { background: var(--bg-card-hover); }
+
+.athlete-list-info {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.athlete-list-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.athlete-list-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.remove-btn:hover { color: var(--accent-red); }
+
+.add-section-inline {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.add-section-inline h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.add-form {
+  margin-bottom: 1.5rem;
+}
+
+.alt-edit {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.alt-edit p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-secondary {
+  background: var(--bg-section);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { border-color: var(--accent-green); }
+
+/* ── Legacy Add Page ── */
 .add-section {
   max-width: 600px;
   margin: 2rem auto;
