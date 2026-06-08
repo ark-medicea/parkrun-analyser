@@ -439,8 +439,8 @@ function renderDashboard(db) {
               <th data-col="pb">PB <span class="sort-arrow">▼</span></th>
               <th data-col="bestAg">Best AG <span class="sort-arrow">▼</span></th>
               <th data-col="avgAg">Avg AG <span class="sort-arrow">▼</span></th>
-              <th data-col="vol">Vol <span class="sort-arrow">▼</span></th>
-              <th data-col="improvement">Δ <span class="sort-arrow">▼</span></th>
+              <th data-col="vol" class="vol-col">Vol <span class="sort-arrow">▼</span></th>
+              <th data-col="improvement" title="Avg of first 3 runs vs last 3 runs in this period">Trend <span class="sort-arrow">▼</span></th>
               <th data-col="streak">Streak <span class="sort-arrow">▼</span></th>
               <th data-col="bestStreak">Best Streak <span class="sort-arrow">▼</span></th>
             </tr>
@@ -597,6 +597,7 @@ function renderDashboard(db) {
       return sortAsc ? va - vb : vb - va;
     });
 
+    const showVol = currentWindow === 'all';
     const tbody = document.getElementById('league-body');
     tbody.innerHTML = sorted.map((d, i) => {
       const { first, last } = splitName(d.name);
@@ -628,8 +629,8 @@ function renderDashboard(db) {
           <td class="col-pb">${d.pb || '—'}</td>
           <td class="col-ag">${d.bestAg ? d.bestAg.toFixed(1) + '%' : '—'}</td>
           <td class="col-ag">${d.avgAg ? d.avgAg.toFixed(1) + '%' : '—'}</td>
-          <td class="col-vol">${d.vol}</td>
-          <td class="col-improvement ${improvementClass}">${improvementHtml}</td>
+          <td class="col-vol vol-col"${showVol ? '' : ' style="display:none"'}>${d.vol}</td>
+          <td class="col-improvement ${improvementClass}" title="${d.improvement !== null ? 'First 3 avg vs last 3 avg' : 'Needs 6+ runs'}">${improvementHtml}</td>
           <td class="col-streak">${d.streak || '—'}</td>
           <td class="col-streak">${d.bestStreak || '—'}</td>
         </tr>
@@ -644,6 +645,12 @@ function renderDashboard(db) {
       btn.classList.add('active');
       currentWindow = btn.dataset.window;
       leagueData = buildLeagueData(currentWindow);
+
+      // Hide Vol column when not "All Time" (we only have all-time vol data)
+      document.querySelectorAll('.vol-col').forEach(el => {
+        el.style.display = currentWindow === 'all' ? '' : 'none';
+      });
+
       renderLeague();
     });
   });
