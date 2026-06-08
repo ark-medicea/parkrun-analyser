@@ -245,17 +245,41 @@ function renderDashboard(db) {
     }
   }
 
-  // 🌍 Tourist run (ran at a different event)
+  // 🌍 Tourist run / tourism streak
   for (const r of thisWeek) {
     const a = athletes.find(x => x.id === r.athlete_id);
     if (!a) continue;
     const home = a.home_event || 'cassiobury';
     if (r.event && r.event !== home) {
-      highlights.push({
-        type: 'tourist',
-        emoji: '🌍',
-        html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> went touring! Ran at <strong>${r.event}</strong>`,
-      });
+      // Count consecutive tourist weeks (most recent first)
+      const allDatesDesc = (resultsByAthlete[a.id] || [])
+        .map(x => ({ date: x.date, event: x.event }))
+        .sort((a, b) => b.date.localeCompare(a.date));
+      // Dedupe by date (take first event per date)
+      const seen = new Set();
+      const byWeek = [];
+      for (const x of allDatesDesc) {
+        if (!seen.has(x.date)) { seen.add(x.date); byWeek.push(x); }
+      }
+      let touristStreak = 0;
+      for (const w of byWeek) {
+        if (w.event !== home) touristStreak++;
+        else break;
+      }
+
+      if (touristStreak > 1) {
+        highlights.push({
+          type: 'tourist',
+          emoji: '🌍',
+          html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> on a <strong>${touristStreak}-week tourist streak</strong>! This week: <strong>${r.event}</strong>`,
+        });
+      } else {
+        highlights.push({
+          type: 'tourist',
+          emoji: '🌍',
+          html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> went touring! Ran at <strong>${r.event}</strong>`,
+        });
+      }
     }
   }
 
