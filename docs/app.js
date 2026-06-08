@@ -75,6 +75,20 @@ function renderDashboard(db) {
     ORDER BY a.total_5k DESC
   `);
 
+  // Load ALL 5k results for league recalculation
+  const allResults = query(db, `
+    SELECT athlete_id, date, time, time_seconds, age_grade, is_pb
+    FROM results WHERE is_junior = 0
+    ORDER BY date ASC
+  `);
+
+  // Build per-athlete results map
+  const resultsByAthlete = {};
+  for (const r of allResults) {
+    if (!resultsByAthlete[r.athlete_id]) resultsByAthlete[r.athlete_id] = [];
+    resultsByAthlete[r.athlete_id].push(r);
+  }
+
   // This week's results (5k only)
   const thisWeek = latestDate
     ? query(db, `
@@ -108,11 +122,11 @@ function renderDashboard(db) {
   // Per-athlete computed data (streaks, improvement, etc.)
   const athleteExtras = {};
   for (const a of athletes) {
-    // Current streak: consecutive weeks ending at latestDate
-    const dates5k = query(db,
-      `SELECT DISTINCT date FROM results WHERE athlete_id = ? AND is_junior = 0 ORDER BY date DESC`,
-      [a.id]
-    ).map(r => r.date);
+    const dates5k = (resultsByAthlete[a.id] || [])
+      .map(r => r.date)
+      .filter((v, i, arr) => arr.indexOf(v) === i)
+      .sort()
+      .reverse();
 
     let streak = 0;
     if (latestDate && dates5k.length > 0) {
@@ -130,25 +144,12 @@ function renderDashboard(db) {
     }
 
     // 2026 improvement: first 3 vs last 3 in 2026
-    const first3 = querySingle(db, `
-      SELECT AVG(time_seconds) as avg_t, COUNT(*) as cnt FROM (
-        SELECT time_seconds FROM results
-        WHERE athlete_id = ? AND date >= '2026-01-01' AND is_junior = 0
-        ORDER BY date ASC LIMIT 3
-      )
-    `, [a.id]);
-
-    const last3 = querySingle(db, `
-      SELECT AVG(time_seconds) as avg_t, COUNT(*) as cnt FROM (
-        SELECT time_seconds FROM results
-        WHERE athlete_id = ? AND date >= '2026-01-01' AND is_junior = 0
-        ORDER BY date DESC LIMIT 3
-      )
-    `, [a.id]);
-
+    const results2026 = (resultsByAthlete[a.id] || []).filter(r => r.date >= '2026-01-01');
     let improvement = null;
-    if (first3 && last3 && first3.cnt >= 3 && last3.cnt >= 3 && first3.avg_t && last3.avg_t) {
-      improvement = Math.round(last3.avg_t - first3.avg_t); // negative = faster
+    if (results2026.length >= 6) {
+      const first3Avg = results2026.slice(0, 3).reduce((s, r) => s + r.time_seconds, 0) / 3;
+      const last3Avg = results2026.slice(-3).reduce((s, r) => s + r.time_seconds, 0) / 3;
+      improvement = Math.round(last3Avg - first3Avg);
     }
 
     athleteExtras[a.id] = { streak, improvement };
@@ -162,7 +163,7 @@ function renderDashboard(db) {
     highlights.push({
       type: 'pb',
       emoji: '🏆',
-      html: `<strong>${pb.name}</strong> set a new PB! <strong>${pb.time}</strong>${
+      html: `<a href="athlete.html?id=${pb.athlete_id}" class="highlight-link"><strong>${pb.name}</strong></a> set a new PB! <strong>${pb.time}</strong>${
         pb.age_grade ? ` (${pb.age_grade.toFixed(1)}% AG)` : ''
       }`,
     });
@@ -175,7 +176,7 @@ function renderDashboard(db) {
       highlights.push({
         type: 'streak',
         emoji: '🔥',
-        html: `<strong>${a.name}</strong> is on a <strong>${s}-week streak</strong>!`,
+        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> is on a <strong>${s}-week streak</strong>!`,
       });
     }
   }
@@ -188,11 +189,11 @@ function renderDashboard(db) {
     for (const target of milestoneTargets) {
       if (runs >= target - 10 && runs < target) {
         const remaining = target - runs;
-        milestones.push({ name: a.name, current: runs, target, remaining });
+        milestones.push({ id: a.id, name: a.name, current: runs, target, remaining });
         highlights.push({
           type: 'milestone',
           emoji: '🎯',
-          html: `<strong>${a.name}</strong> is ${remaining} run${remaining === 1 ? '' : 's'} away from <strong>${target} runs</strong>!`,
+          html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> is ${remaining} run${remaining === 1 ? '' : 's'} away from <strong>${target} runs</strong>!`,
         });
       }
     }
@@ -221,7 +222,43 @@ function renderDashboard(db) {
     `;
   }
 
-  // B) This week's results
+  // B) Milestones (ring progress) — moved before This Week
+  if (milestones.length > 0) {
+    const circ = 2 * Math.PI * 20;
+    html += `
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🎯</span>
+          <h2>Approaching Milestones</h2>
+        </div>
+        <div class="milestone-list">
+          ${milestones.map(m => {
+            const pct = m.current / m.target;
+            const offset = circ * (1 - pct);
+            const { first, last } = splitName(m.name);
+            return `
+              <div class="milestone-item">
+                <div class="milestone-progress">
+                  <svg viewBox="0 0 48 48">
+                    <circle class="bg" cx="24" cy="24" r="20" />
+                    <circle class="fg" cx="24" cy="24" r="20"
+                      stroke-dasharray="${circ}" stroke-dashoffset="${offset}" />
+                  </svg>
+                  <span class="milestone-count">${m.current}</span>
+                </div>
+                <div class="milestone-detail">
+                  <a href="athlete.html?id=${m.id}" class="milestone-name-link">${first} ${last}</a>
+                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} runs 🏅</div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // C) This week's results
   if (thisWeek.length > 0) {
     const dateStr = new Date(latestDate).toLocaleDateString('en-GB', {
       day: 'numeric', month: 'long', year: 'numeric',
@@ -253,7 +290,7 @@ function renderDashboard(db) {
     `;
   }
 
-  // C) Didn't run this week
+  // D) Didn't run this week
   if (absent.length > 0) {
     html += `
       <div class="section">
@@ -267,19 +304,26 @@ function renderDashboard(db) {
             const streakNote = d.streak > 2
               ? `<span class="streak-lost">🔥 ${d.streak}-week streak broken!</span>`
               : '';
-            return `<span class="absent-chip">${splitName(a.name).first} ${streakNote}</span>`;
+            return `<a href="athlete.html?id=${a.id}" class="absent-chip">${splitName(a.name).first} ${streakNote}</a>`;
           }).join('')}
         </div>
       </div>
     `;
   }
 
-  // D) League Table
+  // E) League Table with time window pills
   html += `
     <div class="section" id="league-section">
       <div class="section-header">
         <span class="section-icon">🏆</span>
         <h2>League Table</h2>
+      </div>
+      <div class="time-window-pills" id="time-pills">
+        <button class="tw-pill active" data-window="all">All Time</button>
+        <button class="tw-pill" data-window="this-year">This Year</button>
+        <button class="tw-pill" data-window="last-year">Last Year</button>
+        <button class="tw-pill" data-window="12-months">Last 12 Months</button>
+        <button class="tw-pill" data-window="3-months">Last 3 Months</button>
       </div>
       <div class="league-table-wrapper">
         <table class="league-table" id="league-table">
@@ -292,8 +336,9 @@ function renderDashboard(db) {
               <th data-col="bestAg">Best AG <span class="sort-arrow">▼</span></th>
               <th data-col="avgAg">Avg AG <span class="sort-arrow">▼</span></th>
               <th data-col="vol">Vol <span class="sort-arrow">▼</span></th>
-              <th data-col="improvement">2026 Δ <span class="sort-arrow">▼</span></th>
+              <th data-col="improvement">Δ <span class="sort-arrow">▼</span></th>
               <th data-col="streak">Streak <span class="sort-arrow">▼</span></th>
+              <th data-col="bestStreak">Best Streak <span class="sort-arrow">▼</span></th>
             </tr>
           </thead>
           <tbody id="league-body"></tbody>
@@ -302,86 +347,145 @@ function renderDashboard(db) {
     </div>
   `;
 
-  // E) Milestones (ring progress)
-  if (milestones.length > 0) {
-    const circ = 2 * Math.PI * 20;
-    html += `
-      <div class="section">
-        <div class="section-header">
-          <span class="section-icon">🎯</span>
-          <h2>Approaching Milestones</h2>
-        </div>
-        <div class="milestone-list">
-          ${milestones.map(m => {
-            const pct = m.current / m.target;
-            const offset = circ * (1 - pct);
-            const { first, last } = splitName(m.name);
-            return `
-              <div class="milestone-item">
-                <div class="milestone-progress">
-                  <svg viewBox="0 0 48 48">
-                    <circle class="bg" cx="24" cy="24" r="20" />
-                    <circle class="fg" cx="24" cy="24" r="20"
-                      stroke-dasharray="${circ}" stroke-dashoffset="${offset}" />
-                  </svg>
-                  <span class="milestone-count">${m.current}</span>
-                </div>
-                <div class="milestone-detail">
-                  <div class="milestone-name">${first} ${last}</div>
-                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} runs 🏅</div>
-                </div>
-              </div>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
-  }
-
   app.className = '';
   app.innerHTML = html;
 
-  // ── League table sorting logic ──
-  const leagueData = athletes.map(a => {
-    const ex = athleteExtras[a.id];
-    return {
-      id: a.id,
-      name: a.name,
-      badge: a.badge,
-      runs: a.total_5k || 0,
-      pbSeconds: a.pb_5k_seconds || 99999,
-      pb: a.pb_5k || null,
-      bestAg: a.best_ag || 0,
-      avgAg: a.avg_ag || 0,
-      vol: a.volunteer_count || 0,
-      improvement: ex.improvement,
-      streak: ex.streak,
-    };
-  });
+  // ── League table logic with time windows ──
 
+  // Helper: compute date range for a time window
+  function getDateRange(window) {
+    const now = latestDate ? new Date(latestDate) : new Date();
+    switch (window) {
+      case 'this-year': {
+        const year = now.getFullYear();
+        return { from: `${year}-01-01`, to: '9999-12-31' };
+      }
+      case 'last-year': {
+        const year = now.getFullYear() - 1;
+        return { from: `${year}-01-01`, to: `${year}-12-31` };
+      }
+      case '12-months': {
+        const d = new Date(now);
+        d.setFullYear(d.getFullYear() - 1);
+        return { from: d.toISOString().slice(0, 10), to: '9999-12-31' };
+      }
+      case '3-months': {
+        const d = new Date(now);
+        d.setMonth(d.getMonth() - 3);
+        return { from: d.toISOString().slice(0, 10), to: '9999-12-31' };
+      }
+      default: // 'all'
+        return { from: '0000-01-01', to: '9999-12-31' };
+    }
+  }
+
+  // Helper: compute best streak from sorted dates (ascending)
+  function calcBestStreak(dates) {
+    if (dates.length === 0) return 0;
+    let best = 1, current = 1;
+    for (let i = 1; i < dates.length; i++) {
+      const diff = Math.round((new Date(dates[i]) - new Date(dates[i - 1])) / (1000 * 60 * 60 * 24));
+      if (diff >= 5 && diff <= 9) {
+        current++;
+        if (current > best) best = current;
+      } else if (diff > 9) {
+        current = 1;
+      }
+      // diff < 5 means same week (multiple events?) — don't break streak, don't increment
+    }
+    return best;
+  }
+
+  // Helper: compute current streak from sorted dates (ascending), ending at latestDate
+  function calcCurrentStreak(dates) {
+    if (dates.length === 0) return 0;
+    const reversed = [...dates].reverse();
+    let streak = 0;
+    let checkDate = new Date(latestDate);
+    for (const d of reversed) {
+      const diff = Math.round((checkDate - new Date(d)) / (1000 * 60 * 60 * 24));
+      if (diff <= 1) {
+        streak++;
+        checkDate = new Date(d);
+        checkDate.setDate(checkDate.getDate() - 7);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  // Build league data for a given time window
+  function buildLeagueData(windowKey) {
+    const range = getDateRange(windowKey);
+    return athletes.map(a => {
+      const allR = resultsByAthlete[a.id] || [];
+      const filtered = allR.filter(r => r.date >= range.from && r.date <= range.to);
+
+      const runs = filtered.length;
+      const pbSeconds = filtered.length > 0
+        ? Math.min(...filtered.map(r => r.time_seconds))
+        : 99999;
+      const pbTime = pbSeconds < 99999 ? formatTime(pbSeconds) : null;
+
+      const withAg = filtered.filter(r => r.age_grade && r.age_grade > 0);
+      const bestAg = withAg.length > 0 ? Math.max(...withAg.map(r => r.age_grade)) : 0;
+      const avgAg = withAg.length > 0 ? withAg.reduce((s, r) => s + r.age_grade, 0) / withAg.length : 0;
+
+      // Improvement: first 3 vs last 3 in the window
+      let improvement = null;
+      if (filtered.length >= 6) {
+        const first3Avg = filtered.slice(0, 3).reduce((s, r) => s + r.time_seconds, 0) / 3;
+        const last3Avg = filtered.slice(-3).reduce((s, r) => s + r.time_seconds, 0) / 3;
+        improvement = Math.round(last3Avg - first3Avg);
+      }
+
+      // Current streak (always from latestDate backwards, uses all results)
+      const allDatesAsc = allR.map(r => r.date).filter((v, i, arr) => arr.indexOf(v) === i).sort();
+      const streak = calcCurrentStreak(allDatesAsc);
+
+      // Best streak within the window
+      const windowDatesAsc = filtered.map(r => r.date).filter((v, i, arr) => arr.indexOf(v) === i).sort();
+      const bestStreak = calcBestStreak(windowDatesAsc);
+
+      return {
+        id: a.id,
+        name: a.name,
+        badge: a.badge,
+        runs,
+        pbSeconds,
+        pb: pbTime,
+        bestAg,
+        avgAg,
+        vol: a.volunteer_count || 0,
+        improvement,
+        streak,
+        bestStreak,
+      };
+    });
+  }
+
+  let currentWindow = 'all';
+  let leagueData = buildLeagueData(currentWindow);
   let currentSort = 'runs';
-  let sortAsc = false; // default: descending
+  let sortAsc = false;
 
   function renderLeague() {
-    // Sort
     const sorted = [...leagueData].sort((a, b) => {
       let va = a[currentSort];
       let vb = b[currentSort];
 
-      // Special handling for name (string sort)
       if (currentSort === 'name') {
         va = (va || '').toLowerCase();
         vb = (vb || '').toLowerCase();
         return sortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
       }
 
-      // PB: lower is better, nulls last
       if (currentSort === 'pbSeconds' || currentSort === 'pb') {
         va = a.pbSeconds;
         vb = b.pbSeconds;
       }
 
-      // Improvement: null should go last
       if (va === null && vb === null) return 0;
       if (va === null) return 1;
       if (vb === null) return -1;
@@ -423,10 +527,22 @@ function renderDashboard(db) {
           <td class="col-vol">${d.vol}</td>
           <td class="col-improvement ${improvementClass}">${improvementHtml}</td>
           <td class="col-streak">${d.streak || '—'}</td>
+          <td class="col-streak">${d.bestStreak || '—'}</td>
         </tr>
       `;
     }).join('');
   }
+
+  // Time window pill click handlers
+  document.querySelectorAll('#time-pills .tw-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#time-pills .tw-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentWindow = btn.dataset.window;
+      leagueData = buildLeagueData(currentWindow);
+      renderLeague();
+    });
+  });
 
   // Column click handlers
   const colMap = {
@@ -439,6 +555,7 @@ function renderDashboard(db) {
     vol: 'vol',
     improvement: 'improvement',
     streak: 'streak',
+    bestStreak: 'bestStreak',
   };
 
   document.querySelectorAll('#league-table thead th').forEach(th => {
@@ -450,11 +567,9 @@ function renderDashboard(db) {
         sortAsc = !sortAsc;
       } else {
         currentSort = sortKey;
-        // Default direction: descending for numbers, ascending for name/pb
         sortAsc = (sortKey === 'name' || sortKey === 'pbSeconds');
       }
 
-      // Update header styles
       document.querySelectorAll('#league-table thead th').forEach(h => {
         h.classList.remove('sorted');
         h.querySelector('.sort-arrow').textContent = '▼';

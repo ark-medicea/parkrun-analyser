@@ -1,5 +1,10 @@
 {
+  "events": [
+    { "name": "cassiobury", "id": 1152 },
+    { "name": "canonspark", "id": 1452 },
+    { "name": "bushey", "id": 1891 }
+  ],
   "event": "cassiobury",
   "eventId": 1152,
-  "surnames": ["PANJU", "MEGHJEE", "TEJANI", "KANANI"]
+  "surnames": ["PANJU", "MEGHJEE", "TEJANI", "KANANI", "KASSAM", "WALJI", "SIDIK", "HAMIR", "ISMAIL", "MERALI", "SHABIR", "BHIMJI", "DHARAMSI", "KALYAN", "KHIMJI", "ALIHASSAN", "MUSTAFA", "THAROO"]
 }
