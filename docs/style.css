@@ -165,7 +165,13 @@ main {
 
 .highlight-card.pb { border-left-color: var(--accent-gold); }
 .highlight-card.milestone { border-left-color: var(--accent-orange); }
+.highlight-card.milestone-reached { border-left-color: var(--accent-gold); }
 .highlight-card.streak { border-left-color: var(--accent-blue); }
+.highlight-card.improvement { border-left-color: var(--accent-green); }
+.highlight-card.ag { border-left-color: var(--accent-orange); }
+.highlight-card.tourist { border-left-color: #9b59b6; }
+.highlight-card.comeback { border-left-color: #1abc9c; }
+.highlight-card.volunteer { border-left-color: var(--accent-blue); }
 
 .highlight-emoji { font-size: 1.5rem; flex-shrink: 0; }
 
@@ -174,7 +180,13 @@ main {
 .highlight-text strong { color: var(--accent-green); }
 .highlight-card.pb .highlight-text strong { color: var(--accent-gold); }
 .highlight-card.milestone .highlight-text strong { color: var(--accent-orange); }
+.highlight-card.milestone-reached .highlight-text strong { color: var(--accent-gold); }
 .highlight-card.streak .highlight-text strong { color: var(--accent-blue); }
+.highlight-card.improvement .highlight-text strong { color: var(--accent-green); }
+.highlight-card.ag .highlight-text strong { color: var(--accent-orange); }
+.highlight-card.tourist .highlight-text strong { color: #9b59b6; }
+.highlight-card.comeback .highlight-text strong { color: #1abc9c; }
+.highlight-card.volunteer .highlight-text strong { color: var(--accent-blue); }
 
 /* ── Results table ── */
 .results-grid { display: grid; gap: 0.5rem; }

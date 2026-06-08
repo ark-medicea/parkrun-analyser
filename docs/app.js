@@ -92,7 +92,7 @@ function renderDashboard(db) {
   // This week's results (5k only)
   const thisWeek = latestDate
     ? query(db, `
-        SELECT r.*, a.name, a.badge FROM results r
+        SELECT r.*, a.name, a.badge, a.home_event, a.prev_volunteer_count, a.volunteer_count FROM results r
         JOIN athletes a ON r.athlete_id = a.id
         WHERE r.date = ? AND r.is_junior = 0
         ORDER BY r.time_seconds ASC
@@ -155,10 +155,20 @@ function renderDashboard(db) {
     athleteExtras[a.id] = { streak, improvement };
   }
 
+  // 3-month cutoff for "best in 3 months" highlights
+  const threeMonthsAgo = latestDate
+    ? new Date(new Date(latestDate).setMonth(new Date(latestDate).getMonth() - 3)).toISOString().split('T')[0]
+    : null;
+
+  // 4-week cutoff for "welcome back" detection
+  const fourWeeksAgo = latestDate
+    ? new Date(new Date(latestDate).setDate(new Date(latestDate).getDate() - 28)).toISOString().split('T')[0]
+    : null;
+
   // Highlights
   const highlights = [];
 
-  // PBs
+  // 🏆 PBs this week
   for (const pb of pbs) {
     highlights.push({
       type: 'pb',
@@ -169,7 +179,61 @@ function renderDashboard(db) {
     });
   }
 
-  // Hot streaks (4+)
+  // ⬆️ Best time in last 3 months (even if not PB) — skip if already a PB highlight
+  const pbAthleteIds = new Set(pbs.map(p => p.athlete_id));
+  for (const r of thisWeek) {
+    if (pbAthleteIds.has(r.athlete_id)) continue;
+    const recent3m = (resultsByAthlete[r.athlete_id] || [])
+      .filter(x => x.date >= threeMonthsAgo && x.date < latestDate);
+    if (recent3m.length >= 3) {
+      const bestRecent = Math.min(...recent3m.map(x => x.time_seconds));
+      if (r.time_seconds < bestRecent) {
+        highlights.push({
+          type: 'improvement',
+          emoji: '⬆️',
+          html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> ran their <strong>fastest in 3 months</strong>! <strong>${r.time}</strong>`,
+        });
+      }
+    }
+  }
+
+  // 🏅 Best age grade vs last 3 months for this athlete
+  for (const r of thisWeek) {
+    if (!r.age_grade || pbAthleteIds.has(r.athlete_id)) continue;
+    const recent3mAG = (resultsByAthlete[r.athlete_id] || [])
+      .filter(x => x.date >= threeMonthsAgo && x.date < latestDate && x.age_grade > 0);
+    if (recent3mAG.length >= 3) {
+      const bestRecentAG = Math.max(...recent3mAG.map(x => x.age_grade));
+      if (r.age_grade > bestRecentAG) {
+        highlights.push({
+          type: 'ag',
+          emoji: '🏅',
+          html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> hit their <strong>best age grade in 3 months</strong>! <strong>${r.age_grade.toFixed(1)}%</strong>`,
+        });
+      }
+    }
+  }
+
+  // 🎉 Milestone reached this week (crossed a threshold)
+  const milestoneThresholds = [10, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 750, 1000];
+  for (const r of thisWeek) {
+    const a = athletes.find(x => x.id === r.athlete_id);
+    if (!a) continue;
+    const totalNow = a.total_5k || 0;
+    // Check if this week's run pushed them over a threshold
+    for (const t of milestoneThresholds) {
+      const prevResults = (resultsByAthlete[a.id] || []).filter(x => x.date < latestDate);
+      if (prevResults.length < t && totalNow >= t) {
+        highlights.push({
+          type: 'milestone-reached',
+          emoji: '🎉',
+          html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> just hit <strong>${t} parkruns</strong>! 🏅`,
+        });
+      }
+    }
+  }
+
+  // 🔥 Hot streaks (4+)
   for (const a of athletes) {
     const s = athleteExtras[a.id].streak;
     if (s >= 4) {
@@ -181,7 +245,52 @@ function renderDashboard(db) {
     }
   }
 
-  // Approaching milestones
+  // 🌍 Tourist run (ran at a different event)
+  for (const r of thisWeek) {
+    const a = athletes.find(x => x.id === r.athlete_id);
+    if (!a) continue;
+    const home = a.home_event || 'cassiobury';
+    if (r.event && r.event !== home) {
+      highlights.push({
+        type: 'tourist',
+        emoji: '🌍',
+        html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> went touring! Ran at <strong>${r.event}</strong>`,
+      });
+    }
+  }
+
+  // 👋 Welcome back (4+ weeks absent, returned this week)
+  for (const r of thisWeek) {
+    const athleteResults = (resultsByAthlete[r.athlete_id] || [])
+      .filter(x => x.date < latestDate)
+      .sort((a, b) => b.date.localeCompare(a.date));
+    if (athleteResults.length > 0) {
+      const lastRun = athleteResults[0].date;
+      if (lastRun < fourWeeksAgo) {
+        const weeksAway = Math.round((new Date(latestDate) - new Date(lastRun)) / (1000 * 60 * 60 * 24 * 7));
+        highlights.push({
+          type: 'comeback',
+          emoji: '👋',
+          html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> is back after <strong>${weeksAway} weeks</strong>!`,
+        });
+      }
+    }
+  }
+
+  // 🤝 Volunteered recently (volunteer_count increased since last scrape)
+  for (const a of athletes) {
+    const prev = a.prev_volunteer_count || 0;
+    const curr = a.volunteer_count || 0;
+    if (curr > prev && prev > 0) {
+      highlights.push({
+        type: 'volunteer',
+        emoji: '🤝',
+        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> volunteered! Now at <strong>${curr} volunteer credits</strong>`,
+      });
+    }
+  }
+
+  // Approaching milestones (for the dedicated section, NOT highlights)
   const milestoneTargets = [25, 50, 100, 250, 500];
   const milestones = [];
   for (const a of athletes) {
@@ -190,11 +299,6 @@ function renderDashboard(db) {
       if (runs >= target - 10 && runs < target) {
         const remaining = target - runs;
         milestones.push({ id: a.id, name: a.name, current: runs, target, remaining });
-        highlights.push({
-          type: 'milestone',
-          emoji: '🎯',
-          html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> is ${remaining} run${remaining === 1 ? '' : 's'} away from <strong>${target} runs</strong>!`,
-        });
       }
     }
   }

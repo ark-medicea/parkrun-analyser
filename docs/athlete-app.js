@@ -92,15 +92,17 @@ function isMultiYear(results) {
 }
 
 /* ── Medal gallery builder ── */
-function buildMedalGallery(totalRuns, volCount) {
+function buildMedalGallery(totalRuns, volCount, ageGroup) {
   const runMilestones = [25, 50, 100, 250, 500, 1000];
-  const juniorMilestone = 10; // shown if earned
   const volMilestones = [25, 50, 100, 250];
+
+  // Jr 10 badge only for junior age categories (JM10, JW10, JM11-14, JW11-14, JM15-17, JW15-17)
+  const isJunior = ageGroup && /^J[MW]/.test(ageGroup);
 
   let html = '<div class="medal-gallery">';
 
-  // Junior milestone (badge-10)
-  if (totalRuns >= juniorMilestone) {
+  // Junior milestone (badge-10) — only for junior athletes
+  if (isJunior && totalRuns >= 10) {
     html += `<div class="medal-item earned"><img src="badges/badge-10.svg" alt="10 runs" class="medal-badge"><span class="medal-label">10</span></div>`;
   }
 
@@ -210,7 +212,7 @@ function renderAthlete(db, athleteId) {
       <h1>
         <span class="first-name">${first}</span> <span class="last-name">${last}</span>
       </h1>
-      ${buildMedalGallery(totalRuns, volCount)}
+      ${buildMedalGallery(totalRuns, volCount, athlete.age_group)}
       <div class="meta">${athlete.age_group || ''} · ${athlete.home_event || 'cassiobury'} · parkrunner #${athleteId}</div>
       <div class="hero-stats">
         <div class="hero-stat">

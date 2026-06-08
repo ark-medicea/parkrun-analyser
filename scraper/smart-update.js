@@ -28,6 +28,7 @@ addCol('athletes', 'total_5k', 'INTEGER DEFAULT 0');
 addCol('athletes', 'total_junior', 'INTEGER DEFAULT 0');
 addCol('athletes', 'volunteer_count', 'INTEGER DEFAULT 0');
 addCol('results', 'is_junior', 'INTEGER DEFAULT 0');
+addCol('athletes', 'prev_volunteer_count', 'INTEGER DEFAULT 0');
 
 function parseTime(timeStr) {
   if (!timeStr) return 0;
@@ -178,6 +179,11 @@ async function main() {
       age_grade = COALESCE(excluded.age_grade, results.age_grade)
   `);
 
+  // Save previous volunteer count before updating
+  const savePrevVol = db.prepare(`
+    UPDATE athletes SET prev_volunteer_count = volunteer_count WHERE id = ?
+  `);
+
   const updateAthlete = db.prepare(`
     UPDATE athletes SET
       age_group = COALESCE(?, age_group),
@@ -249,6 +255,10 @@ async function main() {
 
       const summary = await scrapeSummary(page);
       const pbSecs = parseTime(summary.pb5k);
+
+      // Save prev volunteer count before updating
+      savePrevVol.run(athlete.id);
+
       updateAthlete.run(
         summary.ageGroup, summary.gender,
         summary.pb5k, pbSecs || null,
