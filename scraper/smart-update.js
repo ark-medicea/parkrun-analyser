@@ -293,6 +293,15 @@ async function main() {
       }
     }
 
+    // Recalculate home event (most frequent 5k event)
+    const topEvent = db.prepare(
+      `SELECT event FROM results WHERE athlete_id = ? AND is_junior = 0
+       GROUP BY event ORDER BY COUNT(*) DESC LIMIT 1`
+    ).get(athlete.id);
+    if (topEvent) {
+      db.prepare('UPDATE athletes SET home_event = ? WHERE id = ?').run(topEvent.event, athlete.id);
+    }
+
     successCount++;
     console.log(`  ⏱️ Next request in ${Math.round(currentDelay/1000)}s`);
     await sleep(currentDelay);
