@@ -75,9 +75,9 @@ function renderDashboard(db) {
     ORDER BY a.total_5k DESC
   `);
 
-  // Load ALL 5k results for league recalculation
+  // Load ALL 5k results for league recalculation + highlights
   const allResults = query(db, `
-    SELECT athlete_id, date, time, time_seconds, age_grade, is_pb
+    SELECT athlete_id, date, event, time, time_seconds, age_grade, is_pb
     FROM results WHERE is_junior = 0
     ORDER BY date ASC
   `);
