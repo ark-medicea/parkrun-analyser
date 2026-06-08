@@ -1,0 +1,1201 @@
+/* ── ParkRun Dashboard ── */
+/* Dark theme, fitness-app aesthetic */
+
+:root {
+  --bg-primary: #0d0d1a;
+  --bg-card: #1a1a2e;
+  --bg-card-hover: #222240;
+  --bg-section: #141428;
+  --accent-green: #00d4aa;
+  --accent-orange: #ff6b35;
+  --accent-red: #ff4757;
+  --accent-blue: #4a9eff;
+  --accent-gold: #ffd700;
+  --text-primary: #f0f0f0;
+  --text-secondary: #a0a0b8;
+  --text-muted: #6b6b80;
+  --border: #2a2a45;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+a { color: var(--accent-green); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Navigation ── */
+nav {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-brand:hover { text-decoration: none; }
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* ── Header ── */
+header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* ── Main ── */
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.error {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--accent-red);
+}
+
+/* ── Section blocks ── */
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.section-icon { font-size: 1.2rem; }
+
+/* ── Highlights ── */
+.highlights {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.highlight-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--accent-green);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.highlight-card.pb { border-left-color: var(--accent-gold); }
+.highlight-card.milestone { border-left-color: var(--accent-orange); }
+.highlight-card.milestone-reached { border-left-color: var(--accent-gold); }
+.highlight-card.streak { border-left-color: var(--accent-blue); }
+.highlight-card.improvement { border-left-color: var(--accent-green); }
+.highlight-card.ag { border-left-color: var(--accent-orange); }
+.highlight-card.tourist { border-left-color: #9b59b6; }
+.highlight-card.comeback { border-left-color: #1abc9c; }
+.highlight-card.volunteer { border-left-color: var(--accent-blue); }
+
+.highlight-emoji { font-size: 1.5rem; flex-shrink: 0; }
+
+.highlight-text { font-size: 0.9rem; }
+
+.highlight-text strong { color: var(--accent-green); }
+.highlight-card.pb .highlight-text strong { color: var(--accent-gold); }
+.highlight-card.milestone .highlight-text strong { color: var(--accent-orange); }
+.highlight-card.milestone-reached .highlight-text strong { color: var(--accent-gold); }
+.highlight-card.streak .highlight-text strong { color: var(--accent-blue); }
+.highlight-card.improvement .highlight-text strong { color: var(--accent-green); }
+.highlight-card.ag .highlight-text strong { color: var(--accent-orange); }
+.highlight-card.tourist .highlight-text strong { color: #9b59b6; }
+.highlight-card.comeback .highlight-text strong { color: #1abc9c; }
+.highlight-card.volunteer .highlight-text strong { color: var(--accent-blue); }
+
+/* ── Results table ── */
+.results-grid { display: grid; gap: 0.5rem; }
+
+.result-row {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  transition: background 0.15s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.result-row:hover { background: var(--bg-card-hover); text-decoration: none; }
+
+.result-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result-name .first-name { color: var(--text-primary); }
+.result-name .last-name { color: var(--text-secondary); font-weight: 400; }
+
+.result-time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-green);
+  text-align: right;
+}
+
+.result-time.is-pb { color: var(--accent-gold); }
+
+.result-pos {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-align: right;
+  min-width: 2.5rem;
+}
+
+.result-ag {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+  min-width: 3rem;
+}
+
+.result-event {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.pb-badge {
+  display: inline-block;
+  background: var(--accent-gold);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 800;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+  letter-spacing: 0.5px;
+}
+
+/* ── Didn't Run ── */
+.absent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.absent-chip {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.absent-chip .streak-lost {
+  color: var(--accent-red);
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+}
+
+/* ── League Table ── */
+.league-table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.league-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+  font-size: 0.9rem;
+}
+
+.league-table thead th {
+  background: var(--bg-section);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.75rem 0.65rem;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--border);
+  transition: color 0.15s;
+  position: relative;
+}
+
+.league-table thead th:hover {
+  color: var(--text-primary);
+}
+
+.league-table thead th.sorted {
+  color: var(--accent-green);
+}
+
+.league-table thead th .sort-arrow {
+  margin-left: 0.25rem;
+  font-size: 0.65rem;
+  opacity: 0.4;
+}
+
+.league-table thead th.sorted .sort-arrow {
+  opacity: 1;
+  color: var(--accent-green);
+}
+
+.league-table tbody tr {
+  background: var(--bg-card);
+  transition: background 0.12s;
+  border-bottom: 1px solid rgba(42,42,69,0.4);
+}
+
+.league-table tbody tr:nth-child(even) {
+  background: rgba(26,26,46,0.7);
+}
+
+.league-table tbody tr:hover {
+  background: var(--bg-card-hover);
+}
+
+.league-table td {
+  padding: 0.7rem 0.65rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.league-table .col-rank {
+  width: 2.5rem;
+  text-align: center;
+  font-weight: 700;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.league-table .col-name {
+  font-weight: 600;
+  min-width: 140px;
+}
+
+.league-table .col-name a {
+  color: var(--text-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.league-table .col-name a:hover {
+  color: var(--accent-green);
+  text-decoration: none;
+}
+
+.league-table .col-name .badge-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+.league-table .col-runs {
+  font-weight: 700;
+  color: var(--accent-green);
+}
+
+.league-table .col-pb {
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.league-table .col-ag {
+  color: var(--accent-orange);
+}
+
+.league-table .col-vol {
+  color: var(--accent-blue);
+}
+
+.league-table .col-improvement {
+  font-weight: 600;
+}
+
+.league-table .col-improvement.faster {
+  color: var(--accent-green);
+}
+
+.league-table .col-improvement.slower {
+  color: var(--accent-orange);
+}
+
+.league-table .col-improvement.neutral {
+  color: var(--text-muted);
+}
+
+.league-table .col-streak {
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+/* Sticky name column on mobile */
+@media (max-width: 768px) {
+  .league-table thead th:nth-child(1),
+  .league-table tbody td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: var(--bg-section);
+  }
+  .league-table thead th:nth-child(2),
+  .league-table tbody td:nth-child(2) {
+    position: sticky;
+    left: 2.5rem;
+    z-index: 2;
+    background: var(--bg-card);
+  }
+  .league-table tbody tr:nth-child(even) td:nth-child(2) {
+    background: rgba(26,26,46,0.95);
+  }
+  .league-table tbody tr:hover td:nth-child(1),
+  .league-table tbody tr:hover td:nth-child(2) {
+    background: var(--bg-card-hover);
+  }
+}
+
+/* ── Milestones ── */
+.milestone-list { display: grid; gap: 0.5rem; }
+
+.milestone-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.milestone-progress {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.milestone-progress svg {
+  transform: rotate(-90deg);
+  width: 48px;
+  height: 48px;
+}
+
+.milestone-progress circle {
+  fill: none;
+  stroke-width: 4;
+}
+
+.milestone-progress .bg { stroke: var(--border); }
+.milestone-progress .fg { stroke: var(--accent-orange); stroke-linecap: round; }
+
+.milestone-count {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+}
+
+.milestone-detail { flex: 1; }
+
+.milestone-name { font-weight: 600; font-size: 0.9rem; }
+
+.milestone-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ── Trend indicator ── */
+.trend { font-size: 0.75rem; margin-left: 0.3rem; }
+.trend.up { color: var(--accent-green); }
+.trend.down { color: var(--accent-red); }
+.trend.flat { color: var(--text-muted); }
+
+/* ── Athlete Detail Page ── */
+.athlete-hero {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.athlete-hero h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.athlete-hero h1 .last-name { color: var(--text-secondary); font-weight: 400; }
+
+.athlete-hero h1 .badge-icon-lg {
+  width: 32px;
+  height: 32px;
+}
+
+.athlete-hero .meta {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.hero-stat {
+  text-align: center;
+  background: var(--bg-section);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.hero-stat .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-green);
+}
+
+.hero-stat .value.gold { color: var(--accent-gold); }
+.hero-stat .value.orange { color: var(--accent-orange); }
+.hero-stat .value.blue { color: var(--accent-blue); }
+
+.hero-stat .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+/* ── Charts ── */
+.chart-container {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-container h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 280px;
+}
+
+/* ── Streaks ── */
+.streaks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.streak-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.streak-card .value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.streak-card .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+/* ── Results History Table ── */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.history-table td {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(42,42,69,0.5);
+}
+
+.history-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+.history-table .time-cell {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-green);
+}
+
+.history-table .pb-row .time-cell {
+  color: var(--accent-gold);
+}
+
+/* ── Rolling Averages ── */
+.averages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.avg-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.avg-card .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-green);
+}
+
+.avg-card .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.25rem;
+}
+
+/* ── Per-event breakdown table ── */
+.event-breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.event-breakdown-table th {
+  text-align: left;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.event-breakdown-table td {
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid rgba(42,42,69,0.4);
+}
+
+.event-breakdown-table tr:hover td {
+  background: var(--bg-card-hover);
+}
+
+/* ── Toggle switch ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: var(--text-secondary);
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--accent-green);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+  background: #fff;
+}
+
+/* ── Athletes Management Page ── */
+.athletes-manage {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+.athlete-list {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.athlete-list-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.15s;
+}
+
+.athlete-list-item:hover { background: var(--bg-card-hover); }
+
+.athlete-list-info {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+
+.athlete-list-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.athlete-list-name .badge-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.athlete-list-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.remove-btn:hover { color: var(--accent-red); }
+
+.add-section-inline {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.add-section-inline h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.add-form {
+  margin-bottom: 1.5rem;
+}
+
+.alt-edit {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.alt-edit p {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-secondary {
+  background: var(--bg-section);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover { border-color: var(--accent-green); }
+
+/* ── Form ── */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-section);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-group input:focus {
+  border-color: var(--accent-green);
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent-green);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btn:hover { opacity: 0.9; text-decoration: none; }
+
+.instructions {
+  background: var(--bg-section);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.instructions h3, .instructions h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.instructions ol {
+  padding-left: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.instructions ol li {
+  margin-bottom: 0.5rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.back-link:hover { color: var(--text-primary); text-decoration: none; }
+
+/* ── Footer ── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.sample-notice {
+  color: var(--accent-orange);
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (min-width: 600px) {
+  .highlights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .result-row {
+    grid-template-columns: 1.5fr auto auto auto auto;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  main { padding: 1.5rem; }
+}
+
+/* ── Time Window Pills ── */
+.time-window-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.tw-pill {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.tw-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-green);
+}
+
+.tw-pill.active {
+  background: var(--accent-green);
+  color: #000;
+  border-color: var(--accent-green);
+}
+
+/* ── Clickable highlights & milestones ── */
+.highlight-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.highlight-link:hover {
+  text-decoration: underline;
+}
+
+.highlight-link strong {
+  color: inherit;
+}
+
+a.absent-chip {
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+a.absent-chip:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-green);
+  text-decoration: none;
+}
+
+.milestone-name-link {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: block;
+}
+
+.milestone-name-link:hover {
+  color: var(--accent-green);
+  text-decoration: none;
+}
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.section {
+  animation: fadeIn 0.3s ease-out both;
+}
+
+.section:nth-child(2) { animation-delay: 0.05s; }
+.section:nth-child(3) { animation-delay: 0.1s; }
+.section:nth-child(4) { animation-delay: 0.15s; }
+.section:nth-child(5) { animation-delay: 0.2s; }
+.section:nth-child(6) { animation-delay: 0.25s; }
+
+/* ── Medal Gallery ── */
+.medal-gallery {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  overflow-x: auto;
+  padding: 0.25rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.medal-gallery::-webkit-scrollbar {
+  height: 4px;
+}
+
+.medal-gallery::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.medal-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.medal-badge {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+  transition: transform 0.15s;
+}
+
+.medal-item:hover .medal-badge {
+  transform: scale(1.15);
+}
+
+.medal-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.medal-item.vol .medal-label {
+  color: var(--accent-blue);
+}
+
+.medal-separator {
+  width: 1px;
+  height: 28px;
+  background: var(--border);
+  flex-shrink: 0;
+  margin: 0 0.25rem;
+}
+
+/* ── Time Controls ── */
+.time-controls {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  padding: 0.35rem;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.time-controls::-webkit-scrollbar {
+  display: none;
+}
+
+.time-pill {
+  flex-shrink: 0;
+  padding: 0.45rem 0.85rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.time-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+}
+
+.time-pill.active {
+  background: var(--accent-green);
+  color: #000;
+}
+
+/* ── Volunteer Card ── */
+.vol-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  border-left: 4px solid var(--accent-blue);
+}
+
+.vol-count {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+}
+
+.vol-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* ── Junior Tag ── */
+.junior-tag {
+  font-size: 0.7rem;
+  color: var(--accent-blue);
+  font-weight: 600;
+}
