@@ -172,6 +172,7 @@ main {
 .highlight-card.tourist { border-left-color: #9b59b6; }
 .highlight-card.comeback { border-left-color: #1abc9c; }
 .highlight-card.volunteer { border-left-color: var(--accent-blue); }
+.highlight-card.pb-streak { border-left-color: #e74c3c; }
 
 .highlight-emoji { font-size: 1.5rem; flex-shrink: 0; }
 
@@ -186,6 +187,7 @@ main {
 .highlight-card.ag .highlight-text strong { color: var(--accent-orange); }
 .highlight-card.tourist .highlight-text strong { color: #9b59b6; }
 .highlight-card.comeback .highlight-text strong { color: #1abc9c; }
+.highlight-card.pb-streak .highlight-text strong { color: #e74c3c; }
 .highlight-card.volunteer .highlight-text strong { color: var(--accent-blue); }
 
 /* ── Results table ── */

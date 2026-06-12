@@ -190,6 +190,25 @@ function renderDashboard(data) {
     }
   }
 
+  // 🎯 Consecutive PB streak (3+)
+  for (const a of athletes) {
+    const results = (resultsByAthlete[a.id] || [])
+      .filter(r => r.time_seconds > 0)
+      .sort((a, b) => b.date.localeCompare(a.date)); // most recent first
+    let pbStreak = 0;
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].is_pb) pbStreak++;
+      else break;
+    }
+    if (pbStreak >= 3) {
+      highlights.push({
+        type: 'pb-streak',
+        emoji: '🎯',
+        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> has <strong>${pbStreak} consecutive PBs</strong>! Hat trick! 🔥`,
+      });
+    }
+  }
+
   // 🌍 Tourist run / tourism streak
   for (const r of thisWeek) {
     const a = athletes.find(x => x.id === r.athlete_id);

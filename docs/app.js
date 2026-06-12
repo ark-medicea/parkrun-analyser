@@ -1,21 +1,15 @@
-/* ── ParkRun Dashboard — app.js ── */
-/* Loads SQLite DB via sql.js, queries everything client-side */
+/* ── ParkRun Dashboard — app.js (Server API version) ── */
+/* Fetches JSON from api.php instead of loading SQLite client-side */
 
 (async function () {
   const app = document.getElementById('app');
 
   try {
-    const SQL = await initSqlJs({
-      locateFile: (file) =>
-        `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.11.0/${file}`,
-    });
+    const resp = await fetch('api.php?dashboard=1');
+    if (!resp.ok) throw new Error('API request failed');
+    const data = await resp.json();
 
-    const resp = await fetch('data/parkrun.db');
-    if (!resp.ok) throw new Error('Failed to load database');
-    const buf = await resp.arrayBuffer();
-    const db = new SQL.Database(new Uint8Array(buf));
-
-    renderDashboard(db);
+    renderDashboard(data);
   } catch (err) {
     app.innerHTML = `<div class="error">Failed to load: ${err.message}</div>`;
     console.error(err);
@@ -23,20 +17,6 @@
 })();
 
 /* ── Helpers ── */
-
-function query(db, sql, params = []) {
-  const stmt = db.prepare(sql);
-  if (params.length) stmt.bind(params);
-  const rows = [];
-  while (stmt.step()) rows.push(stmt.getAsObject());
-  stmt.free();
-  return rows;
-}
-
-function querySingle(db, sql, params = []) {
-  const rows = query(db, sql, params);
-  return rows.length > 0 ? rows[0] : null;
-}
 
 function formatTime(seconds) {
   if (!seconds && seconds !== 0) return '—';
@@ -58,29 +38,14 @@ function badgeImg(badge, cls = 'badge-icon') {
 
 /* ── Main render ── */
 
-function renderDashboard(db) {
+function renderDashboard(data) {
   const app = document.getElementById('app');
 
-  // Latest result date
-  const latestDateRow = querySingle(db, 'SELECT MAX(date) as d FROM results');
-  const latestDate = latestDateRow?.d;
-
-  // All active athletes with pre-computed fields from DB
-  const athletes = query(db, `
-    SELECT a.*,
-      (SELECT MAX(age_grade) FROM results r WHERE r.athlete_id = a.id AND r.is_junior = 0) as best_ag,
-      (SELECT AVG(age_grade) FROM results r WHERE r.athlete_id = a.id AND r.is_junior = 0 AND r.age_grade > 0) as avg_ag
-    FROM athletes a
-    WHERE a.active = 1
-    ORDER BY a.total_5k DESC
-  `);
-
-  // Load ALL 5k results for league recalculation + highlights
-  const allResults = query(db, `
-    SELECT athlete_id, date, event, time, time_seconds, age_grade, is_pb
-    FROM results WHERE is_junior = 0
-    ORDER BY date ASC
-  `);
+  const latestDate = data.latestDate;
+  const athletes = data.athletes;
+  const thisWeek = data.thisWeek;
+  const thisWeekJunior = data.thisWeekJunior;
+  const allResults = data.allResults;
 
   // Build per-athlete results map
   const resultsByAthlete = {};
@@ -88,26 +53,6 @@ function renderDashboard(db) {
     if (!resultsByAthlete[r.athlete_id]) resultsByAthlete[r.athlete_id] = [];
     resultsByAthlete[r.athlete_id].push(r);
   }
-
-  // This week's results (5k only)
-  const thisWeek = latestDate
-    ? query(db, `
-        SELECT r.*, a.name, a.badge, a.home_event, a.prev_volunteer_count, a.volunteer_count FROM results r
-        JOIN athletes a ON r.athlete_id = a.id
-        WHERE r.date = ? AND r.is_junior = 0
-        ORDER BY r.time_seconds ASC
-      `, [latestDate])
-    : [];
-
-  // Junior results this week (separate)
-  const thisWeekJunior = latestDate
-    ? query(db, `
-        SELECT r.*, a.name FROM results r
-        JOIN athletes a ON r.athlete_id = a.id
-        WHERE r.date = ? AND r.is_junior = 1
-        ORDER BY r.time_seconds ASC
-      `, [latestDate])
-    : [];
 
   // Who ran this week (either 5k or junior)
   const allThisWeekIds = new Set([
@@ -241,6 +186,25 @@ function renderDashboard(db) {
         type: 'streak',
         emoji: '🔥',
         html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> is on a <strong>${s}-week streak</strong>!`,
+      });
+    }
+  }
+
+  // 🎯 Consecutive PB streak (3+)
+  for (const a of athletes) {
+    const results = (resultsByAthlete[a.id] || [])
+      .filter(r => r.time_seconds > 0)
+      .sort((a, b) => b.date.localeCompare(a.date)); // most recent first
+    let pbStreak = 0;
+    for (let i = 0; i < results.length; i++) {
+      if (results[i].is_pb) pbStreak++;
+      else break;
+    }
+    if (pbStreak >= 3) {
+      highlights.push({
+        type: 'pb-streak',
+        emoji: '🎯',
+        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> has <strong>${pbStreak} consecutive PBs</strong>! Hat trick! 🔥`,
       });
     }
   }
