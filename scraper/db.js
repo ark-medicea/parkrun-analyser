@@ -185,29 +185,38 @@ function recalculateAthleteStats(db) {
   const athletes = queryAll(db, 'SELECT id FROM athletes');
 
   for (const athlete of athletes) {
-    const stats = queryAll(
+    // Count totals
+    const counts = queryAll(
       db,
       `SELECT
         SUM(CASE WHEN is_junior = 0 THEN 1 ELSE 0 END) AS total_5k,
-        SUM(CASE WHEN is_junior = 1 THEN 1 ELSE 0 END) AS total_junior,
-        MIN(CASE WHEN is_junior = 0 THEN time ELSE NULL END) AS pb_5k,
-        MIN(CASE WHEN is_junior = 0 THEN time_seconds ELSE NULL END) AS pb_5k_seconds
+        SUM(CASE WHEN is_junior = 1 THEN 1 ELSE 0 END) AS total_junior
       FROM results WHERE athlete_id = ?`,
       [athlete.id]
     );
 
-    if (stats.length > 0) {
-      const s = stats[0];
-      db.run(
-        `UPDATE athletes SET
-          total_5k = ?,
-          total_junior = ?,
-          pb_5k = ?,
-          pb_5k_seconds = ?
-        WHERE id = ?`,
-        [s.total_5k || 0, s.total_junior || 0, s.pb_5k || null, s.pb_5k_seconds || null, athlete.id]
-      );
-    }
+    // Get PB from the row with the fastest time_seconds (not MIN of text!)
+    const pbRow = queryAll(
+      db,
+      `SELECT time AS pb_5k, time_seconds AS pb_5k_seconds
+      FROM results
+      WHERE athlete_id = ? AND is_junior = 0
+      ORDER BY time_seconds ASC
+      LIMIT 1`,
+      [athlete.id]
+    );
+
+    const c = counts[0] || {};
+    const pb = pbRow[0] || {};
+    db.run(
+      `UPDATE athletes SET
+        total_5k = ?,
+        total_junior = ?,
+        pb_5k = ?,
+        pb_5k_seconds = ?
+      WHERE id = ?`,
+      [c.total_5k || 0, c.total_junior || 0, pb.pb_5k || null, pb.pb_5k_seconds || null, athlete.id]
+    );
   }
 }
 
