@@ -2,8 +2,8 @@ name: Update ParkRun Data
 
 on:
   schedule:
-    # 11:00 UTC = 12:00 BST on Saturdays
-    - cron: '0 11 * * 6'
+    # 12:30 UTC = 13:30 BST on Saturdays
+    - cron: '30 12 * * 6'
   workflow_dispatch:
 
 permissions:
