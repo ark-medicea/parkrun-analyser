@@ -10,6 +10,19 @@
     const data = await resp.json();
 
     renderDashboard(data);
+
+    // Show last updated timestamp in footer
+    try {
+      const luResp = await fetch('api.php?lastUpdated=1');
+      if (luResp.ok) {
+        const luData = await luResp.json();
+        const el = document.getElementById('last-updated');
+        if (el && luData.lastUpdated) {
+          const d = new Date(luData.lastUpdated);
+          el.textContent = `Last updated: ${d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} at ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+        }
+      }
+    } catch (_) { /* non-critical */ }
   } catch (err) {
     app.innerHTML = `<div class="error">Failed to load: ${err.message}</div>`;
     console.error(err);

@@ -51,7 +51,9 @@ try {
 
 // ─── Routing ────────────────────────────────────────────────────────────────
 
-if (isset($_GET['dashboard'])) {
+if (isset($_GET['lastUpdated'])) {
+    handleLastUpdated($dbPath);
+} elseif (isset($_GET['dashboard'])) {
     handleDashboard($db);
 } elseif (isset($_GET['athlete'])) {
     handleAthlete($db, $_GET['athlete']);
@@ -64,6 +66,19 @@ if (isset($_GET['dashboard'])) {
 $db->close();
 
 // ─── Endpoint Handlers ─────────────────────────────────────────────────────
+
+/**
+ * Last updated endpoint — returns the DB file's last modification time.
+ */
+function handleLastUpdated(string $dbPath): void
+{
+    $mtime = filemtime($dbPath);
+    respond(200, [
+        'lastUpdated' => $mtime ? date('c', $mtime) : null,
+        'lastUpdatedUnix' => $mtime ?: null,
+    ]);
+}
+
 
 /**
  * Dashboard endpoint — returns everything the home page needs in one shot.
