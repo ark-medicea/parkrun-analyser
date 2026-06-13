@@ -30,7 +30,7 @@ async function updateResults() {
 
               const eventLink = cells[0]?.querySelector('a');
               const eventHref = eventLink?.getAttribute('href') || '';
-              const eventMatch = eventHref.match(/parkrun\.org\.uk\/([^/]+)\//);
+              const eventMatch = eventHref.match(/parkrun\.[^/]+\/([^/]+)\//);
               const event = eventMatch ? eventMatch[1] : '';
 
               const dateText = cells[1]?.textContent?.trim() || '';
