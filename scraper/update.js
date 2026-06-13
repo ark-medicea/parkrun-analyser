@@ -4,7 +4,7 @@
  */
 
 const { getPage, closeBrowser, sleep } = require('./browser');
-const { getDb, saveDb, getAthletes, upsertResult, recalculatePBs } = require('./db');
+const { getDb, saveDb, getAthletes, upsertResult, recalculatePBs, recalculateAthleteStats } = require('./db');
 
 async function updateResults() {
   const db = await getDb();
@@ -83,6 +83,9 @@ async function updateResults() {
 
     console.log('\nRecalculating PBs...');
     recalculatePBs(db);
+
+    console.log('Recalculating athlete stats...');
+    recalculateAthleteStats(db);
 
     saveDb(db);
     console.log('Done.');

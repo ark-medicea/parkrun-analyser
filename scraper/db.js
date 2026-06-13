@@ -149,18 +149,64 @@ function recalculatePBs(db) {
   const athletes = queryAll(db, 'SELECT id FROM athletes');
 
   for (const athlete of athletes) {
-    const results = queryAll(
+    // Recalculate PBs for 5k results (non-junior)
+    const results5k = queryAll(
       db,
-      'SELECT id, time_seconds FROM results WHERE athlete_id = ? ORDER BY date ASC, event ASC',
+      'SELECT id, time_seconds FROM results WHERE athlete_id = ? AND is_junior = 0 ORDER BY date ASC, event ASC',
       [athlete.id]
     );
 
-    let bestTime = Infinity;
-    for (const r of results) {
-      if (r.time_seconds < bestTime) {
-        bestTime = r.time_seconds;
+    let bestTime5k = Infinity;
+    for (const r of results5k) {
+      if (r.time_seconds < bestTime5k) {
+        bestTime5k = r.time_seconds;
         db.run('UPDATE results SET is_pb = 1 WHERE id = ?', [r.id]);
       }
+    }
+
+    // Recalculate PBs for junior results separately
+    const resultsJr = queryAll(
+      db,
+      'SELECT id, time_seconds FROM results WHERE athlete_id = ? AND is_junior = 1 ORDER BY date ASC, event ASC',
+      [athlete.id]
+    );
+
+    let bestTimeJr = Infinity;
+    for (const r of resultsJr) {
+      if (r.time_seconds < bestTimeJr) {
+        bestTimeJr = r.time_seconds;
+        db.run('UPDATE results SET is_pb = 1 WHERE id = ?', [r.id]);
+      }
+    }
+  }
+}
+
+function recalculateAthleteStats(db) {
+  const athletes = queryAll(db, 'SELECT id FROM athletes');
+
+  for (const athlete of athletes) {
+    const stats = queryAll(
+      db,
+      `SELECT
+        SUM(CASE WHEN is_junior = 0 THEN 1 ELSE 0 END) AS total_5k,
+        SUM(CASE WHEN is_junior = 1 THEN 1 ELSE 0 END) AS total_junior,
+        MIN(CASE WHEN is_junior = 0 THEN time ELSE NULL END) AS pb_5k,
+        MIN(CASE WHEN is_junior = 0 THEN time_seconds ELSE NULL END) AS pb_5k_seconds
+      FROM results WHERE athlete_id = ?`,
+      [athlete.id]
+    );
+
+    if (stats.length > 0) {
+      const s = stats[0];
+      db.run(
+        `UPDATE athletes SET
+          total_5k = ?,
+          total_junior = ?,
+          pb_5k = ?,
+          pb_5k_seconds = ?
+        WHERE id = ?`,
+        [s.total_5k || 0, s.total_junior || 0, s.pb_5k || null, s.pb_5k_seconds || null, athlete.id]
+      );
     }
   }
 }
@@ -176,4 +222,5 @@ module.exports = {
   getAthletes,
   getResults,
   recalculatePBs,
+  recalculateAthleteStats,
 };
