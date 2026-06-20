@@ -19,7 +19,11 @@ async function updateResults() {
 
       try {
         const url = `https://www.parkrun.org.uk/parkrunner/${athlete.id}/all/`;
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+        // Wait for JS-rendered results table to appear
+        await page.waitForSelector('#results tbody tr', { timeout: 10000 }).catch(() => {
+          console.log('  ⚠ Results table not found, page may not have loaded fully');
+        });
 
         const results = await page.$$eval(
           '#results tbody tr',
