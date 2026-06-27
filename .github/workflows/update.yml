@@ -40,3 +40,15 @@ jobs:
           git add -A
           git diff --staged --quiet || git commit -m "chore: update parkrun data $(date +%Y-%m-%d)"
           git push
+
+      - name: Deploy to server
+        env:
+          SSH_KEY: ${{ secrets.COPPER_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H 92.205.60.89 >> ~/.ssh/known_hosts 2>/dev/null
+          scp -i ~/.ssh/deploy_key data/parkrun.db ali@92.205.60.89:/home/ali/public_html/nomasti.enriched.solutions/parkrun.db
+          scp -i ~/.ssh/deploy_key server/app.js server/api.php server/style.css server/index.html server/athlete.html server/athletes.html server/athlete-app.js ali@92.205.60.89:/home/ali/public_html/nomasti.enriched.solutions/
+          rm -f ~/.ssh/deploy_key

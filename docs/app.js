@@ -10,6 +10,19 @@
     const data = await resp.json();
 
     renderDashboard(data);
+
+    // Show last updated timestamp in footer
+    try {
+      const luResp = await fetch('api.php?lastUpdated=1');
+      if (luResp.ok) {
+        const luData = await luResp.json();
+        const el = document.getElementById('last-updated');
+        if (el && luData.lastUpdated) {
+          const d = new Date(luData.lastUpdated);
+          el.textContent = `Last updated: ${d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })} at ${d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+        }
+      }
+    } catch (_) { /* non-critical */ }
   } catch (err) {
     app.innerHTML = `<div class="error">Failed to load: ${err.message}</div>`;
     console.error(err);
@@ -142,22 +155,7 @@ function renderDashboard(data) {
     }
   }
 
-  // 🏅 Best age grade vs last 3 months for this athlete
-  for (const r of thisWeek) {
-    if (!r.age_grade || pbAthleteIds.has(r.athlete_id)) continue;
-    const recent3mAG = (resultsByAthlete[r.athlete_id] || [])
-      .filter(x => x.date >= threeMonthsAgo && x.date < latestDate && x.age_grade > 0);
-    if (recent3mAG.length >= 3) {
-      const bestRecentAG = Math.max(...recent3mAG.map(x => x.age_grade));
-      if (r.age_grade > bestRecentAG) {
-        highlights.push({
-          type: 'ag',
-          emoji: '🏅',
-          html: `<a href="athlete.html?id=${r.athlete_id}" class="highlight-link"><strong>${r.name}</strong></a> hit their <strong>best age grade in 3 months</strong>! <strong>${r.age_grade.toFixed(1)}%</strong>`,
-        });
-      }
-    }
-  }
+  // 🏅 Best age grade vs last 3 months — REMOVED per user request
 
   // 🎉 Milestone reached this week (crossed a threshold)
   const milestoneThresholds = [10, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 750, 1000];
@@ -190,8 +188,9 @@ function renderDashboard(data) {
     }
   }
 
-  // 🎯 Consecutive PB streak (3+)
+  // 🎯 Consecutive PB streak (3+) — only if athlete ran this week
   for (const a of athletes) {
+    if (!allThisWeekIds.has(a.id)) continue;
     const results = (resultsByAthlete[a.id] || [])
       .filter(r => r.time_seconds > 0)
       .sort((a, b) => b.date.localeCompare(a.date)); // most recent first
