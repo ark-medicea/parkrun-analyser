@@ -290,6 +290,10 @@ function renderDashboard(data) {
     }
   }
 
+  // Sort highlights: PBs and PB streaks first, then rest in original order
+  const highlightPriority = { 'pb': 0, 'pb-streak': 1 };
+  highlights.sort((a, b) => (highlightPriority[a.type] ?? 99) - (highlightPriority[b.type] ?? 99));
+
   // ── Build HTML ──
   let html = '';
 
