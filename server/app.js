@@ -290,6 +290,9 @@ function renderDashboard(data) {
     }
   }
 
+  // Sort milestones: fewest runs remaining first, then biggest milestone first
+  milestones.sort((a, b) => a.remaining - b.remaining || b.target - a.target);
+
   // Sort highlights: PBs and PB streaks first, then rest in original order
   const highlightPriority = { 'pb': 0, 'pb-streak': 1 };
   highlights.sort((a, b) => (highlightPriority[a.type] ?? 99) - (highlightPriority[b.type] ?? 99));
