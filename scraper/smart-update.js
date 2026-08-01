@@ -7,8 +7,30 @@
 const { chromium } = require('playwright');
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
 const DB_PATH = path.join(__dirname, '..', 'data', 'parkrun.db');
+const LOG_PATH = path.join(__dirname, '..', 'data', 'scrape.log');
+
+// ── Pre-scrape snapshot ──
+const BAK_PATH = DB_PATH + '.pre-scrape';
+try {
+  fs.copyFileSync(DB_PATH, BAK_PATH);
+  console.log(`📦 Pre-scrape snapshot: ${BAK_PATH}`);
+} catch (e) {
+  console.warn(`⚠️ Could not create snapshot: ${e.message}`);
+}
+
+// ── Log file ──
+const logStream = fs.createWriteStream(LOG_PATH, { flags: 'a' });
+const _origLog = console.log;
+const _origWarn = console.warn;
+const _origError = console.error;
+const ts = () => new Date().toISOString();
+console.log = (...args) => { const msg = args.join(' '); _origLog(msg); logStream.write(`[${ts()}] ${msg}\n`); };
+console.warn = (...args) => { const msg = args.join(' '); _origWarn(msg); logStream.write(`[${ts()}] WARN: ${msg}\n`); };
+console.error = (...args) => { const msg = args.join(' '); _origError(msg); logStream.write(`[${ts()}] ERROR: ${msg}\n`); };
+
 const db = new Database(DB_PATH);
 
 // ── Config ──
@@ -30,6 +52,20 @@ addCol('athletes', 'volunteer_count', 'INTEGER DEFAULT 0');
 addCol('results', 'is_junior', 'INTEGER DEFAULT 0');
 addCol('athletes', 'prev_volunteer_count', 'INTEGER DEFAULT 0');
 addCol('athletes', 'last_active_date', 'TEXT');
+
+addCol('athletes', 'last_scraped_date', 'TEXT');
+
+// Volunteer log table
+db.exec(`
+  CREATE TABLE IF NOT EXISTS volunteer_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    athlete_id TEXT NOT NULL,
+    date_detected TEXT NOT NULL,
+    prev_count INTEGER NOT NULL,
+    new_count INTEGER NOT NULL,
+    UNIQUE(athlete_id, date_detected)
+  )
+`);
 
 function parseTime(timeStr) {
   if (!timeStr) return 0;
@@ -278,12 +314,19 @@ async function main() {
           .run(athlete.id, `%${je}%`);
       }
 
+      // Log volunteer count changes
+      const volIncreased = summary.volunteerCount > (athlete.prev_volunteer_count || 0);
+      const today = new Date().toISOString().split('T')[0];
+      if (volIncreased && (athlete.prev_volunteer_count || 0) > 0) {
+        db.prepare('INSERT OR IGNORE INTO volunteer_log (athlete_id, date_detected, prev_count, new_count) VALUES (?, ?, ?, ?)')
+          .run(athlete.id, today, athlete.prev_volunteer_count || 0, summary.volunteerCount);
+        console.log(`  📋 Volunteer log: ${athlete.prev_volunteer_count} → ${summary.volunteerCount}`);
+      }
+
       // Update last_active_date: latest run date or today if volunteer count increased
       const latestRunDate = db.prepare(
         'SELECT MAX(date) as d FROM results WHERE athlete_id = ?'
       ).get(athlete.id);
-      const volIncreased = summary.volunteerCount > (athlete.prev_volunteer_count || 0);
-      const today = new Date().toISOString().split('T')[0];
       const lastActive = volIncreased ? today : (latestRunDate?.d || null);
       if (lastActive) {
         db.prepare('UPDATE athletes SET last_active_date = ? WHERE id = ? AND (last_active_date IS NULL OR last_active_date < ?)')
@@ -315,6 +358,8 @@ async function main() {
       db.prepare('UPDATE athletes SET home_event = ? WHERE id = ?').run(topEvent.event, athlete.id);
     }
 
+    // Mark successful scrape
+    db.prepare('UPDATE athletes SET last_scraped_date = ? WHERE id = ?').run(today, athlete.id);
     successCount++;
     console.log(`  ⏱️ Next request in ${Math.round(currentDelay/1000)}s`);
     await sleep(currentDelay);
