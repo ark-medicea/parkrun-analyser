@@ -304,7 +304,7 @@ function renderDashboard(data) {
   // Sort milestones: fewest runs remaining first, then biggest milestone first
   milestones.sort((a, b) => a.remaining - b.remaining || b.target - a.target);
 
-  // Prexit Prevention: athletes who haven't run since the start of last month
+  // Prexit Prevention: athletes who haven't run OR volunteered since the start of last month
   const latestDateObj = new Date(latestDate);
   const prexitCutoff = new Date(latestDateObj.getFullYear(), latestDateObj.getMonth() - 1, 1)
     .toISOString().split('T')[0];
@@ -314,15 +314,23 @@ function renderDashboard(data) {
       .sort((x, y) => y.date.localeCompare(x.date));
     const lastRunDate = results.length > 0 ? results[0].date : null;
     const lastRunEvent = results.length > 0 ? results[0].event : null;
-    if (!lastRunDate || lastRunDate < prexitCutoff) {
-      prexitAthletes.push({ id: a.id, name: a.name, lastRunDate, lastRunEvent });
+
+    // Use last_active_date if available (tracks runs + volunteering), else fall back to last run
+    const lastActiveDate = a.last_active_date || lastRunDate;
+    // Also exclude if volunteer count increased this scrape (they're active!)
+    const volunteeredRecently = (a.volunteer_count || 0) > (a.prev_volunteer_count || 0);
+
+    if (!volunteeredRecently && (!lastActiveDate || lastActiveDate < prexitCutoff)) {
+      prexitAthletes.push({ id: a.id, name: a.name, lastRunDate, lastRunEvent, lastActiveDate });
     }
   }
   prexitAthletes.sort((a, b) => {
-    if (!a.lastRunDate && !b.lastRunDate) return 0;
-    if (!a.lastRunDate) return 1;
-    if (!b.lastRunDate) return -1;
-    return a.lastRunDate.localeCompare(b.lastRunDate);
+    const da = a.lastActiveDate || a.lastRunDate;
+    const db = b.lastActiveDate || b.lastRunDate;
+    if (!da && !db) return 0;
+    if (!da) return 1;
+    if (!db) return -1;
+    return da.localeCompare(db);
   });
 
   // Sort highlights: PBs and PB streaks first, then rest in original order
@@ -407,6 +415,12 @@ function renderDashboard(data) {
               const mmm = d.toLocaleString('en-GB', { month: 'short' });
               const yy = String(d.getFullYear()).slice(2);
               lastRunStr = `Last run: ${dd}-${mmm}-${yy} (${p.lastRunEvent})`;
+            } else if (p.lastActiveDate) {
+              const d = new Date(p.lastActiveDate);
+              const dd = String(d.getDate()).padStart(2, '0');
+              const mmm = d.toLocaleString('en-GB', { month: 'short' });
+              const yy = String(d.getFullYear()).slice(2);
+              lastRunStr = `Last active: ${dd}-${mmm}-${yy}`;
             }
             return `
               <a href="athlete.html?id=${p.id}" class="prexit-card">

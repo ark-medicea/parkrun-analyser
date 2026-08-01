@@ -29,6 +29,7 @@ addCol('athletes', 'total_junior', 'INTEGER DEFAULT 0');
 addCol('athletes', 'volunteer_count', 'INTEGER DEFAULT 0');
 addCol('results', 'is_junior', 'INTEGER DEFAULT 0');
 addCol('athletes', 'prev_volunteer_count', 'INTEGER DEFAULT 0');
+addCol('athletes', 'last_active_date', 'TEXT');
 
 function parseTime(timeStr) {
   if (!timeStr) return 0;
@@ -277,7 +278,19 @@ async function main() {
           .run(athlete.id, `%${je}%`);
       }
 
-      console.log(`  ✓ Badge: ${summary.badge || 'none'} | 5k: ${summary.total5k} | Jr: ${summary.totalJunior} | Vol: ${summary.volunteerCount} | PB: ${summary.pb5k || '—'}`);
+      // Update last_active_date: latest run date or today if volunteer count increased
+      const latestRunDate = db.prepare(
+        'SELECT MAX(date) as d FROM results WHERE athlete_id = ?'
+      ).get(athlete.id);
+      const volIncreased = summary.volunteerCount > (athlete.prev_volunteer_count || 0);
+      const today = new Date().toISOString().split('T')[0];
+      const lastActive = volIncreased ? today : (latestRunDate?.d || null);
+      if (lastActive) {
+        db.prepare('UPDATE athletes SET last_active_date = ? WHERE id = ? AND (last_active_date IS NULL OR last_active_date < ?)')
+          .run(lastActive, athlete.id, lastActive);
+      }
+
+      console.log(`  ✓ Badge: ${summary.badge || 'none'} | 5k: ${summary.total5k} | Jr: ${summary.totalJunior} | Vol: ${summary.volunteerCount} | PB: ${summary.pb5k || '—'} | Active: ${lastActive || '—'}`);
     }
 
     // Recalculate PBs for this athlete

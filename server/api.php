@@ -103,7 +103,7 @@ function handleDashboard(SQLite3 $db): void
     $athletes = queryAll($db, "
         SELECT
             a.id, a.name, a.gender, a.age_group, a.home_event, a.badge,
-            a.total_5k, a.total_junior, a.volunteer_count, a.prev_volunteer_count,
+            a.total_5k, a.total_junior, a.volunteer_count, a.prev_volunteer_count, a.last_active_date,
             ROUND(MAX(r.age_grade), 2) AS best_ag,
             ROUND(AVG(r.age_grade), 2) AS avg_ag
         FROM athletes a
