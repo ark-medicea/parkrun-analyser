@@ -269,10 +269,14 @@ function renderDashboard(data) {
     const prev = a.prev_volunteer_count || 0;
     const curr = a.volunteer_count || 0;
     if (curr > prev && prev > 0) {
+      const alsoRan = thisWeek.some(r => r.athlete_id === a.id);
+      const msg = alsoRan
+        ? `ran <strong>and</strong> volunteered! Now at <strong>${curr} volunteer credits</strong>`
+        : `volunteered! Now at <strong>${curr} volunteer credits</strong>`;
       highlights.push({
         type: 'volunteer',
         emoji: '🤝',
-        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> volunteered! Now at <strong>${curr} volunteer credits</strong>`,
+        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> ${msg}`,
       });
     }
   }
