@@ -12,7 +12,7 @@ const DB_PATH = path.join(__dirname, '..', 'data', 'parkrun.db');
 const db = new Database(DB_PATH);
 
 // ── Config ──
-const BASE_DELAY = 5000;       // 5s between requests
+const BASE_DELAY = 15000;      // 15s between requests (avoid Cloudflare)
 const MAX_DELAY = 120000;      // 2 min max backoff
 const BACKOFF_MULTIPLIER = 2;
 const MAX_RETRIES = 5;
