@@ -505,6 +505,63 @@ main {
   color: var(--text-secondary);
 }
 
+/* ── Milestone badge icon ── */
+.milestone-badge-icon {
+  height: 1.1em;
+  width: auto;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
+/* ── Section subtitle ── */
+.section-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-left: 0.5rem;
+  font-weight: 400;
+}
+
+/* ── Prexit Prevention ── */
+.prexit-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.prexit-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-left: 3px solid var(--accent-red, #ef4444);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.prexit-card:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.prexit-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.prexit-last {
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.prexit-detail {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
 /* ── Trend indicator ── */
 .trend { font-size: 0.75rem; margin-left: 0.3rem; }
 .trend.up { color: var(--accent-green); }

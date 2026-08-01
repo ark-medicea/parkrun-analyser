@@ -176,16 +176,18 @@ function renderDashboard(data) {
     }
   }
 
-  // 🔥 Hot streaks (4+)
-  for (const a of athletes) {
-    const s = athleteExtras[a.id].streak;
-    if (s >= 4) {
-      highlights.push({
-        type: 'streak',
-        emoji: '🔥',
-        html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> is on a <strong>${s}-week streak</strong>!`,
-      });
-    }
+  // 🔥 Hot streaks (4+) — top 5 by streak length
+  const streakCandidates = athletes
+    .filter(a => athleteExtras[a.id].streak >= 4)
+    .map(a => ({ a, streak: athleteExtras[a.id].streak }))
+    .sort((x, y) => y.streak - x.streak)
+    .slice(0, 5);
+  for (const { a, streak } of streakCandidates) {
+    highlights.push({
+      type: 'streak',
+      emoji: '🔥',
+      html: `<a href="athlete.html?id=${a.id}" class="highlight-link"><strong>${a.name}</strong></a> is on a <strong>${streak}-week streak</strong>!`,
+    });
   }
 
   // 🎯 Consecutive PB streak (3+) — only if athlete ran this week
@@ -282,20 +284,46 @@ function renderDashboard(data) {
   }
 
   // Approaching milestones (for the dedicated section, NOT highlights)
-  const milestoneTargets = [25, 50, 100, 250, 500];
+  // Official parkrun milestones get a badge icon
+  const officialMilestones = new Set([10, 25, 50, 100, 250, 500, 1000]);
   const milestones = [];
   for (const a of athletes) {
     const runs = a.total_5k || 0;
-    for (const target of milestoneTargets) {
+    // Generate targets: official milestones + every multiple of 50
+    const targets = new Set([25, 50, 100, 250, 500, 1000]);
+    for (let m = 50; m <= 1000; m += 50) targets.add(m);
+    for (const target of [...targets].sort((a, b) => a - b)) {
       if (runs >= target - 10 && runs < target) {
         const remaining = target - runs;
-        milestones.push({ id: a.id, name: a.name, current: runs, target, remaining });
+        const isOfficial = officialMilestones.has(target);
+        milestones.push({ id: a.id, name: a.name, current: runs, target, remaining, isOfficial });
       }
     }
   }
 
   // Sort milestones: fewest runs remaining first, then biggest milestone first
   milestones.sort((a, b) => a.remaining - b.remaining || b.target - a.target);
+
+  // Prexit Prevention: athletes who haven't run since the start of last month
+  const latestDateObj = new Date(latestDate);
+  const prexitCutoff = new Date(latestDateObj.getFullYear(), latestDateObj.getMonth() - 1, 1)
+    .toISOString().split('T')[0];
+  const prexitAthletes = [];
+  for (const a of athletes) {
+    const results = (resultsByAthlete[a.id] || [])
+      .sort((x, y) => y.date.localeCompare(x.date));
+    const lastRunDate = results.length > 0 ? results[0].date : null;
+    const lastRunEvent = results.length > 0 ? results[0].event : null;
+    if (!lastRunDate || lastRunDate < prexitCutoff) {
+      prexitAthletes.push({ id: a.id, name: a.name, lastRunDate, lastRunEvent });
+    }
+  }
+  prexitAthletes.sort((a, b) => {
+    if (!a.lastRunDate && !b.lastRunDate) return 0;
+    if (!a.lastRunDate) return 1;
+    if (!b.lastRunDate) return -1;
+    return a.lastRunDate.localeCompare(b.lastRunDate);
+  });
 
   // Sort highlights: PBs and PB streaks first, then rest in original order
   const highlightPriority = { 'pb': 0, 'pb-streak': 1 };
@@ -350,9 +378,41 @@ function renderDashboard(data) {
                 </div>
                 <div class="milestone-detail">
                   <a href="athlete.html?id=${m.id}" class="milestone-name-link">${first} ${last}</a>
-                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} runs 🏅</div>
+                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} runs ${m.isOfficial ? badgeImg(m.target, 'milestone-badge-icon') : ''}</div>
                 </div>
               </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // B2) Prexit Prevention
+  if (prexitAthletes.length > 0) {
+    html += `
+      <div class="section">
+        <div class="section-header">
+          <span class="section-icon">🚪</span>
+          <h2>Prexit Prevention</h2>
+          <span class="section-subtitle">No run since start of last month — at risk of removal!</span>
+        </div>
+        <div class="prexit-list">
+          ${prexitAthletes.map(p => {
+            const { first, last } = splitName(p.name);
+            let lastRunStr = 'Never run';
+            if (p.lastRunDate) {
+              const d = new Date(p.lastRunDate);
+              const dd = String(d.getDate()).padStart(2, '0');
+              const mmm = d.toLocaleString('en-GB', { month: 'short' });
+              const yy = String(d.getFullYear()).slice(2);
+              lastRunStr = `Last run: ${dd}-${mmm}-${yy} (${p.lastRunEvent})`;
+            }
+            return `
+              <a href="athlete.html?id=${p.id}" class="prexit-card">
+                <div class="prexit-name">${first} <span class="prexit-last">${last}</span></div>
+                <div class="prexit-detail">${lastRunStr}</div>
+              </a>
             `;
           }).join('')}
         </div>
