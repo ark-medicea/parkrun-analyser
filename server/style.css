@@ -1247,7 +1247,14 @@ a.absent-chip:hover {
 }
 
 .junior-league .col-name {
-  max-width: 50vw;
+  max-width: calc(50% - 1rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.junior-league .col-name a {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

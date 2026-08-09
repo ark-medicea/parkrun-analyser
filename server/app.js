@@ -314,7 +314,7 @@ function renderDashboard(data) {
     const targets = new Set([25, 50, 100, 250, 500, 1000]);
     for (let m = 50; m <= 1000; m += 50) targets.add(m);
     for (const target of [...targets].sort((a, b) => a - b)) {
-      if (runs >= target - 10 && runs < target) {
+      if (runs >= target - 5 && runs < target) {
         const remaining = target - runs;
         const isOfficial = officialMilestones.has(target);
         milestones.push({ id: a.id, name: a.name, current: runs, target, remaining, isOfficial });
@@ -327,7 +327,7 @@ function renderDashboard(data) {
   for (const ja of juniorAthletes) {
     const jruns = ja.total_junior || 0;
     for (const target of juniorMilestoneThresholds) {
-      if (jruns >= target - 10 && jruns < target) {
+      if (jruns >= target - 5 && jruns < target) {
         const remaining = target - jruns;
         milestones.push({ id: ja.id, name: ja.name, current: jruns, target, remaining, isOfficial: true, isJunior: true });
       }
