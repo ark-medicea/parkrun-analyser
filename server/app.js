@@ -323,13 +323,15 @@ function renderDashboard(data) {
   }
 
   // Junior milestones (thresholds: 11 and 22)
+  // Wider range than 5k since totals are much smaller
   const juniorMilestoneThresholds = [11, 22];
   for (const ja of juniorAthletes) {
     const jruns = ja.total_junior || 0;
     for (const target of juniorMilestoneThresholds) {
-      if (jruns >= target - 5 && jruns < target) {
+      if (jruns >= 1 && jruns < target) {
         const remaining = target - jruns;
         milestones.push({ id: ja.id, name: ja.name, current: jruns, target, remaining, isOfficial: true, isJunior: true });
+        break; // only show next upcoming junior milestone
       }
     }
   }

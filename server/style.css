@@ -1229,9 +1229,24 @@ a.absent-chip:hover {
 
 .junior-league {
   font-size: 0.9rem;
+  table-layout: fixed;
 }
+
+.junior-league th:nth-child(1),
+.junior-league td:nth-child(1) { width: 2rem; }   /* # */
+.junior-league th:nth-child(2),
+.junior-league td:nth-child(2) { width: auto; }    /* Name — takes remaining space */
+.junior-league th:nth-child(3),
+.junior-league td:nth-child(3) { width: 3.5rem; text-align: center; }  /* Runs */
+.junior-league th:nth-child(4),
+.junior-league td:nth-child(4) { width: 4rem; text-align: center; }    /* PB */
+.junior-league th:nth-child(5),
+.junior-league td:nth-child(5) { width: 3rem; text-align: center; }    /* Vol */
 
 .junior-league th,
 .junior-league td {
-  padding: 0.6rem 0.75rem;
+  padding: 0.6rem 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
