@@ -496,7 +496,22 @@ main {
   color: var(--accent-orange);
 }
 
-.milestone-detail { flex: 1; }
+.milestone-detail { flex: 1; min-width: 0; }
+
+.milestone-badge-wrap {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.milestone-badge-icon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
 
 .milestone-name { font-weight: 600; font-size: 0.9rem; }
 
@@ -1229,24 +1244,16 @@ a.absent-chip:hover {
 
 .junior-league {
   font-size: 0.9rem;
-  table-layout: fixed;
 }
 
-.junior-league th:nth-child(1),
-.junior-league td:nth-child(1) { width: 2rem; }   /* # */
-.junior-league th:nth-child(2),
-.junior-league td:nth-child(2) { width: auto; }    /* Name — takes remaining space */
-.junior-league th:nth-child(3),
-.junior-league td:nth-child(3) { width: 3.5rem; text-align: center; }  /* Runs */
-.junior-league th:nth-child(4),
-.junior-league td:nth-child(4) { width: 4rem; text-align: center; }    /* PB */
-.junior-league th:nth-child(5),
-.junior-league td:nth-child(5) { width: 3rem; text-align: center; }    /* Vol */
+.junior-league .col-name {
+  max-width: 50vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .junior-league th,
 .junior-league td {
   padding: 0.6rem 0.5rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }

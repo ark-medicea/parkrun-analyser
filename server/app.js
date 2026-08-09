@@ -323,15 +323,13 @@ function renderDashboard(data) {
   }
 
   // Junior milestones (thresholds: 11 and 22)
-  // Wider range than 5k since totals are much smaller
   const juniorMilestoneThresholds = [11, 22];
   for (const ja of juniorAthletes) {
     const jruns = ja.total_junior || 0;
     for (const target of juniorMilestoneThresholds) {
-      if (jruns >= 1 && jruns < target) {
+      if (jruns >= target - 10 && jruns < target) {
         const remaining = target - jruns;
         milestones.push({ id: ja.id, name: ja.name, current: jruns, target, remaining, isOfficial: true, isJunior: true });
-        break; // only show next upcoming junior milestone
       }
     }
   }
@@ -421,8 +419,9 @@ function renderDashboard(data) {
                 </div>
                 <div class="milestone-detail">
                   <a href="athlete.html?id=${m.id}" class="milestone-name-link">${first} ${last}</a>
-                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} ${m.isJunior ? 'junior ' : ''}runs ${m.isOfficial && !m.isJunior ? badgeImg(m.target, 'milestone-badge-icon') : ''}</div>
+                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} ${m.isJunior ? 'junior ' : ''}runs</div>
                 </div>
+                ${m.isOfficial && !m.isJunior ? `<div class="milestone-badge-wrap">${badgeImg(m.target, 'milestone-badge-icon')}</div>` : ''}
               </div>
             `;
           }).join('')}
