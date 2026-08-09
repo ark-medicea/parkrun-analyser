@@ -1207,3 +1207,31 @@ a.absent-chip:hover {
   color: var(--accent-blue);
   font-weight: 600;
 }
+
+/* ── Junior ParkRun Section ── */
+.junior-section {
+  border-top: 3px solid var(--accent-blue);
+  margin-top: 2rem;
+}
+
+.junior-section .section-header {
+  margin-bottom: 0.5rem;
+}
+
+.junior-sub-header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 1.5rem 0 0.75rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.junior-league {
+  font-size: 0.9rem;
+}
+
+.junior-league th,
+.junior-league td {
+  padding: 0.6rem 0.75rem;
+}

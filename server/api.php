@@ -151,12 +151,38 @@ function handleDashboard(SQLite3 $db): void
         ORDER BY r.date ASC
     ");
 
+    // Junior athletes with stats
+    $juniorAthletes = queryAll($db, "
+        SELECT
+            a.id, a.name, a.gender, a.total_junior, a.volunteer_count,
+            MIN(r.time_seconds) AS pb_junior_seconds,
+            MIN(r.time) AS pb_junior
+        FROM athletes a
+        JOIN results r ON r.athlete_id = a.id AND r.is_junior = 1
+        WHERE a.active = 1
+        GROUP BY a.id
+        ORDER BY a.total_junior DESC
+    ");
+
+    // All junior results
+    $allJuniorResults = queryAll($db, "
+        SELECT
+            r.athlete_id, r.date, r.event, r.time, r.time_seconds, r.position, r.age_grade, r.is_pb
+        FROM results r
+        JOIN athletes a ON a.id = r.athlete_id
+        WHERE a.active = 1 AND r.is_junior = 1
+        ORDER BY r.date ASC
+    ");
+
     respond(200, [
-        'latestDate'      => $latestDate,
-        'athletes'        => $athletes,
-        'thisWeek'        => $thisWeek,
-        'thisWeekJunior'  => $thisWeekJunior,
-        'allResults'      => $allResults,
+        'latestDate'        => $latestDate,
+        'latestJuniorDate'  => $latestJuniorDate,
+        'athletes'          => $athletes,
+        'thisWeek'          => $thisWeek,
+        'thisWeekJunior'    => $thisWeekJunior,
+        'allResults'        => $allResults,
+        'juniorAthletes'    => $juniorAthletes,
+        'allJuniorResults'  => $allJuniorResults,
     ]);
 }
 

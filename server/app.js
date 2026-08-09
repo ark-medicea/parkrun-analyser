@@ -176,6 +176,24 @@ function renderDashboard(data) {
     }
   }
 
+  // 🎉 Junior milestone reached this week
+  const juniorMilestoneHitThresholds = [11, 22];
+  for (const r of thisWeekJunior) {
+    const ja = (data.juniorAthletes || []).find(x => x.id === r.athlete_id);
+    if (!ja) continue;
+    const totalNow = ja.total_junior || 0;
+    const prevJuniorResults = allJuniorResults.filter(x => x.athlete_id === r.athlete_id && x.date < (data.latestJuniorDate || ''));
+    for (const t of juniorMilestoneHitThresholds) {
+      if (prevJuniorResults.length < t && totalNow >= t) {
+        highlights.push({
+          type: 'milestone-reached',
+          emoji: '🎉',
+          html: `<a href="athlete.html?id=${ja.id}" class="highlight-link"><strong>${ja.name}</strong></a> just hit <strong>${t} junior parkruns</strong>! 🏅`,
+        });
+      }
+    }
+  }
+
   // 🔥 Hot streaks (4+) — top 5 by streak length
   const streakCandidates = athletes
     .filter(a => athleteExtras[a.id].streak >= 4)
@@ -301,6 +319,21 @@ function renderDashboard(data) {
     }
   }
 
+  // Junior milestones (thresholds: 11 and 22)
+  const juniorAthletes = data.juniorAthletes || [];
+  const allJuniorResults = data.allJuniorResults || [];
+  const latestJuniorDate = data.latestJuniorDate || null;
+  const juniorMilestoneThresholds = [11, 22];
+  for (const ja of juniorAthletes) {
+    const jruns = ja.total_junior || 0;
+    for (const target of juniorMilestoneThresholds) {
+      if (jruns >= target - 5 && jruns < target) {
+        const remaining = target - jruns;
+        milestones.push({ id: ja.id, name: ja.name, current: jruns, target, remaining, isOfficial: true, isJunior: true });
+      }
+    }
+  }
+
   // Sort milestones: fewest runs remaining first, then biggest milestone first
   milestones.sort((a, b) => a.remaining - b.remaining || b.target - a.target);
 
@@ -386,7 +419,7 @@ function renderDashboard(data) {
                 </div>
                 <div class="milestone-detail">
                   <a href="athlete.html?id=${m.id}" class="milestone-name-link">${first} ${last}</a>
-                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} runs ${m.isOfficial ? badgeImg(m.target, 'milestone-badge-icon') : ''}</div>
+                  <div class="milestone-desc">${m.remaining} more to reach ${m.target} ${m.isJunior ? 'junior ' : ''}runs ${m.isOfficial && !m.isJunior ? badgeImg(m.target, 'milestone-badge-icon') : ''}</div>
                 </div>
               </div>
             `;
@@ -522,6 +555,91 @@ function renderDashboard(data) {
       </div>
     </div>
   `;
+
+  // F) Junior ParkRun Section
+  if (juniorAthletes.length > 0) {
+    const juniorDateStr = latestJuniorDate
+      ? new Date(latestJuniorDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+      : '';
+
+    // Build junior results by athlete map
+    const juniorResultsByAthlete = {};
+    for (const r of allJuniorResults) {
+      if (!juniorResultsByAthlete[r.athlete_id]) juniorResultsByAthlete[r.athlete_id] = [];
+      juniorResultsByAthlete[r.athlete_id].push(r);
+    }
+
+    html += `
+      <div class="section junior-section">
+        <div class="section-header">
+          <span class="section-icon">🧒</span>
+          <h2>Junior ParkRun</h2>
+          <span class="section-subtitle">2k · Cassiobury Juniors</span>
+        </div>
+    `;
+
+    // This week's junior results
+    if (thisWeekJunior.length > 0) {
+      html += `
+        <h3 class="junior-sub-header">This Week — ${juniorDateStr}</h3>
+        <div class="results-grid">
+          ${thisWeekJunior.map(r => {
+            const { first, last } = splitName(r.name);
+            const isPb = allJuniorResults.find(jr => jr.athlete_id === r.athlete_id && jr.date === latestJuniorDate && jr.is_pb);
+            return `
+              <a href="athlete.html?id=${r.athlete_id}" class="result-row">
+                <div class="result-name">
+                  <span class="first-name">${first}</span>
+                  <span class="last-name">${last}</span>
+                </div>
+                <div class="result-time ${isPb ? 'is-pb' : ''}">${r.time}${isPb ? '<span class="pb-badge">PB</span>' : ''}</div>
+                <div class="result-pos">#${r.position || '—'}</div>
+                <div class="result-event">${r.event}</div>
+              </a>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // Junior league table
+    html += `
+      <h3 class="junior-sub-header">Junior Stats</h3>
+      <div class="league-table-wrapper">
+        <table class="league-table junior-league" id="junior-league-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>2k Runs</th>
+              <th>PB</th>
+              <th>Vol</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${juniorAthletes.map((ja, i) => {
+              const { first, last } = splitName(ja.name);
+              return `
+                <tr>
+                  <td class="col-rank">${i + 1}</td>
+                  <td class="col-name">
+                    <a href="athlete.html?id=${ja.id}">
+                      ${first} <span style="color:var(--text-secondary);font-weight:400">${last}</span>
+                    </a>
+                  </td>
+                  <td class="col-runs">${ja.total_junior}</td>
+                  <td class="col-pb">${ja.pb_junior || '—'}</td>
+                  <td class="col-vol">${ja.volunteer_count || 0}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    html += '</div>';
+  }
 
   app.className = '';
   app.innerHTML = html;
