@@ -59,6 +59,9 @@ function renderDashboard(data) {
   const thisWeek = data.thisWeek;
   const thisWeekJunior = data.thisWeekJunior;
   const allResults = data.allResults;
+  const juniorAthletes = data.juniorAthletes || [];
+  const allJuniorResults = data.allJuniorResults || [];
+  const latestJuniorDate = data.latestJuniorDate || null;
 
   // Build per-athlete results map
   const resultsByAthlete = {};
@@ -320,9 +323,6 @@ function renderDashboard(data) {
   }
 
   // Junior milestones (thresholds: 11 and 22)
-  const juniorAthletes = data.juniorAthletes || [];
-  const allJuniorResults = data.allJuniorResults || [];
-  const latestJuniorDate = data.latestJuniorDate || null;
   const juniorMilestoneThresholds = [11, 22];
   for (const ja of juniorAthletes) {
     const jruns = ja.total_junior || 0;
