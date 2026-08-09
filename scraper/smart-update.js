@@ -237,6 +237,7 @@ async function main() {
   let currentDelay = BASE_DELAY;
   let successCount = 0;
   let failCount = 0;
+  const today = new Date().toISOString().split('T')[0];
 
   for (const athlete of athletes) {
     console.log(`\n━━━ ${athlete.name} (${athlete.id}) ━━━`);
@@ -316,7 +317,6 @@ async function main() {
 
       // Log volunteer count changes
       const volIncreased = summary.volunteerCount > (athlete.prev_volunteer_count || 0);
-      const today = new Date().toISOString().split('T')[0];
       if (volIncreased && (athlete.prev_volunteer_count || 0) > 0) {
         db.prepare('INSERT OR IGNORE INTO volunteer_log (athlete_id, date_detected, prev_count, new_count) VALUES (?, ?, ?, ?)')
           .run(athlete.id, today, athlete.prev_volunteer_count || 0, summary.volunteerCount);
