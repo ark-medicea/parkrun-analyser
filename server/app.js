@@ -623,11 +623,11 @@ function renderDashboard(data) {
               return `
                 <tr>
                   <td class="col-rank">${i + 1}</td>
-                  <td class="col-name">
+                  <td class="col-name"><div class="jr-name-wrap">
                     <a href="athlete.html?id=${ja.id}">
                       ${first} <span style="color:var(--text-secondary);font-weight:400">${last}</span>
                     </a>
-                  </td>
+                  </div></td>
                   <td class="col-runs">${ja.total_junior}</td>
                   <td class="col-pb">${ja.pb_junior || '—'}</td>
                   <td class="col-vol">${ja.volunteer_count || 0}</td>

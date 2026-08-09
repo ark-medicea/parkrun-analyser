@@ -1246,18 +1246,20 @@ a.absent-chip:hover {
   font-size: 0.9rem;
 }
 
-.junior-league .col-name {
-  max-width: calc(50% - 1rem);
+.jr-name-wrap {
+  max-width: 40vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.junior-league .col-name a {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.jr-name-wrap a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.jr-name-wrap a:hover {
+  color: var(--accent-green);
 }
 
 .junior-league th,
