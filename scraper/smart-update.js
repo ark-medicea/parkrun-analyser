@@ -39,6 +39,8 @@ const MAX_DELAY = 300000;      // 5 min max backoff
 const BACKOFF_MULTIPLIER = 2.5;
 const MAX_RETRIES = 6;
 const PAGE_LOAD_WAIT = 5000;   // 5s settle time after page load
+const JITTER_MIN = 0.8;       // Randomise delay: 80%-150% of base
+const JITTER_MAX = 1.5;
 
 // ── Ensure columns exist ──
 const addCol = (table, col, type) => {
@@ -77,6 +79,10 @@ function parseTime(timeStr) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+function jitteredDelay(base) {
+  const factor = JITTER_MIN + Math.random() * (JITTER_MAX - JITTER_MIN);
+  return Math.round(base * factor);
+}
 
 async function isBlocked(page) {
   const text = await page.$eval('body', el => el.innerText.substring(0, 300)).catch(() => '');
@@ -252,7 +258,7 @@ async function main() {
       console.log(`  ❌ Giving up on results after ${MAX_RETRIES} attempts`);
       currentDelay = allResult.delay;
       failCount++;
-      await sleep(currentDelay);
+      await sleep(jitteredDelay(currentDelay));
       continue;
     }
     currentDelay = allResult.delay;
@@ -278,7 +284,9 @@ async function main() {
     }
     console.log(`  ✓ ${count} results upserted`);
 
-    await sleep(currentDelay);
+    const gap1 = jitteredDelay(currentDelay);
+    console.log(`  💤 Waiting ${Math.round(gap1/1000)}s before summary...`);
+    await sleep(gap1);
 
     // 2) Scrape summary page
     const sumUrl = `https://www.parkrun.org.uk/parkrunner/${athlete.id}/`;
@@ -365,8 +373,9 @@ async function main() {
     // Mark successful scrape
     db.prepare('UPDATE athletes SET last_scraped_date = ? WHERE id = ?').run(today, athlete.id);
     successCount++;
-    console.log(`  ⏱️ Next request in ${Math.round(currentDelay/1000)}s`);
-    await sleep(currentDelay);
+    const gap2 = jitteredDelay(currentDelay);
+    console.log(`  ⏱️ Next athlete in ${Math.round(gap2/1000)}s`);
+    await sleep(gap2);
   }
 
   await browser.close();
