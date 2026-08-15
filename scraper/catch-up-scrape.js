@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Smart athlete results scraper with rate limiting and Cloudflare backoff.
- * Scrapes /parkrunner/{id}/all/ for each tracked athlete.
- * Also scrapes summary page for badges/PB/volunteer data.
+ * Catch-up scraper for athletes that were blocked by Cloudflare.
+ * Longer delays between requests (30s base, up to 3min backoff).
+ * Only targets athletes from Safia THAROO onward (alphabetically).
  */
 const { chromium } = require('playwright');
 const Database = require('better-sqlite3');
@@ -10,10 +10,9 @@ const path = require('path');
 const fs = require('fs');
 
 const DB_PATH = path.join(__dirname, '..', 'data', 'parkrun.db');
-const LOG_PATH = path.join(__dirname, '..', 'data', 'scrape.log');
 
 // ── Pre-scrape snapshot ──
-const BAK_PATH = DB_PATH + '.pre-scrape';
+const BAK_PATH = DB_PATH + '.pre-catchup';
 try {
   fs.copyFileSync(DB_PATH, BAK_PATH);
   console.log(`📦 Pre-scrape snapshot: ${BAK_PATH}`);
@@ -21,24 +20,14 @@ try {
   console.warn(`⚠️ Could not create snapshot: ${e.message}`);
 }
 
-// ── Log file ──
-const logStream = fs.createWriteStream(LOG_PATH, { flags: 'a' });
-const _origLog = console.log;
-const _origWarn = console.warn;
-const _origError = console.error;
-const ts = () => new Date().toISOString();
-console.log = (...args) => { const msg = args.join(' '); _origLog(msg); logStream.write(`[${ts()}] ${msg}\n`); };
-console.warn = (...args) => { const msg = args.join(' '); _origWarn(msg); logStream.write(`[${ts()}] WARN: ${msg}\n`); };
-console.error = (...args) => { const msg = args.join(' '); _origError(msg); logStream.write(`[${ts()}] ERROR: ${msg}\n`); };
-
 const db = new Database(DB_PATH);
 
-// ── Config ──
-const BASE_DELAY = 30000;      // 30s between requests (avoid Cloudflare)
-const MAX_DELAY = 300000;      // 5 min max backoff
-const BACKOFF_MULTIPLIER = 2.5;
-const MAX_RETRIES = 6;
-const PAGE_LOAD_WAIT = 5000;   // 5s settle time after page load
+// ── Config — LONGER DELAYS ──
+const BASE_DELAY = 30000;       // 30s between requests
+const MAX_DELAY = 180000;       // 3 min max backoff
+const BACKOFF_MULTIPLIER = 2;
+const MAX_RETRIES = 5;
+const PAGE_LOAD_WAIT = 5000;    // 5s after page load before scraping
 
 // ── Ensure columns exist ──
 const addCol = (table, col, type) => {
@@ -53,8 +42,6 @@ addCol('athletes', 'volunteer_count', 'INTEGER DEFAULT 0');
 addCol('results', 'is_junior', 'INTEGER DEFAULT 0');
 addCol('athletes', 'prev_volunteer_count', 'INTEGER DEFAULT 0');
 addCol('athletes', 'last_active_date', 'TEXT');
-
-addCol('athletes', 'last_scraped_date', 'TEXT');
 
 // Volunteer log table
 db.exec(`
@@ -79,7 +66,7 @@ function parseTime(timeStr) {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 async function isBlocked(page) {
-  const text = await page.$eval('body', el => el.innerText.substring(0, 300)).catch(() => '');
+  const text = await page.$eval('body', el => el.innerText.substring(0, 200)).catch(() => '');
   return text.includes('confirm you are human') || text.includes('security check') || text.includes('Checking your browser');
 }
 
@@ -99,7 +86,7 @@ async function loadWithRetry(page, url, currentDelay) {
 
       return { success: true, delay, status: resp.status() };
     } catch (err) {
-      console.log(`    ⚠️ Load error (attempt ${attempt}): ${err.message.substring(0, 60)}`);
+      console.log(`    ⚠️ Load error (attempt ${attempt}): ${err.message.substring(0, 80)}`);
       await sleep(delay);
       delay = Math.min(delay * BACKOFF_MULTIPLIER, MAX_DELAY);
     }
@@ -107,53 +94,40 @@ async function loadWithRetry(page, url, currentDelay) {
   return { success: false, delay };
 }
 
-// ── Scrape /all/ results page ──
-async function scrapeAllResults(page, athleteId) {
+async function scrapeAllResults(page) {
   const rows = await page.$$eval('#results tbody tr', trs =>
     trs.map(tr => {
       const cells = tr.querySelectorAll('td');
       if (cells.length < 6) return null;
-
       const eventLink = cells[0]?.querySelector('a');
       const eventHref = eventLink?.getAttribute('href') || '';
       const eventMatch = eventHref.match(/parkrun\.org\.uk\/([^/]+)\//);
       const event = eventMatch ? eventMatch[1] : '';
-
       const dateText = cells[1]?.textContent?.trim() || '';
       const position = parseInt(cells[3]?.textContent?.trim()) || null;
       const time = cells[4]?.textContent?.trim() || '';
       const agText = cells[5]?.textContent?.trim()?.replace('%', '') || '';
       const ageGrade = parseFloat(agText) || null;
-
       return { event, dateText, position, time, ageGrade };
     })
   );
-
   return rows.filter(Boolean);
 }
 
-// ── Scrape summary page ──
 async function scrapeSummary(page) {
   return await page.evaluate(() => {
     const text = document.body.innerText;
-
     const badgeMatch = text.match(/Member of the parkrun (\d+) Club/);
     const badge = badgeMatch ? parseInt(badgeMatch[1]) : null;
-
     const ageMatch = text.match(/Most recent age category was ([A-Z0-9-]+)/);
     const ageGroup = ageMatch ? ageMatch[1] : null;
-
     let gender = null;
-    if (ageGroup) {
-      gender = (ageGroup.includes('W') || ageGroup.includes('F')) ? 'F' : 'M';
-    }
-
+    if (ageGroup) gender = (ageGroup.includes('W') || ageGroup.includes('F')) ? 'F' : 'M';
     let total5k = 0, totalJunior = 0;
     const m1 = text.match(/(\d+)\s+parkruns?\s+&\s+(\d+)\s+junior\s+parkruns?\s+total/);
     const m2 = text.match(/(\d+)\s+parkruns?\s+total/);
     if (m1) { total5k = parseInt(m1[1]); totalJunior = parseInt(m1[2]); }
     else if (m2) { total5k = parseInt(m2[1]); }
-
     let pb5k = null;
     const tables = document.querySelectorAll('table');
     for (const table of tables) {
@@ -168,10 +142,8 @@ async function scrapeSummary(page) {
         }
       }
     }
-
     const volMatch = text.match(/Total Credits\s+(\d+)/);
     const volunteerCount = volMatch ? parseInt(volMatch[1]) : 0;
-
     const juniorEvents = [];
     const eventSection = text.match(/Event Summaries([\s\S]*?)(?:Volunteer Summary|$)/);
     if (eventSection) {
@@ -182,14 +154,20 @@ async function scrapeSummary(page) {
         }
       }
     }
-
     return { badge, ageGroup, gender, total5k, totalJunior, pb5k, volunteerCount, juniorEvents };
   });
 }
 
 async function main() {
-  const athletes = db.prepare('SELECT * FROM athletes WHERE active = 1 ORDER BY name').all();
-  console.log(`🏃 Smart update for ${athletes.length} athletes\n`);
+  // Target: athletes from Safia THAROO onward (alphabetically) that weren't refreshed on Aug 1
+  const allAthletes = db.prepare('SELECT * FROM athletes WHERE active = 1 ORDER BY name').all();
+  
+  // Find the cutoff — Safia THAROO onward
+  const cutoffIdx = allAthletes.findIndex(a => a.name === 'Safia THAROO');
+  const athletes = cutoffIdx >= 0 ? allAthletes.slice(cutoffIdx) : allAthletes;
+  
+  console.log(`🏃 Catch-up scrape for ${athletes.length} athletes (${athletes[0]?.name} → ${athletes[athletes.length-1]?.name})`);
+  console.log(`   Base delay: ${BASE_DELAY/1000}s | Max backoff: ${MAX_DELAY/1000}s\n`);
 
   const browser = await chromium.launch({
     channel: 'chrome',
@@ -217,10 +195,7 @@ async function main() {
       age_grade = COALESCE(excluded.age_grade, results.age_grade)
   `);
 
-  // Save previous volunteer count before updating
-  const savePrevVol = db.prepare(`
-    UPDATE athletes SET prev_volunteer_count = volunteer_count WHERE id = ?
-  `);
+  const savePrevVol = db.prepare(`UPDATE athletes SET prev_volunteer_count = volunteer_count WHERE id = ?`);
 
   const updateAthlete = db.prepare(`
     UPDATE athletes SET
@@ -243,7 +218,7 @@ async function main() {
   for (const athlete of athletes) {
     console.log(`\n━━━ ${athlete.name} (${athlete.id}) ━━━`);
 
-    // 1) Scrape /all/ results page
+    // 1) Results page
     const allUrl = `https://www.parkrun.org.uk/parkrunner/${athlete.id}/all/`;
     console.log(`  📊 Results: ${allUrl}`);
 
@@ -256,15 +231,11 @@ async function main() {
       continue;
     }
     currentDelay = allResult.delay;
-
-    // On success, gradually reduce delay (but not below base)
-    // Recover slowly — only halve the excess over base each time
     if (currentDelay > BASE_DELAY) {
-      const excess = currentDelay - BASE_DELAY;
-      currentDelay = BASE_DELAY + Math.floor(excess / 2);
+      currentDelay = Math.max(BASE_DELAY, Math.floor(currentDelay / BACKOFF_MULTIPLIER));
     }
 
-    const rawResults = await scrapeAllResults(page, athlete.id);
+    const rawResults = await scrapeAllResults(page);
     let count = 0;
     for (const r of rawResults) {
       if (!r.event || !r.time || r.time === '--') continue;
@@ -278,9 +249,10 @@ async function main() {
     }
     console.log(`  ✓ ${count} results upserted`);
 
+    console.log(`  ⏱️ Waiting ${Math.round(currentDelay/1000)}s before summary...`);
     await sleep(currentDelay);
 
-    // 2) Scrape summary page
+    // 2) Summary page
     const sumUrl = `https://www.parkrun.org.uk/parkrunner/${athlete.id}/`;
     console.log(`  📋 Summary: ${sumUrl}`);
 
@@ -291,16 +263,12 @@ async function main() {
     } else {
       currentDelay = sumResult.delay;
       if (currentDelay > BASE_DELAY) {
-        const excess = currentDelay - BASE_DELAY;
-        currentDelay = BASE_DELAY + Math.floor(excess / 2);
+        currentDelay = Math.max(BASE_DELAY, Math.floor(currentDelay / BACKOFF_MULTIPLIER));
       }
 
       const summary = await scrapeSummary(page);
       const pbSecs = parseTime(summary.pb5k);
-
-      // Save prev volunteer count before updating
       savePrevVol.run(athlete.id);
-
       updateAthlete.run(
         summary.ageGroup, summary.gender,
         summary.pb5k, pbSecs || null,
@@ -311,7 +279,6 @@ async function main() {
         athlete.id
       );
 
-      // Mark junior results
       db.prepare('UPDATE results SET is_junior = 1 WHERE athlete_id = ? AND event LIKE ?')
         .run(athlete.id, '%junior%');
       for (const je of summary.juniorEvents) {
@@ -319,7 +286,6 @@ async function main() {
           .run(athlete.id, `%${je}%`);
       }
 
-      // Log volunteer count changes
       const volIncreased = summary.volunteerCount > (athlete.prev_volunteer_count || 0);
       if (volIncreased && (athlete.prev_volunteer_count || 0) > 0) {
         db.prepare('INSERT OR IGNORE INTO volunteer_log (athlete_id, date_detected, prev_count, new_count) VALUES (?, ?, ?, ?)')
@@ -327,10 +293,7 @@ async function main() {
         console.log(`  📋 Volunteer log: ${athlete.prev_volunteer_count} → ${summary.volunteerCount}`);
       }
 
-      // Update last_active_date: latest run date or today if volunteer count increased
-      const latestRunDate = db.prepare(
-        'SELECT MAX(date) as d FROM results WHERE athlete_id = ?'
-      ).get(athlete.id);
+      const latestRunDate = db.prepare('SELECT MAX(date) as d FROM results WHERE athlete_id = ?').get(athlete.id);
       const lastActive = volIncreased ? today : (latestRunDate?.d || null);
       if (lastActive) {
         db.prepare('UPDATE athletes SET last_active_date = ? WHERE id = ? AND (last_active_date IS NULL OR last_active_date < ?)')
@@ -340,7 +303,7 @@ async function main() {
       console.log(`  ✓ Badge: ${summary.badge || 'none'} | 5k: ${summary.total5k} | Jr: ${summary.totalJunior} | Vol: ${summary.volunteerCount} | PB: ${summary.pb5k || '—'} | Active: ${lastActive || '—'}`);
     }
 
-    // Recalculate PBs for this athlete
+    // Recalculate PBs
     db.prepare('UPDATE results SET is_pb = 0 WHERE athlete_id = ?').run(athlete.id);
     const results = db.prepare(
       'SELECT rowid, time_seconds FROM results WHERE athlete_id = ? AND is_junior = 0 ORDER BY date ASC'
@@ -353,7 +316,7 @@ async function main() {
       }
     }
 
-    // Recalculate home event (most frequent 5k event)
+    // Recalculate home event
     const topEvent = db.prepare(
       `SELECT event FROM results WHERE athlete_id = ? AND is_junior = 0
        GROUP BY event ORDER BY COUNT(*) DESC LIMIT 1`
@@ -362,26 +325,23 @@ async function main() {
       db.prepare('UPDATE athletes SET home_event = ? WHERE id = ?').run(topEvent.event, athlete.id);
     }
 
-    // Mark successful scrape
-    db.prepare('UPDATE athletes SET last_scraped_date = ? WHERE id = ?').run(today, athlete.id);
     successCount++;
-    console.log(`  ⏱️ Next request in ${Math.round(currentDelay/1000)}s`);
+    console.log(`  ⏱️ Next athlete in ${Math.round(currentDelay/1000)}s`);
     await sleep(currentDelay);
   }
 
   await browser.close();
 
-  // Final summary
-  console.log(`\n\n${'═'.repeat(60)}`);
-  console.log(`✅ Done: ${successCount} succeeded, ${failCount} failed`);
+  console.log(`\n${'═'.repeat(60)}`);
+  console.log(`✅ Done: ${successCount} succeeded, ${failCount} failed out of ${athletes.length}`);
   console.log(`${'═'.repeat(60)}\n`);
 
+  // Final summary
   const summary = db.prepare(`
     SELECT a.name, a.badge, a.total_5k, a.total_junior, a.volunteer_count, a.pb_5k,
       (SELECT COUNT(*) FROM results r WHERE r.athlete_id = a.id) as db_results
     FROM athletes a WHERE a.active = 1 ORDER BY a.name
   `).all();
-
   for (const s of summary) {
     const badge = s.badge ? `🏅${s.badge}` : '';
     console.log(`  ${s.name.padEnd(28)} ${String(s.db_results).padStart(4)} results | PB: ${(s.pb_5k||'—').padEnd(6)} | 5k: ${String(s.total_5k||0).padStart(3)} Jr: ${String(s.total_junior||0).padStart(2)} Vol: ${String(s.volunteer_count||0).padStart(3)} ${badge}`);
