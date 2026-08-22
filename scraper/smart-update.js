@@ -35,9 +35,9 @@ const db = new Database(DB_PATH);
 
 // ── Config ──
 const BASE_DELAY = 30000;      // 30s between requests (avoid Cloudflare)
-const MAX_DELAY = 300000;      // 5 min max backoff
+const MAX_DELAY = 1200000;     // 20 min max backoff — never give up
 const BACKOFF_MULTIPLIER = 2.5;
-const MAX_RETRIES = 6;
+const MAX_RETRIES = Infinity;  // NEVER stop — keep retrying with backoff
 const PAGE_LOAD_WAIT = 5000;   // 5s settle time after page load
 const JITTER_MIN = 0.8;       // Randomise delay: 80%-150% of base
 const JITTER_MAX = 1.5;
@@ -91,13 +91,14 @@ async function isBlocked(page) {
 
 async function loadWithRetry(page, url, currentDelay) {
   let delay = currentDelay;
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+  for (let attempt = 1; ; attempt++) {
     try {
-      const resp = await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+      const resp = await page.goto(url, { waitUntil: 'networkidle', timeout: 90000 });
       await page.waitForTimeout(PAGE_LOAD_WAIT);
 
       if (await isBlocked(page)) {
-        console.log(`    ⚡ Cloudflare challenge (attempt ${attempt}/${MAX_RETRIES}), backing off ${Math.round(delay/1000)}s...`);
+        const waitSecs = Math.round(delay/1000);
+        console.log(`    ⚡ Cloudflare challenge (attempt ${attempt}), backing off ${waitSecs}s (${Math.round(waitSecs/60)}min)...`);
         await sleep(delay);
         delay = Math.min(delay * BACKOFF_MULTIPLIER, MAX_DELAY);
         continue;
@@ -105,12 +106,12 @@ async function loadWithRetry(page, url, currentDelay) {
 
       return { success: true, delay, status: resp.status() };
     } catch (err) {
-      console.log(`    ⚠️ Load error (attempt ${attempt}): ${err.message.substring(0, 60)}`);
+      const waitSecs = Math.round(delay/1000);
+      console.log(`    ⚠️ Load error (attempt ${attempt}): ${err.message.substring(0, 80)} — retrying in ${waitSecs}s`);
       await sleep(delay);
       delay = Math.min(delay * BACKOFF_MULTIPLIER, MAX_DELAY);
     }
   }
-  return { success: false, delay };
 }
 
 // ── Scrape /all/ results page ──
