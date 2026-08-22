@@ -44,7 +44,9 @@ const thisWeek = db.prepare(`
   ORDER BY a.name
 `).all(latestDate);
 
-const thisWeekJunior = latestJuniorDate ? db.prepare(`
+// Only include junior results from the same week as the latest 5k date (within 2 days)
+const juniorSameWeek = latestJuniorDate && Math.abs(new Date(latestDate) - new Date(latestJuniorDate)) <= 2 * 86400000;
+const thisWeekJunior = juniorSameWeek ? db.prepare(`
   SELECT r.*, a.name FROM results r
   JOIN athletes a ON a.id = r.athlete_id
   WHERE r.date = ? AND r.is_junior = 1
@@ -163,11 +165,14 @@ for (const r of thisWeek) {
   let streak = 0;
   let checkDate = new Date(latestDate);
   for (const d of dates5k) {
-    const diff = Math.round((checkDate - new Date(d)) / (7 * 86400000));
-    if (diff > 1) break;
-    streak++;
-    checkDate = new Date(d);
-    checkDate.setDate(checkDate.getDate() - 7);
+    const diffDays = Math.round((checkDate - new Date(d)) / (1000 * 60 * 60 * 24));
+    if (diffDays <= 1) {
+      streak++;
+      checkDate = new Date(d);
+      checkDate.setDate(checkDate.getDate() - 7);
+    } else {
+      break;
+    }
   }
   if (streak >= 4) {
     streaks.push({ name: r.name, streak });
