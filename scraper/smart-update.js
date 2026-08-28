@@ -399,7 +399,7 @@ async function main() {
 
   // Recalculate last_active_date for all athletes from actual results
   console.log('\n🔄 Recalculating last_active_date for all athletes...');
-  const activeAthletes = db.prepare('SELECT id, last_active_date FROM athletes WHERE active = 1').all();
+  const activeAthletes = db.prepare('SELECT id, last_active_date, total_5k, badge FROM athletes WHERE active = 1').all();
   let fixedCount = 0;
   for (const a of activeAthletes) {
     const row = db.prepare('SELECT MAX(date) AS latest FROM results WHERE athlete_id = ?').get(a.id);
@@ -409,6 +409,19 @@ async function main() {
     }
   }
   if (fixedCount > 0) console.log(`  ✅ Fixed ${fixedCount} stale last_active_date values`);
+
+  // Recalculate badges from total_5k (fallback for missed scrapes)
+  const badgeThresholds = [500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25];
+  let badgeFixCount = 0;
+  for (const a of activeAthletes) {
+    const earned = badgeThresholds.find(t => (a.total_5k || 0) >= t);
+    const currentBadge = a.badge ? parseInt(a.badge) : 0;
+    if (earned && earned > currentBadge) {
+      db.prepare('UPDATE athletes SET badge = ? WHERE id = ?').run(String(earned), a.id);
+      badgeFixCount++;
+    }
+  }
+  if (badgeFixCount > 0) console.log(`  🏅 Fixed ${badgeFixCount} missing/outdated badges`);
 
   db.close();
 }
