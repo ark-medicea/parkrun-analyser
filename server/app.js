@@ -348,8 +348,8 @@ function renderDashboard(data) {
     const lastRunDate = results.length > 0 ? results[0].date : null;
     const lastRunEvent = results.length > 0 ? results[0].event : null;
 
-    // Use last_active_date if available (tracks runs + volunteering), else fall back to last run
-    const lastActiveDate = a.last_active_date || lastRunDate;
+    // Use the more recent of last_active_date (tracks volunteering) and lastRunDate
+    const lastActiveDate = [a.last_active_date, lastRunDate].filter(Boolean).sort().pop() || null;
     // Also exclude if volunteer count increased this scrape (they're active!)
     const volunteeredRecently = (a.volunteer_count || 0) > (a.prev_volunteer_count || 0);
 

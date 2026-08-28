@@ -220,6 +220,26 @@ function recalculateAthleteStats(db) {
   }
 }
 
+function recalculateLastActiveDates(db) {
+  const athletes = queryAll(db, 'SELECT id FROM athletes WHERE active = 1');
+  for (const athlete of athletes) {
+    const row = queryAll(
+      db,
+      'SELECT MAX(date) AS latest FROM results WHERE athlete_id = ?',
+      [athlete.id]
+    );
+    const latestRun = row[0]?.latest || null;
+    if (latestRun) {
+      // Update last_active_date to the latest run date if it's more recent
+      db.run(
+        `UPDATE athletes SET last_active_date = ?
+         WHERE id = ? AND (last_active_date IS NULL OR last_active_date < ?)`,
+        [latestRun, athlete.id, latestRun]
+      );
+    }
+  }
+}
+
 module.exports = {
   getDb,
   saveDb,
@@ -232,4 +252,5 @@ module.exports = {
   getResults,
   recalculatePBs,
   recalculateAthleteStats,
+  recalculateLastActiveDates,
 };

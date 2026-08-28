@@ -397,6 +397,19 @@ async function main() {
     console.log(`  ${s.name.padEnd(28)} ${String(s.db_results).padStart(4)} results | PB: ${(s.pb_5k||'—').padEnd(6)} | 5k: ${String(s.total_5k||0).padStart(3)} Jr: ${String(s.total_junior||0).padStart(2)} Vol: ${String(s.volunteer_count||0).padStart(3)} ${badge}`);
   }
 
+  // Recalculate last_active_date for all athletes from actual results
+  console.log('\n🔄 Recalculating last_active_date for all athletes...');
+  const activeAthletes = db.prepare('SELECT id, last_active_date FROM athletes WHERE active = 1').all();
+  let fixedCount = 0;
+  for (const a of activeAthletes) {
+    const row = db.prepare('SELECT MAX(date) AS latest FROM results WHERE athlete_id = ?').get(a.id);
+    if (row?.latest && (!a.last_active_date || a.last_active_date < row.latest)) {
+      db.prepare('UPDATE athletes SET last_active_date = ? WHERE id = ?').run(row.latest, a.id);
+      fixedCount++;
+    }
+  }
+  if (fixedCount > 0) console.log(`  ✅ Fixed ${fixedCount} stale last_active_date values`);
+
   db.close();
 }
 
