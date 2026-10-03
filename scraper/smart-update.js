@@ -106,6 +106,11 @@ async function loadWithRetry(page, url, currentDelay) {
 
       return { success: true, delay, status: resp.status() };
     } catch (err) {
+      // If browser/context crashed, return failure immediately so caller can relaunch
+      if (err.message.includes('browser has been closed') || err.message.includes('Target closed') || err.message.includes('context or browser')) {
+        console.log(`    💥 Browser crashed — will relaunch and retry`);
+        return { success: false, delay, browserCrashed: true };
+      }
       const waitSecs = Math.round(delay/1000);
       console.log(`    ⚠️ Load error (attempt ${attempt}): ${err.message.substring(0, 80)} — retrying in ${waitSecs}s`);
       await sleep(delay);
@@ -194,10 +199,7 @@ async function scrapeSummary(page) {
   });
 }
 
-async function main() {
-  const athletes = db.prepare('SELECT * FROM athletes WHERE active = 1 ORDER BY name').all();
-  console.log(`🏃 Smart update for ${athletes.length} athletes\n`);
-
+async function launchBrowser() {
   const browser = await chromium.launch({
     channel: 'chrome',
     headless: true,
@@ -213,6 +215,26 @@ async function main() {
     Object.defineProperty(navigator, 'webdriver', { get: () => false });
   });
   const page = await ctx.newPage();
+  return { browser, ctx, page };
+}
+
+async function main() {
+  const athletes = db.prepare('SELECT * FROM athletes WHERE active = 1 ORDER BY name').all();
+  console.log(`🏃 Smart update for ${athletes.length} athletes\n`);
+
+  let { browser, ctx, page } = await launchBrowser();
+
+  // Helper to recover from crashed browser
+  async function ensureBrowser() {
+    try {
+      await page.evaluate(() => true);
+    } catch (e) {
+      console.log(`  🔄 Browser crashed, relaunching...`);
+      try { await browser.close(); } catch (_) {}
+      ({ browser, ctx, page } = await launchBrowser());
+      console.log(`  ✅ Browser relaunched`);
+    }
+  }
 
   const upsertResult = db.prepare(`
     INSERT INTO results (athlete_id, date, event, time, time_seconds, position, age_grade, is_pb, is_junior)
@@ -254,7 +276,12 @@ async function main() {
     const allUrl = `https://www.parkrun.org.uk/parkrunner/${athlete.id}/all/`;
     console.log(`  📊 Results: ${allUrl}`);
 
-    const allResult = await loadWithRetry(page, allUrl, currentDelay);
+    await ensureBrowser();
+    let allResult = await loadWithRetry(page, allUrl, currentDelay);
+    if (allResult.browserCrashed) {
+      await ensureBrowser();
+      allResult = await loadWithRetry(page, allUrl, currentDelay);
+    }
     if (!allResult.success) {
       console.log(`  ❌ Giving up on results after ${MAX_RETRIES} attempts`);
       currentDelay = allResult.delay;
@@ -293,7 +320,12 @@ async function main() {
     const sumUrl = `https://www.parkrun.org.uk/parkrunner/${athlete.id}/`;
     console.log(`  📋 Summary: ${sumUrl}`);
 
-    const sumResult = await loadWithRetry(page, sumUrl, currentDelay);
+    await ensureBrowser();
+    let sumResult = await loadWithRetry(page, sumUrl, currentDelay);
+    if (sumResult.browserCrashed) {
+      await ensureBrowser();
+      sumResult = await loadWithRetry(page, sumUrl, currentDelay);
+    }
     if (!sumResult.success) {
       console.log(`  ⚠️ Summary failed, keeping existing data`);
       currentDelay = sumResult.delay;
