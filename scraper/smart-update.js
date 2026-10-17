@@ -79,6 +79,16 @@ function parseTime(timeStr) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Compute milestone badge from total 5k count
+// Parkrun milestones: 10, 25, 50, 100, 250, 500
+function computeBadge(total5k) {
+  const milestones = [500, 250, 100, 50, 25, 10];
+  for (const m of milestones) {
+    if (total5k >= m) return String(m);
+  }
+  return null;
+}
 function jitteredDelay(base) {
   const factor = JITTER_MIN + Math.random() * (JITTER_MAX - JITTER_MIN);
   return Math.round(base * factor);
@@ -257,7 +267,7 @@ async function main() {
       gender = COALESCE(?, gender),
       pb_5k = COALESCE(?, pb_5k),
       pb_5k_seconds = COALESCE(?, pb_5k_seconds),
-      badge = COALESCE(?, badge),
+      badge = ?,
       total_5k = CASE WHEN ? > 0 THEN ? ELSE total_5k END,
       total_junior = CASE WHEN ? > 0 THEN ? ELSE total_junior END,
       volunteer_count = CASE WHEN ? > 0 THEN ? ELSE volunteer_count END
@@ -342,10 +352,13 @@ async function main() {
       // Save prev volunteer count before updating
       savePrevVol.run(athlete.id);
 
+      // Compute badge from total runs (more reliable than scraping profile text)
+      const computedBadge = computeBadge(summary.total5k || athlete.total_5k || 0);
+
       updateAthlete.run(
         summary.ageGroup, summary.gender,
         summary.pb5k, pbSecs || null,
-        summary.badge ? String(summary.badge) : null,
+        computedBadge,
         summary.total5k, summary.total5k,
         summary.totalJunior, summary.totalJunior,
         summary.volunteerCount, summary.volunteerCount,
