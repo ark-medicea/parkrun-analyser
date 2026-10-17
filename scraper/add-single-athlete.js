@@ -118,6 +118,9 @@ async function run() {
 
     console.log(`✓ ${count} results upserted`);
 
+    // Mark junior results
+    db.run(`UPDATE results SET is_junior = 1 WHERE athlete_id = '${ATHLETE_ID}' AND event LIKE '%junior%'`);
+
     console.log('Recalculating PBs...');
     recalculatePBs(db);
 
