@@ -28,7 +28,8 @@ async function run() {
     // Extract athlete name from h2
     const name = await page.$eval('h2', el => {
       let t = el.textContent.trim();
-      t = t.replace(/['']s parkrun summary/i, '').trim();
+      t = t.replace(/['’]s parkrun summary/i, '').trim();
+      t = t.replace(/\s*\(A\d+\)\s*$/, '').trim();
       return t;
     }).catch(() => null);
 
