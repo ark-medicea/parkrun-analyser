@@ -81,9 +81,9 @@ function parseTime(timeStr) {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // Compute milestone badge from total 5k count
-// Parkrun milestones: 10, 25, 50, 100, 250, 500
+// Parkrun milestones: 10, 25, 50, 100, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000
 function computeBadge(total5k) {
-  const milestones = [500, 250, 100, 50, 25, 10];
+  const milestones = [1000, 900, 800, 700, 600, 500, 400, 300, 250, 200, 100, 50, 25, 10];
   for (const m of milestones) {
     if (total5k >= m) return String(m);
   }
@@ -456,7 +456,7 @@ async function main() {
   if (fixedCount > 0) console.log(`  ✅ Fixed ${fixedCount} stale last_active_date values`);
 
   // Recalculate badges from total_5k (fallback for missed scrapes)
-  const badgeThresholds = [500, 450, 400, 350, 300, 250, 200, 150, 100, 50, 25];
+  const badgeThresholds = [1000, 900, 800, 700, 600, 500, 400, 300, 250, 200, 100, 50, 25, 10];
   let badgeFixCount = 0;
   for (const a of activeAthletes) {
     const earned = badgeThresholds.find(t => (a.total_5k || 0) >= t);

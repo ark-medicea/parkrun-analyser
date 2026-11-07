@@ -161,7 +161,7 @@ function renderDashboard(data) {
   // 🏅 Best age grade vs last 3 months — REMOVED per user request
 
   // 🎉 Milestone reached this week (crossed a threshold)
-  const milestoneThresholds = [10, 25, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 750, 1000];
+  const milestoneThresholds = [10, 25, 50, 100, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000];
   for (const r of thisWeek) {
     const a = athletes.find(x => x.id === r.athlete_id);
     if (!a) continue;
@@ -306,12 +306,12 @@ function renderDashboard(data) {
 
   // Approaching milestones (for the dedicated section, NOT highlights)
   // Official parkrun milestones get a badge icon
-  const officialMilestones = new Set([10, 25, 50, 100, 250, 500, 1000]);
+  const officialMilestones = new Set([10, 25, 50, 100, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000]);
   const milestones = [];
   for (const a of athletes) {
     const runs = a.total_5k || 0;
     // Generate targets: official milestones + every multiple of 50
-    const targets = new Set([25, 50, 100, 250, 500, 1000]);
+    const targets = new Set([10, 25, 50, 100, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000]);
     for (let m = 50; m <= 1000; m += 50) targets.add(m);
     for (const target of [...targets].sort((a, b) => a - b)) {
       if (runs >= target - 5 && runs < target) {
